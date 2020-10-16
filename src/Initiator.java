@@ -9,9 +9,9 @@ public class Initiator {
     public static void main(String[] args) throws StaleProxyException {
         Runtime rt = Runtime.instance();
         Profile profile = new ProfileImpl();
-        profile.setParameter(profile.GUI,"true");
+        profile.setParameter(Profile.GUI,"true");
         ContainerController ac = rt.createMainContainer(profile);
-        AgentController agc = ac.createNewAgent("joao","seller",null);
+        AgentController agc = ac.createNewAgent("joao","HelloWorldAgent",null);
         agc.start();
     }
 }
