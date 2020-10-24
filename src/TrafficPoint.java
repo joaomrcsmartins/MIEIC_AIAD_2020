@@ -1,6 +1,6 @@
 import jade.core.Agent;
 
-public class AccessPoint extends Agent {
+public class TrafficPoint extends Agent {
     protected Integer traffic;
     protected Coordinates position;
 
@@ -20,7 +20,7 @@ public class AccessPoint extends Agent {
         this.position = position;
     }
 
-    public AccessPoint(Integer traffic, Coordinates position){
+    public TrafficPoint(Integer traffic, Coordinates position){
         this.traffic = traffic;
         this.position = position;
     }

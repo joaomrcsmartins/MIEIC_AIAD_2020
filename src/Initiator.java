@@ -11,7 +11,7 @@ public class Initiator {
         Profile profile = new ProfileImpl();
         profile.setParameter(Profile.GUI,"true");
         ContainerController ac = rt.createMainContainer(profile);
-        AgentController agc = ac.createNewAgent("joao","HelloWorldAgent",null);
+        AgentController agc = ac.createNewAgent("joao","TrafficPoint",null);
         agc.start();
     }
 }
