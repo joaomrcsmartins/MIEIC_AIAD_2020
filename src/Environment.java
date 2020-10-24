@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 public class Environment {
 
-    ArrayList<AccessPoint> traffic_points;
+    ArrayList<TrafficPoint> traffic_points;
     ArrayList<DroneAgent> drones;
 
-    public ArrayList<AccessPoint> getTraffic_points() {
+    public ArrayList<TrafficPoint> getTraffic_points() {
         return traffic_points;
     }
 
@@ -19,7 +19,7 @@ public class Environment {
         this.drones = drones;
     }
 
-    public void setTraffic_points(ArrayList<AccessPoint> traffic_points) {
+    public void setTraffic_points(ArrayList<TrafficPoint> traffic_points) {
         this.traffic_points = traffic_points;
     }
 
@@ -28,7 +28,7 @@ public class Environment {
         drones.add(drone);
     }
 
-    public void addNewTrafficPoint(AccessPoint traffic_point)
+    public void addNewTrafficPoint(TrafficPoint traffic_point)
     {
         traffic_points.add(traffic_point);
     }
