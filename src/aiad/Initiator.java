@@ -1,3 +1,5 @@
+package aiad;
+
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.core.Runtime;
@@ -11,7 +13,7 @@ public class Initiator {
         Profile profile = new ProfileImpl();
         profile.setParameter(Profile.GUI,"true");
         ContainerController ac = rt.createMainContainer(profile);
-        AgentController agc = ac.createNewAgent("joao","TrafficPoint",null);
+        AgentController agc = ac.createNewAgent("joao","aiad.access_point.TrafficPoint",null);
         agc.start();
     }
 }
