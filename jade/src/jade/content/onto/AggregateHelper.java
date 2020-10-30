@@ -1,5 +1,5 @@
 /*****************************************************************
- WADE - Workflow and Agent Development Environment is a framework to develop 
+ WADE - Workflow and Agent Development Environment is a framework to develop
  multi-agent systems able to execute tasks defined according to the workflow
  metaphor.
  Copyright (C) 2008 Telecom Italia S.p.A. 
