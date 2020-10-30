@@ -1,21 +1,23 @@
-import Drone.DroneAgent;
+package aiad;
+
+import aiad.access_point.FlyingAccessPoint;
 
 import java.util.ArrayList;
 
 public class Environment {
 
     ArrayList<TrafficPoint> traffic_points;
-    ArrayList<DroneAgent> drones;
+    ArrayList<FlyingAccessPoint> drones;
 
     public ArrayList<TrafficPoint> getTraffic_points() {
         return traffic_points;
     }
 
-    public ArrayList<DroneAgent> getDrones() {
+    public ArrayList<FlyingAccessPoint> getDrones() {
         return drones;
     }
 
-    public void setDrones(ArrayList<DroneAgent> drones) {
+    public void setDrones(ArrayList<FlyingAccessPoint> drones) {
         this.drones = drones;
     }
 
@@ -23,7 +25,7 @@ public class Environment {
         this.traffic_points = traffic_points;
     }
 
-    public void addNewDrone(DroneAgent drone)
+    public void addNewDrone(FlyingAccessPoint drone)
     {
         drones.add(drone);
     }

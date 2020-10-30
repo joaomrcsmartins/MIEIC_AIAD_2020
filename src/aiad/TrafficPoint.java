@@ -1,3 +1,5 @@
+package aiad;
+
 import jade.core.Agent;
 
 public class TrafficPoint extends Agent {
