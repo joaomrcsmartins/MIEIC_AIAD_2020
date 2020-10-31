@@ -1,6 +1,9 @@
 # Compiled class file
 *.class
 
+
+out/
+
 # Log file
 *.log
 
@@ -23,7 +26,9 @@
 hs_err_pid*
 
 # intellij folder
-.idea
+.idea/
 
 # jade files
 jade
+APDescription.txt
+MTPs-Main-Container.txt

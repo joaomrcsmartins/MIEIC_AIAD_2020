@@ -14,8 +14,8 @@ public class Initiator {
         Profile profile = new ProfileImpl();
         profile.setParameter(Profile.GUI, "true");
         ContainerController ac = rt.createMainContainer(profile);
-        Object[] agentArgs = new Object[]{120, new Coordinates(10, 10)};
-        AgentController agc = ac.createNewAgent("joao", FlyingAccessPoint.class.getName(), agentArgs);
+        FlyingAccessPoint fap = new FlyingAccessPoint(120,new Coordinates(10,10));
+        AgentController agc = ac.acceptNewAgent("joao", fap);
         agc.start();
     }
 }

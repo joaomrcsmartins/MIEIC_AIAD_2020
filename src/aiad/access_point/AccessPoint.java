@@ -16,7 +16,7 @@ import java.util.PriorityQueue;
 
 public class AccessPoint extends Agent {
     static double MAX_RANGE = 20.0; //fixed value, but might change later
-    private double trafficCapacity;
+    private final double trafficCapacity;
     private double availableTraffic;
     private PriorityQueue<TrafficPoint> clientPoints;
     private Coordinates pos;

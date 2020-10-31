@@ -1,13 +1,6 @@
 package aiad.access_point;
 
 import aiad.Coordinates;
-import jade.domain.FIPAAgentManagement.FailureException;
-import jade.domain.FIPAAgentManagement.NotUnderstoodException;
-import jade.domain.FIPAAgentManagement.RefuseException;
-import jade.domain.FIPANames;
-import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
-import jade.proto.ContractNetResponder;
 
 public class FlyingAccessPoint extends AccessPoint {
     private int battery; //in percentage (0-100%)
