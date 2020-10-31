@@ -25,29 +25,33 @@ public class Environment {
         this.traffic_points = traffic_points;
     }
 
-    public void addNewDrone(FlyingAccessPoint drone)
-    {
+    public void addNewDrone(FlyingAccessPoint drone) {
         drones.add(drone);
     }
 
-    public void addNewTrafficPoint(TrafficPoint traffic_point)
-    {
+    public void addNewTrafficPoint(TrafficPoint traffic_point) {
         traffic_points.add(traffic_point);
     }
 
-    //verify if the new position that the drone wants to move to is empty
-    public boolean verifyNewPosition(Coordinates coord)
-    {
-        return true;
-        //verify traffic_points
-        //verify drones
+    public ArrayList<FlyingAccessPoint> getNearDrones(FlyingAccessPoint actual_drone) {
+        ArrayList<FlyingAccessPoint> near_drones = new ArrayList<>();
+        for (FlyingAccessPoint drone : drones) {
+            if (actual_drone.isNear(drone))
+                near_drones.add(drone);
+        }
+        return near_drones;
     }
 
-    //verify if communication received is valid (is within the range of the drone)
-    public boolean verifyDroneRange(Coordinates coord, Integer range)
-    {
+    public boolean verifyNewPosition(Coordinates coord) {
+        for(FlyingAccessPoint drone : drones) {
+            if (drone.getPos().equals(coord))
+                return false;
+        }
+        for(TrafficPoint trafficPoint : traffic_points) {
+            if (trafficPoint.getPosition().equals(coord))
+                return false;
+        }
         return true;
     }
-
 
 }

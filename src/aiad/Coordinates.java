@@ -20,7 +20,7 @@ public class Coordinates {
         this.y = y;
     }
 
-    public Double getDistance(Coordinates p2) {
+    public double getDistance(Coordinates p2) {
         int tempX = Math.abs(getX()-p2.getX());
         int tempY = Math.abs(getY()-p2.getY());
         return Math.sqrt(Math.pow(tempX,2) + Math.pow(tempY,2));
