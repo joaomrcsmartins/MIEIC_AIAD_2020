@@ -27,4 +27,12 @@ public class Coordinates {
     }
 
     public Coordinates(Integer x, Integer y){this.x = x; this.y = y;}
+
+    @Override
+    public String toString() {
+        return "Coordinates{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
+    }
 }
