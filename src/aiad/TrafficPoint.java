@@ -33,6 +33,7 @@ public class TrafficPoint extends Agent {
         this.env = env;
     }
 
+    @Override
     public void setup() {
         addBehaviour(new TrafficPointContractNetInit(this, new ACLMessage(ACLMessage.CFP), this.env));
     }

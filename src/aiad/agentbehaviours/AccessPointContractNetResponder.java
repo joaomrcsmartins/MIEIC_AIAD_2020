@@ -2,9 +2,7 @@ package aiad.agentbehaviours;
 
 import aiad.Environment;
 import aiad.access_point.AccessPoint;
-import jade.core.Agent;
 import jade.domain.FIPAAgentManagement.FailureException;
-import jade.domain.FIPAAgentManagement.NotUnderstoodException;
 import jade.domain.FIPAAgentManagement.RefuseException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
@@ -21,7 +19,8 @@ public class AccessPointContractNetResponder extends ContractNetResponder {
         this.env = env;
     }
 
-    protected jade.lang.acl.ACLMessage handleCfp(jade.lang.acl.ACLMessage cfp) throws RefuseException, FailureException, NotUnderstoodException {
+    @Override
+    protected ACLMessage handleCfp(ACLMessage cfp) throws RefuseException {
         System.out.println("FAP agent " + this.accessPoint.getLocalName() + ": CFP received from " + cfp.getSender().getName() + ". Action is " + cfp.getContent());
         boolean proposal = this.accessPoint.evaluateTrafficRequest();
         if (proposal) {
@@ -36,7 +35,8 @@ public class AccessPointContractNetResponder extends ContractNetResponder {
         }
     }
 
-    protected jade.lang.acl.ACLMessage handleAcceptProposal(jade.lang.acl.ACLMessage cfp, jade.lang.acl.ACLMessage propose, jade.lang.acl.ACLMessage accept) throws FailureException {
+    @Override
+    protected ACLMessage handleAcceptProposal(ACLMessage cfp, ACLMessage propose, ACLMessage accept) throws FailureException {
         System.out.println("FAP Agent " + this.accessPoint.getLocalName() + ": Proposal accepted");
         if (this.accessPoint.handleTrafficRequest()) {
             System.out.println("FAP Agent " + this.accessPoint.getLocalName() + ": Request accepted, connecting to Traffic Point");
@@ -49,7 +49,8 @@ public class AccessPointContractNetResponder extends ContractNetResponder {
         }
     }
 
-    protected void handleRejectProposal(jade.lang.acl.ACLMessage cfp, jade.lang.acl.ACLMessage propose, ACLMessage reject) {
+    @Override
+    protected void handleRejectProposal(ACLMessage cfp, ACLMessage propose, ACLMessage reject) {
         System.out.println("FAP Agent " + this.accessPoint.getLocalName() + ": Proposal rejected");
     }
 }

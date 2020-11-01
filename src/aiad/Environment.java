@@ -41,7 +41,7 @@ public class Environment {
     //TODO: create more data
     private void createAccesPoints() throws StaleProxyException {
         //TODO: create real id
-        FlyingAccessPoint fap = new FlyingAccessPoint(120,new Coordinates(10,10), this);
+        FlyingAccessPoint fap = new FlyingAccessPoint(120,new Coordinates(15,0), this);
         AgentController aa = this.ac.acceptNewAgent("joao", fap);
         aa.start();
         drones.add(fap);
@@ -50,7 +50,7 @@ public class Environment {
     //TODO: create more data
     private void createTrafficPoints() throws StaleProxyException {
         //TODO: create id
-        TrafficPoint tp = new TrafficPoint(120, new Coordinates(20,20), this);
+        TrafficPoint tp = new TrafficPoint(120, new Coordinates(20,0), this);
         AgentController aa = this.ac.acceptNewAgent("joana", tp);
         aa.start();
         traffic_points.add(tp);

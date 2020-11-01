@@ -4,15 +4,9 @@ import aiad.Coordinates;
 import aiad.Environment;
 import aiad.TrafficPoint;
 import aiad.agentbehaviours.AccessPointContractNetResponder;
-import aiad.agentbehaviours.TrafficPointContractNetInit;
 import jade.core.Agent;
-import jade.domain.FIPAAgentManagement.FailureException;
-import jade.domain.FIPAAgentManagement.NotUnderstoodException;
-import jade.domain.FIPAAgentManagement.RefuseException;
-import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
-import jade.proto.ContractNetResponder;
 
 import java.util.Comparator;
 import java.util.PriorityQueue;
@@ -103,8 +97,7 @@ public class AccessPoint extends Agent {
 
     @Override
     protected void setup() {
-        MessageTemplate template = MessageTemplate.and(MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET),
-                MessageTemplate.MatchPerformative(ACLMessage.CFP));
+        MessageTemplate template = MessageTemplate.MatchPerformative(ACLMessage.CFP);
         addBehaviour(new AccessPointContractNetResponder(this, template, this.env));
 
     }
