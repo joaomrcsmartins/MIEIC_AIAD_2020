@@ -1,16 +1,15 @@
 package aiad;
 
-import jade.core.AID;
+import aiad.access_point.FlyingAccessPoint;
+import aiad.agentbehaviours.TrafficPointContractNetInit;
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
-import jade.proto.AchieveREInitiator;
-import jade.proto.ContractNetInitiator;
-
-import java.util.Vector;
 
 public class TrafficPoint extends Agent {
     protected Integer traffic;
     protected Coordinates position;
+    protected Environment env;
+    static double MAX_RANGE = 10.0;
 
     public Integer getTraffic() {
         return traffic;
@@ -28,50 +27,17 @@ public class TrafficPoint extends Agent {
         this.position = position;
     }
 
-    public TrafficPoint(Integer traffic, Coordinates position){
+    public TrafficPoint(Integer traffic, Coordinates position, Environment env){
         this.traffic = traffic;
         this.position = position;
+        this.env = env;
     }
-
 
     public void setup() {
-        addBehaviour(new FIPAContractNetInit(this, new ACLMessage(ACLMessage.CFP)));
+        addBehaviour(new TrafficPointContractNetInit(this, new ACLMessage(ACLMessage.CFP), this.env));
     }
 
-    class FIPAContractNetInit extends ContractNetInitiator {
-
-        public FIPAContractNetInit(Agent a, ACLMessage msg) {
-            super(a, msg);
-        }
-
-        protected Vector prepareCfps(ACLMessage cfp) {
-            Vector v = new Vector();
-
-            cfp.addReceiver(new AID("a1", false));
-            cfp.addReceiver(new AID("a2", false));
-            cfp.addReceiver(new AID("a3", false));
-            cfp.setContent("this is a call...");
-
-            v.add(cfp);
-
-            return v;
-        }
-
-        protected void handleAllResponses(Vector responses, Vector acceptances) {
-
-            System.out.println("got " + responses.size() + " responses!");
-
-            for(int i=0; i<responses.size(); i++) {
-                ACLMessage msg = ((ACLMessage) responses.get(i)).createReply();
-                msg.setPerformative(ACLMessage.ACCEPT_PROPOSAL); // OR NOT!
-                acceptances.add(msg);
-            }
-        }
-
-        protected void handleAllResultNotifications(Vector resultNotifications) {
-            System.out.println("got " + resultNotifications.size() + " result notifs!");
-        }
-
+    public boolean isNearDrone(FlyingAccessPoint drone) {
+        return position.getDistance(drone.getPos()) <= MAX_RANGE;
     }
-
 }

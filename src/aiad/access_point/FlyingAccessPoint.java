@@ -1,14 +1,15 @@
 package aiad.access_point;
 
 import aiad.Coordinates;
+import aiad.Environment;
 
 public class FlyingAccessPoint extends AccessPoint {
     private int battery; //in percentage (0-100%)
     static int LOW_ENERGY_LVL = 10;
     private boolean charging;
 
-    public FlyingAccessPoint(double trafficCapacity, Coordinates pos) {
-        super(trafficCapacity, pos);
+    public FlyingAccessPoint(double trafficCapacity, Coordinates pos, Environment env) {
+        super(trafficCapacity, pos, env);
         this.battery = 100;
         this.charging = false;
     }
