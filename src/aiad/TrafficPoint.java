@@ -27,10 +27,10 @@ public class TrafficPoint extends Agent {
         this.position = position;
     }
 
-    public TrafficPoint(Integer traffic, Coordinates position, Environment env){
+    public TrafficPoint(Integer traffic, Coordinates position){
         this.traffic = traffic;
         this.position = position;
-        this.env = env;
+        this.env = Environment.getInstance();
     }
 
     @Override

@@ -4,7 +4,7 @@ import jade.wrapper.StaleProxyException;
 
 public class Initiator {
     public static void main(String[] args) throws StaleProxyException {
-        Environment env = new Environment();
+        Environment env = Environment.getInstance();
         env.startSystem();
     }
 }

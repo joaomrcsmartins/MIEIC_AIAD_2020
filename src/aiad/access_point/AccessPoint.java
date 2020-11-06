@@ -19,12 +19,12 @@ public class AccessPoint extends Agent {
     private Coordinates pos;
     private Environment env;
 
-    public AccessPoint(double trafficCapacity, Coordinates pos, Environment env) {
+    public AccessPoint(double trafficCapacity, Coordinates pos) {
         this.trafficCapacity = trafficCapacity;
         this.availableTraffic = trafficCapacity;
         this.pos = pos;
         this.clientPoints = initTPQueue();
-        this.env = env;
+        this.env = Environment.getInstance();
     }
 
     public double getTrafficCapacity() {
