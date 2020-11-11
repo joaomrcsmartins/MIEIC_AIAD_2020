@@ -12,7 +12,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Environment implements Serializable {
-
     private static Environment env_instance = null;
 
     private static Runtime rt;
@@ -51,10 +50,15 @@ public class Environment implements Serializable {
     //TODO: create more data
     private void createAccessPoints() throws StaleProxyException {
         //TODO: create real id
-        FlyingAccessPoint fap = new FlyingAccessPoint(120, new Coordinates(15, 0));
-        AgentController aa = this.ac.acceptNewAgent("joao", fap);
+        FlyingAccessPoint fap = new FlyingAccessPoint(130,new Coordinates(15,0));
+        AgentController aa = this.ac.acceptNewAgent("zoe", fap);
         aa.start();
         drones.add(fap);
+        //TODO: create real id
+        FlyingAccessPoint fap2 = new FlyingAccessPoint(80,new Coordinates(16,0));
+        AgentController aa2 = this.ac.acceptNewAgent("daisy", fap2);
+        aa2.start();
+        drones.add(fap2);
     }
 
     //TODO: create more data
@@ -74,20 +78,23 @@ public class Environment implements Serializable {
         return drones;
     }
 
-    public ArrayList<FlyingAccessPoint> getNearDrones(FlyingAccessPoint actual_drone) {
+    /*public ArrayList<FlyingAccessPoint> getNearDrones(FlyingAccessPoint actual_drone) {
         ArrayList<FlyingAccessPoint> near_drones = new ArrayList<>();
         for (FlyingAccessPoint drone : drones) {
             if (actual_drone.isNear(drone))
                 near_drones.add(drone);
         }
         return near_drones;
-    }
+    }*/
 
     public ArrayList<FlyingAccessPoint> getNearDrones(TrafficPoint actual_point) {
         ArrayList<FlyingAccessPoint> near_drones = new ArrayList<>();
         for (FlyingAccessPoint drone : drones) {
-            if (actual_point.isNearDrone(drone))
+            double dist = actual_point.isNearDrone(drone);
+            if (dist <= actual_point.getMaxRange())
+            {
                 near_drones.add(drone);
+            }
         }
         return near_drones;
     }

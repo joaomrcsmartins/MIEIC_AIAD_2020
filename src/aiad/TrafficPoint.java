@@ -10,9 +10,12 @@ import java.io.Serializable;
 public class TrafficPoint extends Agent implements Serializable, Comparable {
     protected Integer traffic;
     protected Coordinates position;
-    protected Environment env;
+    protected transient Environment env;
     static double MAX_RANGE = 10.0;
 
+    public double getMaxRange(){
+        return MAX_RANGE;
+    }
     public Integer getTraffic() {
         return traffic;
     }
@@ -40,8 +43,8 @@ public class TrafficPoint extends Agent implements Serializable, Comparable {
         addBehaviour(new TrafficPointContractNetInit(this, new ACLMessage(ACLMessage.CFP), this.env));
     }
 
-    public boolean isNearDrone(FlyingAccessPoint drone) {
-        return position.getDistance(drone.getPos()) <= MAX_RANGE;
+    public double isNearDrone(FlyingAccessPoint drone) {
+        return position.getDistance(drone.getPos());
     }
 
 
