@@ -1,11 +1,13 @@
 package aiad.agentbehaviours;
 
 import aiad.Environment;
+import aiad.TrafficPoint;
 import aiad.access_point.AccessPoint;
 import jade.domain.FIPAAgentManagement.FailureException;
 import jade.domain.FIPAAgentManagement.RefuseException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import jade.lang.acl.UnreadableException;
 import jade.proto.ContractNetResponder;
 
 public class AccessPointContractNetResponder extends ContractNetResponder {
@@ -21,12 +23,12 @@ public class AccessPointContractNetResponder extends ContractNetResponder {
 
     @Override
     protected ACLMessage handleCfp(ACLMessage cfp) throws RefuseException {
-        System.out.println("FAP agent " + this.accessPoint.getLocalName() + ": CFP received from " + cfp.getSender().getName() + ". Action is " + cfp.getContent());
-        boolean proposal = this.accessPoint.evaluateTrafficRequest();
+        System.out.println("FAP agent " + this.accessPoint.getLocalName() + ": CFP received from " + cfp.getSender().getLocalName() + ". Traffic requested is " + cfp.getContent());
+        boolean proposal = this.accessPoint.isAvailable();
         if (proposal) {
             System.out.println("FAP agent " + this.accessPoint.getLocalName() + ": Proposing " + this.accessPoint.getAvailableTraffic());
-            jade.lang.acl.ACLMessage propose = cfp.createReply();
-            propose.setPerformative(jade.lang.acl.ACLMessage.PROPOSE);
+            ACLMessage propose = cfp.createReply();
+            propose.setPerformative(ACLMessage.PROPOSE);
             propose.setContent(String.valueOf(this.accessPoint.getAvailableTraffic()));
             return propose;
         } else {
@@ -38,7 +40,14 @@ public class AccessPointContractNetResponder extends ContractNetResponder {
     @Override
     protected ACLMessage handleAcceptProposal(ACLMessage cfp, ACLMessage propose, ACLMessage accept) throws FailureException {
         System.out.println("FAP Agent " + this.accessPoint.getLocalName() + ": Proposal accepted");
-        if (this.accessPoint.handleTrafficRequest()) {
+        TrafficPoint requestPoint = null;
+        try {
+            requestPoint = (TrafficPoint) accept.getContentObject();
+        } catch (UnreadableException e) {
+            e.printStackTrace();
+            throw new FailureException("failed-read-trafficPoint-obj");
+        }
+        if (this.accessPoint.serveRequest(requestPoint)) {
             System.out.println("FAP Agent " + this.accessPoint.getLocalName() + ": Request accepted, connecting to Traffic Point");
             jade.lang.acl.ACLMessage inform = accept.createReply();
             inform.setPerformative(jade.lang.acl.ACLMessage.INFORM);
@@ -51,6 +60,6 @@ public class AccessPointContractNetResponder extends ContractNetResponder {
 
     @Override
     protected void handleRejectProposal(ACLMessage cfp, ACLMessage propose, ACLMessage reject) {
-        System.out.println("FAP Agent " + this.accessPoint.getLocalName() + ": Proposal rejected");
+        System.out.println("FAP Agent " + this.accessPoint.getLocalName() + ": Proposal rejected from " + cfp.getSender().getLocalName());
     }
 }

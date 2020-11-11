@@ -1,6 +1,8 @@
 package aiad;
 
-public class Coordinates {
+import java.io.Serializable;
+
+public class Coordinates implements Serializable {
     protected Integer x;
     protected Integer y;
 
@@ -30,7 +32,7 @@ public class Coordinates {
 
     @Override
     public String toString() {
-        return "Coordinates{" +
+        return "Coordinates {" +
                 "x=" + x +
                 ", y=" + y +
                 '}';

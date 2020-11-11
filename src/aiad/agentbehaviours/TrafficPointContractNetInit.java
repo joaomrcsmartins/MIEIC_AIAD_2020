@@ -7,6 +7,7 @@ import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jade.proto.ContractNetInitiator;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -24,7 +25,7 @@ public class TrafficPointContractNetInit extends ContractNetInitiator {
     @Override
     protected Vector prepareCfps(ACLMessage cfp) {
         Vector v = new Vector();
-        cfp.setContent("This is my new capacity");
+        cfp.setContent(String.valueOf(this.trafficPoint.getTraffic())); // could be Object instead of String
         ArrayList<FlyingAccessPoint> near_drones =  env.getNearDrones(trafficPoint);
 
         for (int i = 0; i < near_drones.size(); i++) {
@@ -44,6 +45,11 @@ public class TrafficPointContractNetInit extends ContractNetInitiator {
         for(int i=0; i<responses.size(); i++) {
             ACLMessage msg = ((ACLMessage) responses.get(i)).createReply();
             msg.setPerformative(ACLMessage.ACCEPT_PROPOSAL); // OR NOT!
+            try {
+                msg.setContentObject(this.trafficPoint);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             acceptances.add(msg);
         }
     }

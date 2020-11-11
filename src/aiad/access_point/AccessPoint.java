@@ -23,7 +23,7 @@ public class AccessPoint extends Agent {
         this.trafficCapacity = trafficCapacity;
         this.availableTraffic = trafficCapacity;
         this.pos = pos;
-        this.clientPoints = initTPQueue();
+        this.clientPoints = new PriorityQueue<TrafficPoint>();
         this.env = Environment.getInstance();
     }
 
@@ -52,7 +52,13 @@ public class AccessPoint extends Agent {
     }
 
     public boolean isInRange(Coordinates pos2) {
-        return pos.getDistance(pos2) <= MAX_RANGE;
+        double dist = pos.getDistance(pos2);
+        if (dist <= MAX_RANGE) {
+            System.out.println("Point in " + this.pos + " and point in " + pos2 + " have distance " + dist + " within range " + MAX_RANGE);
+            return true;
+        }
+        return false;
+
     }
 
     public boolean addClient(TrafficPoint point) {
@@ -74,25 +80,8 @@ public class AccessPoint extends Agent {
     }
 
     public boolean serveRequest(TrafficPoint point) {
-        if (!isInRange(point.getPosition()) || !isAvailable()) return false;
+        if (point == null || !isInRange(point.getPosition()) || !isAvailable()) return false;
         return addClient(point);
-    }
-
-    private PriorityQueue<TrafficPoint> initTPQueue() {
-        return new PriorityQueue<TrafficPoint>() {
-            @Override
-            public Comparator<? super TrafficPoint> comparator() {
-                return new Comparator<TrafficPoint>() {
-                    @Override
-                    public int compare(TrafficPoint o1, TrafficPoint o2) {
-                        if (o1.getTraffic() > o2.getTraffic())
-                            return 1;
-                        else
-                            return o1.getTraffic().equals(o2.getTraffic()) ? 0 : -1;
-                    }
-                };
-            }
-        };
     }
 
     @Override
@@ -100,15 +89,5 @@ public class AccessPoint extends Agent {
         MessageTemplate template = MessageTemplate.MatchPerformative(ACLMessage.CFP);
         addBehaviour(new AccessPointContractNetResponder(this, template, this.env));
 
-    }
-
-    public boolean evaluateTrafficRequest() {
-        //TODO: evaluate request from the TrafficPoint
-        return true;
-    }
-
-    public boolean handleTrafficRequest() {
-        //TODO: handle traffic request
-        return true;
     }
 }

@@ -8,9 +8,10 @@ import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Environment {
+public class Environment implements Serializable {
 
     private static Environment env_instance = null;
 
