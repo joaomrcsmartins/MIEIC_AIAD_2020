@@ -47,6 +47,4 @@ public class TrafficPoint extends Agent implements Serializable {
         return position.getDistance(drone.getPos());
     }
 
-
-
 }
