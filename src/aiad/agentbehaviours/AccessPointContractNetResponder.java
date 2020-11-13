@@ -23,23 +23,23 @@ public class AccessPointContractNetResponder extends ContractNetResponder {
 
     @Override
     protected ACLMessage handleCfp(ACLMessage cfp) throws RefuseException {
-        System.out.println("FAP agent " + this.accessPoint.getLocalName() + ": CFP received from " + cfp.getSender().getLocalName() + ". Traffic requested is " + cfp.getContent());
+        System.out.println(" (handleCpf) FAP agent " + this.accessPoint.getLocalName() + ": CFP received from " + cfp.getSender().getLocalName() + ". Traffic requested is " + cfp.getContent());
         boolean proposal = this.accessPoint.isAvailable();
         if (proposal) {
-            System.out.println("FAP agent " + this.accessPoint.getLocalName() + ": Proposing " + this.accessPoint.getAvailableTraffic());
+            System.out.println(" (handleCpf) FAP agent " + this.accessPoint.getLocalName() + ": Proposing " + this.accessPoint.getAvailableTraffic() + " to "+ cfp.getSender().getLocalName());
             ACLMessage propose = cfp.createReply();
             propose.setPerformative(ACLMessage.PROPOSE);
             propose.setContent(String.valueOf(this.accessPoint.getAvailableTraffic()));
             return propose;
         } else {
-            System.out.println("FAP agent " + this.accessPoint.getLocalName() + ": Refused contract from " + cfp.getSender().getName());
+            System.out.println(" (handleCpf)  FAP agent " + this.accessPoint.getLocalName() + ": Refused contract from " + cfp.getSender().getName());
             throw new RefuseException("proposal-refused");
         }
     }
 
     @Override
     protected ACLMessage handleAcceptProposal(ACLMessage cfp, ACLMessage propose, ACLMessage accept) throws FailureException {
-        System.out.println("FAP Agent " + this.accessPoint.getLocalName() + ": Proposal accepted");
+        System.out.println(" (handleAcceptProposal)  FAP Agent " + this.accessPoint.getLocalName() + ": Proposal accepted" + " from " + cfp.getSender().getName());
         TrafficPoint requestPoint = null;
         try {
             requestPoint = (TrafficPoint) accept.getContentObject();
@@ -48,18 +48,29 @@ public class AccessPointContractNetResponder extends ContractNetResponder {
             throw new FailureException("failed-read-trafficPoint-obj");
         }
         if (this.accessPoint.serveRequest(requestPoint)) {
-            System.out.println("FAP Agent " + this.accessPoint.getLocalName() + ": Request accepted, connecting to Traffic Point");
+            System.out.println("(handleAcceptProposal) FAP Agent " + this.accessPoint.getLocalName() + ": Request accepted, connecting to Traffic Point" + " from " + cfp.getSender().getName());
             jade.lang.acl.ACLMessage inform = accept.createReply();
             inform.setPerformative(jade.lang.acl.ACLMessage.INFORM);
+
+            //testing: inform former traffic point that will no longer support it
+           /* TrafficPoint tp_client = this.accessPoint.getCloserClient();
+            if(tp_client != null)
+            {
+                this.accessPoint.addBehaviour(new RequestTrafficPointShutdownRequestInit(this.accessPoint,new ACLMessage(ACLMessage.CFP),tp_client));
+                MessageTemplate template = MessageTemplate.MatchPerformative(ACLMessage.CFP);
+                tp_client.addBehaviour(new RequestTrafficPointShutdownRequestResponder(tp_client,template));
+            }*/
+
+
             return inform;
         } else {
-            System.out.println("FAP Agent " + this.accessPoint.getLocalName() + ": Request denied, refusing connection");
+            System.out.println(" (handleAcceptProposal) FAP Agent " + this.accessPoint.getLocalName() + ": Request denied, refusing connection" + " from " + cfp.getSender().getName());
             throw new FailureException("refused-traffic-request");
         }
     }
 
     @Override
     protected void handleRejectProposal(ACLMessage cfp, ACLMessage propose, ACLMessage reject) {
-        System.out.println("FAP Agent " + this.accessPoint.getLocalName() + ": Proposal rejected from " + cfp.getSender().getLocalName());
+        System.out.println(" (handleRejectProposal) FAP Agent " + this.accessPoint.getLocalName() + ": Proposal rejected from " + cfp.getSender().getLocalName());
     }
 }

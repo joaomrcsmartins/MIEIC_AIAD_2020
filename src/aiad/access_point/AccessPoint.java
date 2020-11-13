@@ -47,6 +47,11 @@ public class AccessPoint extends Agent {
         return env;
     }
 
+    public TrafficPoint getCloserClient(){
+        return clientPoints.peek();
+    }
+
+
     public void setPos(Coordinates pos) {
         this.pos = pos;
     }
@@ -54,7 +59,7 @@ public class AccessPoint extends Agent {
     public boolean isInRange(Coordinates pos2) {
         double dist = pos.getDistance(pos2);
         if (dist <= MAX_RANGE) {
-            System.out.println("Point in " + this.pos + " and point in " + pos2 + " have distance " + dist + " within range " + MAX_RANGE);
+            //System.out.println("Point in " + this.pos + " and point in " + pos2 + " have distance " + dist + " within range " + MAX_RANGE);
             return true;
         }
         return false;
