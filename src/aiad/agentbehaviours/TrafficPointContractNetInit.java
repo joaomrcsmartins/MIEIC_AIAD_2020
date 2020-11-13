@@ -29,7 +29,7 @@ public class TrafficPointContractNetInit extends ContractNetInitiator {
     @Override
     protected Vector prepareCfps(ACLMessage cfp) {
         Vector v = new Vector();
-        cfp.setContent(" (Init.prepareCfps) This is my new capacity: " + trafficPoint.getTraffic());
+        cfp.setContent(String.valueOf(trafficPoint.getTraffic()));
         ArrayList<FlyingAccessPoint> near_drones = env.getNearDrones(trafficPoint);
 
         for (int i = 0; i < near_drones.size(); i++) {
