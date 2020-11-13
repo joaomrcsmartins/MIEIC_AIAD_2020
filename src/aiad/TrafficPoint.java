@@ -1,11 +1,21 @@
 package aiad;
 
+import aiad.access_point.FlyingAccessPoint;
+import aiad.agentbehaviours.TrafficPointContractNetInit;
 import jade.core.Agent;
+import jade.lang.acl.ACLMessage;
 
-public class TrafficPoint extends Agent {
+import java.io.Serializable;
+
+public class TrafficPoint extends Agent implements Serializable, Comparable {
     protected Integer traffic;
     protected Coordinates position;
+    protected transient Environment env;
+    static double MAX_RANGE = 10.0;
 
+    public double getMaxRange(){
+        return MAX_RANGE;
+    }
     public Integer getTraffic() {
         return traffic;
     }
@@ -22,8 +32,32 @@ public class TrafficPoint extends Agent {
         this.position = position;
     }
 
-    public TrafficPoint(Integer traffic, Coordinates position){
+    public TrafficPoint(Integer traffic, Coordinates position) {
         this.traffic = traffic;
         this.position = position;
+        this.env = Environment.getInstance();
+    }
+
+    @Override
+    public void setup() {
+        addBehaviour(new TrafficPointContractNetInit(this, new ACLMessage(ACLMessage.CFP), this.env));
+    }
+
+    public double isNearDrone(FlyingAccessPoint drone) {
+        return position.getDistance(drone.getPos());
+    }
+
+
+    @Override
+    public int compareTo(Object o) {
+        if (!(o instanceof TrafficPoint)) {
+            throw new InstantiationError("Object is not a TrafficPoint Object");
+        }
+
+        TrafficPoint tp = (TrafficPoint) o;
+        if (this.getTraffic() > tp.getTraffic())
+            return 1;
+        else
+            return this.getTraffic().equals(tp.getTraffic()) ? 0 : -1;
     }
 }
