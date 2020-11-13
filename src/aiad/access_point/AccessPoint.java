@@ -44,15 +44,6 @@ public class AccessPoint extends Agent {
         return pos;
     }
 
-    public Environment getEnv() {
-        return env;
-    }
-
-    public ClientPair getCloserClient() {
-        return clientPoints.peek();
-    }
-
-
     public void setPos(Coordinates pos) {
         this.pos = pos;
     }
@@ -65,6 +56,18 @@ public class AccessPoint extends Agent {
         }
         return false;
 
+    }
+
+    public Environment getEnv() {
+        return env;
+    }
+
+    public ClientPair getCloserClient() {
+        return clientPoints.peek();
+    }
+
+    public PriorityQueue<ClientPair> getClientPoints() {
+        return clientPoints;
     }
 
     public boolean addClient(TrafficPoint point) {
