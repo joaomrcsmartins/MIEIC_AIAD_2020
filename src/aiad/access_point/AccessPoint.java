@@ -97,13 +97,19 @@ public class AccessPoint extends Agent {
 
     }
 
-    public boolean evaluateRequest(double requestedTraffic) {
+    public double evaluateRequest(double requestedTraffic) {
+        if(getAvailableTraffic() == 0)
+            return 0;
+
         double optimizableTraffic = requestedTraffic - getAvailableTraffic();
         if (optimizableTraffic > 0) {
-            //TODO: discuss elimination criteria
+            //find the first client that isn't fully satisfied by the AP and whose supplied traffic is enough to fully satisfy this request
             Optional<ClientPair> result = clientPoints.stream().filter(client -> !client.isSatisfied() && client.getValue() >= optimizableTraffic).findFirst();
-            return result.isPresent() && removeClient(result.get());
-        } else
-            return true;
+            if (result.isEmpty())
+                return getAvailableTraffic(); //when no optimization is possible, return the available value
+            else
+                removeClient(result.get()); //otherwise removes a not fully satisfied client to have necessary traffic to fully satisfy this one
+        }
+        return requestedTraffic; //fully satisfies the request the available traffic is enough or an optimization is made
     }
 }
