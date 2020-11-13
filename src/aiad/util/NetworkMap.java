@@ -8,8 +8,11 @@ import aiad.access_point.FlyingAccessPoint;
 import javax.swing.*;
 import java.awt.*;
 
+import static java.lang.Thread.sleep;
+
 public class NetworkMap extends Canvas {
     private final Environment env;
+    public int time = 0;
 
     public NetworkMap(Environment env) {
         this.env = env;
@@ -18,14 +21,6 @@ public class NetworkMap extends Canvas {
         frame.add(this);
         frame.pack();
         frame.setVisible(true);
-    }
-
-    public void paint(Graphics g) {
-        Color base = g.getColor();
-        paintLegend(g);
-        paintTrafficPoints(g);
-        paintFlyingAccessPoints(g);
-        g.setColor(base);
     }
 
     private void paintLegend(Graphics g) {
@@ -71,4 +66,22 @@ public class NetworkMap extends Canvas {
             g.fillOval(coords.getX()*10,coords.getY()*10,10,10);
         }
     }
+
+    @Override
+    public void paint(Graphics g) {
+        Color base = g.getColor();
+        paintLegend(g);
+        paintTrafficPoints(g);
+        paintFlyingAccessPoints(g);
+        g.setColor(base);
+        g.drawString("Time Passed: " + time+"s",20,20);
+        time++;
+        try {
+            sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        repaint();
+    }
+
 }
