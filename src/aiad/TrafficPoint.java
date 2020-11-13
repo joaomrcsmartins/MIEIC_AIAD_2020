@@ -7,8 +7,8 @@ import jade.lang.acl.ACLMessage;
 
 import java.io.Serializable;
 
-public class TrafficPoint extends Agent implements Serializable, Comparable {
-    protected Integer traffic;
+public class TrafficPoint extends Agent implements Serializable {
+    protected Double traffic;
     protected Coordinates position;
     protected transient Environment env;
     static double MAX_RANGE = 10.0;
@@ -16,11 +16,11 @@ public class TrafficPoint extends Agent implements Serializable, Comparable {
     public double getMaxRange(){
         return MAX_RANGE;
     }
-    public Integer getTraffic() {
+    public Double getTraffic() {
         return traffic;
     }
 
-    public void setTraffic(Integer traffic) {
+    public void setTraffic(Double traffic) {
         this.traffic = traffic;
     }
 
@@ -32,7 +32,7 @@ public class TrafficPoint extends Agent implements Serializable, Comparable {
         this.position = position;
     }
 
-    public TrafficPoint(Integer traffic, Coordinates position) {
+    public TrafficPoint(Double traffic, Coordinates position) {
         this.traffic = traffic;
         this.position = position;
         this.env = Environment.getInstance();
@@ -48,16 +48,5 @@ public class TrafficPoint extends Agent implements Serializable, Comparable {
     }
 
 
-    @Override
-    public int compareTo(Object o) {
-        if (!(o instanceof TrafficPoint)) {
-            throw new InstantiationError("Object is not a TrafficPoint Object");
-        }
 
-        TrafficPoint tp = (TrafficPoint) o;
-        if (this.getTraffic() > tp.getTraffic())
-            return 1;
-        else
-            return this.getTraffic().equals(tp.getTraffic()) ? 0 : -1;
-    }
 }
