@@ -24,7 +24,7 @@ public class TPRequestProtocolInit extends
         super(a, msg);
         this.trafficPoint = a;
         this.env = env;
-        this.currentReceiverDrone = new Random().nextInt() % env.getNearDrones(a).size();
+        this.currentReceiverDrone = Math.abs(new Random().nextInt() % env.getNearDrones(a).size());
     }
 
     @Override

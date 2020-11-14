@@ -10,13 +10,15 @@ public class TPCyclicContractNet extends TickerBehaviour {
     private static int period = 5000;
 
     public TPCyclicContractNet(TrafficPoint tp) {
-        super(tp,period);
+        super(tp, period);
         this.tp = tp;
     }
 
     @Override
     protected void onTick() {
-        if (tp.getCollected() < tp.getTraffic())
+        System.out.println("collected:" + tp.getCollected());
+        System.out.println("traffic:" + tp.getTraffic());
+        if (tp.getCollected() == tp.getTraffic())
             tp.addBehaviour(new TPContractNetInit(tp, new ACLMessage(ACLMessage.CFP), tp.getEnv()));
     }
 }

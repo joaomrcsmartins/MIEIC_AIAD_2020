@@ -16,7 +16,7 @@ public class TrafficPoint extends Agent implements Serializable {
     protected transient Environment env;
     static double MAX_RANGE = 10.0;
 
-    int collected = 0;
+    int collected;
 
     public double getMaxRange(){
         return MAX_RANGE;
@@ -45,6 +45,7 @@ public class TrafficPoint extends Agent implements Serializable {
         this.traffic = traffic;
         this.position = position;
         this.env = Environment.getInstance();
+        this.collected = 0;
     }
 
     public void setCollected(int collected) {
@@ -57,6 +58,7 @@ public class TrafficPoint extends Agent implements Serializable {
 
     @Override
     public void setup() {
+        addBehaviour(new TPContractNetInit(this, new ACLMessage(ACLMessage.CFP), this.getEnv()));
         addBehaviour(new TPCyclicContractNet(this));
     }
 

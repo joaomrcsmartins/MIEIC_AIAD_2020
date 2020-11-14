@@ -53,18 +53,18 @@ public class TPContractNetInit extends ContractNetInitiator {
         Collections.sort(responses, (Comparator<ACLMessage>) (aclMessage, t1) -> {
             String content = aclMessage.getContent();
             String content2 = t1.getContent();
-            double value = (content.equals("proposal-refused")) ? 0.0: Double.parseDouble(content);
+            double value = (content.equals("proposal-refused")) ? 0.0 : Double.parseDouble(content);
             double value2 = (content2.equals("proposal-refused")) ? 0.0 : Double.parseDouble(content2);
             return (int) (value2 - value);
         });
 
         for (int i = 0; i < responses.size(); i++) {
-            System.out.println(" (Init.handleAllResponses) Response from: " + ((ACLMessage) responses.get(i)).getSender().getLocalName() + " content:" + ((ACLMessage) responses.get(i)).getContent() );
+            System.out.println(" (Init.handleAllResponses) Response from: " + ((ACLMessage) responses.get(i)).getSender().getLocalName() + " content:" + ((ACLMessage) responses.get(i)).getContent());
             aux_name.add(((ACLMessage) responses.get(i)).getSender().getName());
             ACLMessage msg_reply = ((ACLMessage) responses.get(i)).createReply();
             ACLMessage msg = (ACLMessage) responses.get(i);
             String parseResponse = msg.getContent();
-            double value = (parseResponse.equals("proposal-refused"))? 0 :Double.parseDouble(parseResponse);
+            double value = (parseResponse.equals("proposal-refused")) ? 0 : Double.parseDouble(parseResponse);
             if (this.trafficPoint.getTraffic() >= collected + value || collected < this.trafficPoint.getTraffic()) {
                 msg_reply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
                 try {
@@ -86,8 +86,7 @@ public class TPContractNetInit extends ContractNetInitiator {
             acceptances.add(auxiliar);
         }
 
-        if(collected < this.trafficPoint.getTraffic())
-        {
+        if (collected < this.trafficPoint.getTraffic()) {
             this.trafficPoint.setCollected(collected);
             this.trafficPoint.addBehaviour(new TPRequestProtocolInit(this.trafficPoint, new ACLMessage(ACLMessage.REQUEST), this.env));
         }

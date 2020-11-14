@@ -83,18 +83,21 @@ public class APSubContractNetInit extends ContractNetInitiator {
             }
         }
 
-        int flag = 0;
         for (ACLMessage auxiliar : aux) {
             if (collected < this.trafficPoint.getTraffic())
             {
                 auxiliar.setPerformative(ACLMessage.REJECT_PROPOSAL);
-                flag = 1;
             }
             acceptances.add(auxiliar);
         }
 
-        if(flag == 0)
+        if(collected >= this.trafficPoint.getTraffic())
+        {
+            System.out.println("bannananas" + this.trafficPoint.getTraffic());
             this.trafficPoint.setCollected(this.trafficPoint.getTraffic());
+            System.out.println("meias: " + this.trafficPoint.getCollected());
+        }
+
     }
 
 
