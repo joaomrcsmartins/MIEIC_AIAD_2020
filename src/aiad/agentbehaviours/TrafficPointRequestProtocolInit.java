@@ -2,6 +2,7 @@ package aiad.agentbehaviours;
 
         import aiad.Environment;
         import aiad.TrafficPoint;
+        import aiad.access_point.AccessPoint;
         import aiad.access_point.FlyingAccessPoint;
         import jade.core.AID;
         import jade.core.behaviours.BaseInitiator;
@@ -32,7 +33,7 @@ public class TrafficPointRequestProtocolInit extends
         Vector v = new Vector();
         try {
             request.setContentObject(this.trafficPoint);
-            ArrayList<FlyingAccessPoint> near_drones = env.getNearDrones(trafficPoint);
+            ArrayList<AccessPoint> near_drones = env.getNearDrones(trafficPoint);
             request.addReceiver(new AID(near_drones.get(currentReceiverDrone).getLocalName(), false));
             v.add(request);
         }

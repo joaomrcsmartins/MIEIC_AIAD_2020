@@ -33,7 +33,7 @@ public class TrafficPointContractNetInit extends ContractNetInitiator {
         Vector v = new Vector();
         cfp.setContent(String.valueOf(trafficPoint.getTraffic()));
         cfp.setConversationId("contract-net");
-        ArrayList<FlyingAccessPoint> near_drones = env.getNearDrones(trafficPoint);
+        ArrayList<AccessPoint> near_drones = env.getNearDrones(trafficPoint);
 
         for (int i = 0; i < near_drones.size(); i++) {
             cfp.addReceiver(new AID(near_drones.get(i).getLocalName(), false));

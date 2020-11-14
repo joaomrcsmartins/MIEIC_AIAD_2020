@@ -1,5 +1,6 @@
 package aiad;
 
+import aiad.access_point.AccessPoint;
 import aiad.access_point.FlyingAccessPoint;
 import aiad.agentbehaviours.TrafficPointContractNetInit;
 import jade.core.Agent;
@@ -53,7 +54,7 @@ public class TrafficPoint extends Agent implements Serializable {
         addBehaviour(new TrafficPointContractNetInit(this, new ACLMessage(ACLMessage.CFP), this.env));
     }
 
-    public double isNearDrone(FlyingAccessPoint drone) {
+    public double isNearDrone(AccessPoint drone) {
         return position.getDistance(drone.getPos());
     }
 

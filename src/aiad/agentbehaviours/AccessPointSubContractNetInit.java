@@ -83,13 +83,18 @@ public class AccessPointSubContractNetInit extends ContractNetInitiator {
             }
         }
 
+        int flag = 0;
         for (ACLMessage auxiliar : aux) {
             if (collected < this.trafficPoint.getTraffic())
+            {
                 auxiliar.setPerformative(ACLMessage.REJECT_PROPOSAL);
+                flag = 1;
+            }
             acceptances.add(auxiliar);
         }
 
-
+        if(flag == 0)
+            this.trafficPoint.setCollected(0);
     }
 
 

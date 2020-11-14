@@ -107,9 +107,9 @@ public class Environment implements Serializable {
         return near_drones;
     }
 
-    public ArrayList<FlyingAccessPoint> getNearDrones(TrafficPoint actual_point) {
-        ArrayList<FlyingAccessPoint> near_drones = new ArrayList<>();
-        for (FlyingAccessPoint drone : drones) {
+    public ArrayList<AccessPoint> getNearDrones(TrafficPoint actual_point) {
+        ArrayList<AccessPoint> near_drones = new ArrayList<>();
+        for (AccessPoint drone : drones) {
             double dist = actual_point.isNearDrone(drone);
             if (dist <= actual_point.getMaxRange()) {
                 near_drones.add(drone);
