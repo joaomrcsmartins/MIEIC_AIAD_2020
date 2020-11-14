@@ -13,9 +13,6 @@ public class FlyingAccessPoint extends AccessPoint {
         this.charging = false;
     }
 
-    public boolean isNear(FlyingAccessPoint drone) {
-        return drone.getPos().getDistance(this.getPos()) <= MAX_RANGE;
-    }
 
     public boolean isAvailable() {
         return !charging && super.isAvailable();

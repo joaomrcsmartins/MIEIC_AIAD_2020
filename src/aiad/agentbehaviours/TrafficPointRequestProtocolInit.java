@@ -44,8 +44,8 @@ public class TrafficPointRequestProtocolInit extends
     @Override
     protected void handleFailure(ACLMessage failure) {
         // Retry with new drone. TODO: make sure there are no synchronization errors, for instance another drone being added to the vector before we call this.
-        this.trafficPoint.addBehaviour(new TrafficPointRequestProtocolInit(this.trafficPoint, new ACLMessage(ACLMessage.CFP), this.env, this.currentReceiverDrone++));
-        super.handleFailure(failure);
+        //this.trafficPoint.addBehaviour(new TrafficPointRequestProtocolInit(this.trafficPoint, new ACLMessage(ACLMessage.CFP), this.env, this.currentReceiverDrone++));
+        //super.handleFailure(refuse);
     }
 
     @Override

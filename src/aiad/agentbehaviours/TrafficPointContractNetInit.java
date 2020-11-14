@@ -2,10 +2,12 @@ package aiad.agentbehaviours;
 
 import aiad.Environment;
 import aiad.TrafficPoint;
+import aiad.access_point.AccessPoint;
 import aiad.access_point.FlyingAccessPoint;
 import jade.core.AID;
 import jade.domain.FIPAAgentManagement.RefuseException;
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 import jade.proto.ContractNetInitiator;
 
 import java.io.IOException;
@@ -45,6 +47,8 @@ public class TrafficPointContractNetInit extends ContractNetInitiator {
     protected void handleAllResponses(Vector responses, Vector acceptances) {
 
         ArrayList<ACLMessage> aux = new ArrayList<>();
+        ArrayList<String> aux_name = new ArrayList<>();
+
         int collected = 0;
         System.out.println(" (Init.handleAllResponses)  got " + responses.size() + " responses! ");
 
@@ -58,6 +62,7 @@ public class TrafficPointContractNetInit extends ContractNetInitiator {
 
         for (int i = 0; i < responses.size(); i++) {
             System.out.println(" (Init.handleAllResponses) Response from: " + ((ACLMessage) responses.get(i)).getSender().getLocalName() + " content:" + ((ACLMessage) responses.get(i)).getContent() );
+            aux_name.add(((ACLMessage) responses.get(i)).getSender().getName());
             ACLMessage msg_reply = ((ACLMessage) responses.get(i)).createReply();
             ACLMessage msg = (ACLMessage) responses.get(i);
             String parseResponse = msg.getContent();
@@ -84,8 +89,13 @@ public class TrafficPointContractNetInit extends ContractNetInitiator {
         }
 
         //TODO: subcontract
-        //if(collected < this.trafficPoint.getTraffic())
-
+        if(collected < this.trafficPoint.getTraffic())
+        {
+            this.trafficPoint.addBehaviour(new TrafficPointRequestProtocolInit(this.trafficPoint, new ACLMessage(ACLMessage.REQUEST), this.env, 0));
+            AccessPoint toanswer = this.env.getDroneByName(aux_name.get(0));
+            toanswer.addBehaviour(new AccessPointRequestProtocolResponse(toanswer, MessageTemplate.MatchPerformative(ACLMessage.REQUEST), this.env));
+            
+        }
     }
 
     @Override

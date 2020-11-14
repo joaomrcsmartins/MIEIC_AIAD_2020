@@ -46,6 +46,10 @@ public class AccessPoint extends Agent {
         return pos;
     }
 
+    public boolean isNear(AccessPoint drone) {
+        return drone.getPos().getDistance(this.getPos()) <= MAX_RANGE;
+    }
+
     public void setPos(Coordinates pos) {
         this.pos = pos;
     }
@@ -99,7 +103,8 @@ public class AccessPoint extends Agent {
     protected void setup() {
         MessageTemplate template = MessageTemplate.MatchPerformative(ACLMessage.CFP);
         addBehaviour(new AccessPointContractNetResponder(this, template, this.env));
-        addBehaviour(new AccessPointRequestProtocolResponse(this, MessageTemplate.MatchPerformative(ACLMessage.REQUEST), this.env));
+        //TODO: modify template
+        addBehaviour(new AccessPointSubContractNetResponder(this,template, this.env));
 
     }
 

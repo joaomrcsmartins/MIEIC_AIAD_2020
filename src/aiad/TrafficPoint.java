@@ -40,8 +40,8 @@ public class TrafficPoint extends Agent implements Serializable {
 
     @Override
     public void setup() {
-//        addBehaviour(new TrafficPointContractNetInit(this, new ACLMessage(ACLMessage.CFP), this.env));
-        addBehaviour(new TrafficPointRequestProtocolInit(this, new ACLMessage(ACLMessage.REQUEST), this.env, 0));
+        addBehaviour(new TrafficPointContractNetInit(this, new ACLMessage(ACLMessage.CFP), this.env));
+        //addBehaviour(new TrafficPointRequestProtocolInit(this, new ACLMessage(ACLMessage.REQUEST), this.env, 0));
     }
 
     public double isNearDrone(FlyingAccessPoint drone) {

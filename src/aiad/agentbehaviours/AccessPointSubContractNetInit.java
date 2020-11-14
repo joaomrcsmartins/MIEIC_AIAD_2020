@@ -14,12 +14,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Vector;
 
-public class AccessPointContractNetInit extends ContractNetInitiator {
-    FlyingAccessPoint accessPoint;
+public class AccessPointSubContractNetInit extends ContractNetInitiator {
+    AccessPoint accessPoint;
     TrafficPoint trafficPoint;
     Environment env;
 
-    public AccessPointContractNetInit(FlyingAccessPoint accessPoint, TrafficPoint trafficPoint, ACLMessage msg, Environment env) {
+    public AccessPointSubContractNetInit(AccessPoint accessPoint, TrafficPoint trafficPoint, ACLMessage msg, Environment env) {
         super(accessPoint, msg);
         this.accessPoint = accessPoint;
         this.trafficPoint = trafficPoint;
@@ -30,7 +30,7 @@ public class AccessPointContractNetInit extends ContractNetInitiator {
     protected Vector prepareCfps(ACLMessage cfp) {
         Vector v = new Vector();
         cfp.setContent(" (Init.prepareCfps) This is my new capacity: " + trafficPoint.getTraffic());
-        ArrayList<FlyingAccessPoint> near_drones = env.getNearDrones(accessPoint);
+        ArrayList<AccessPoint> near_drones = env.getNearDrones(accessPoint);
 
         for (int i = 0; i < near_drones.size(); i++) {
             cfp.addReceiver(new AID(near_drones.get(i).getLocalName(), false));
