@@ -6,6 +6,7 @@ import aiad.TrafficPoint;
 import aiad.agentbehaviours.AccessPointContractNetResponder;
 import aiad.util.ClientPair;
 import aiad.agentbehaviours.AccessPointRequestProtocolResponse;
+import aiad.agentbehaviours.AccessPointSubContractNetResponder;
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;

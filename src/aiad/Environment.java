@@ -11,6 +11,9 @@ import jade.wrapper.StaleProxyException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Random;
+
+import static java.lang.Integer.max;
 
 public class Environment implements Serializable {
     private static Environment env_instance = null;
@@ -123,5 +126,23 @@ public class Environment implements Serializable {
     public void startSystem() {
         createPoints();
         //TODO: trigger the agents activity
+    }
+
+    public Coordinates getPosInRange(Coordinates pos, double range){
+        Random rand = new Random();
+        Integer dir = rand.nextInt(4);
+        switch(dir){
+            case(0):
+                return new Coordinates(pos.getX() + (int) range, pos.getY());
+            case(1):
+                return new Coordinates(max(pos.getX() - (int) range, 0), pos.getY());
+            case(2):
+                return new Coordinates(pos.getX(), pos.getY() + (int)range);
+            case(3):
+                return new Coordinates(pos.getX(), max(pos.getY() - (int) range, 0));
+            default:
+                return pos;
+        }
+
     }
 }
