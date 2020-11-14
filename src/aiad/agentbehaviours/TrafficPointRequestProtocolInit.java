@@ -26,7 +26,8 @@ public class TrafficPointRequestProtocolInit extends
     }
 
     @Override
-    protected Vector prepareCfps(ACLMessage cfp) {
+    protected Vector prepareRequests(ACLMessage request) {
+        System.out.println("Preparing request: " + trafficPoint.getTraffic());
         Vector v = new Vector();
         cfp.setContent("Initiate contract net");
         ArrayList<FlyingAccessPoint> near_drones =  env.getNearDrones(trafficPoint);

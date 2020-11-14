@@ -5,6 +5,7 @@ import aiad.Environment;
 import aiad.TrafficPoint;
 import aiad.agentbehaviours.AccessPointContractNetResponder;
 import aiad.util.ClientPair;
+import aiad.agentbehaviours.AccessPointRequestProtocolResponse;
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
@@ -97,6 +98,7 @@ public class AccessPoint extends Agent {
     protected void setup() {
         MessageTemplate template = MessageTemplate.MatchPerformative(ACLMessage.CFP);
         addBehaviour(new AccessPointContractNetResponder(this, template, this.env));
+        addBehaviour(new AccessPointRequestProtocolResponse(this, MessageTemplate.MatchPerformative(ACLMessage.REQUEST), this.env));
 
     }
 
