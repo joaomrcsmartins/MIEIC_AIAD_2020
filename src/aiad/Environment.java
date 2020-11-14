@@ -1,5 +1,6 @@
 package aiad;
 
+import aiad.access_point.AccessPoint;
 import aiad.access_point.FlyingAccessPoint;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
@@ -83,14 +84,17 @@ public class Environment implements Serializable {
         return drones;
     }
 
-    /*public ArrayList<FlyingAccessPoint> getNearDrones(FlyingAccessPoint actual_drone) {
+    public ArrayList<FlyingAccessPoint> getNearDrones(FlyingAccessPoint actual_drone) {
         ArrayList<FlyingAccessPoint> near_drones = new ArrayList<>();
         for (FlyingAccessPoint drone : drones) {
+            if(drone.getName().equals(actual_drone.getName()))
+                continue;
+
             if (actual_drone.isNear(drone))
                 near_drones.add(drone);
         }
         return near_drones;
-    }*/
+    }
 
     public ArrayList<FlyingAccessPoint> getNearDrones(TrafficPoint actual_point) {
         ArrayList<FlyingAccessPoint> near_drones = new ArrayList<>();

@@ -3,6 +3,7 @@ package aiad.agentbehaviours;
 import aiad.Environment;
 import aiad.TrafficPoint;
 import aiad.access_point.AccessPoint;
+import aiad.access_point.FlyingAccessPoint;
 import jade.core.behaviours.SequentialBehaviour;
 import jade.domain.FIPAAgentManagement.FailureException;
 import jade.domain.FIPAAgentManagement.RefuseException;
@@ -25,17 +26,18 @@ public class AccessPointRequestProtocolResponse extends AchieveREResponder {
 
     @Override
     protected ACLMessage handleRequest(ACLMessage request) throws RefuseException {
-        System.out.println("Received request: " + request.getContent());
+        System.out.println("(handleRequest) " + this.accessPoint.getLocalName() + " Received request: " + request);
         try {
             TrafficPoint tp = (TrafficPoint) request.getContentObject();
-            this.accessPoint.addBehaviour(new TrafficPointContractNetInit(tp, new ACLMessage(ACLMessage.CFP), this.env));
+            System.out.println("Traffic point traffic: " + tp.getTraffic());
+            //TODO: remove this cast.
+            this.accessPoint.addBehaviour(new AccessPointContractNetInit((FlyingAccessPoint) this.accessPoint, tp, new ACLMessage(ACLMessage.CFP), this.env));
+//            ACLMessage response = new ACLMessage()
         }
         catch(Exception e){
             e.printStackTrace();
         }
         return request;
-
-
     }
 
 }

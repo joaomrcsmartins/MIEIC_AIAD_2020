@@ -29,12 +29,15 @@ public class TrafficPointRequestProtocolInit extends
     protected Vector prepareRequests(ACLMessage request) {
         System.out.println("Preparing request: " + trafficPoint.getTraffic());
         Vector v = new Vector();
-        cfp.setContent("Initiate contract net");
-        ArrayList<FlyingAccessPoint> near_drones =  env.getNearDrones(trafficPoint);
-        cfp.addReceiver(new AID(near_drones.get(currentReceiverDrone).getLocalName(), false));
-
-        v.add(cfp);
-
+        try {
+            request.setContentObject(this.trafficPoint);
+            ArrayList<FlyingAccessPoint> near_drones = env.getNearDrones(trafficPoint);
+            request.addReceiver(new AID(near_drones.get(currentReceiverDrone).getLocalName(), false));
+            v.add(request);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
         return v;
     }
 
