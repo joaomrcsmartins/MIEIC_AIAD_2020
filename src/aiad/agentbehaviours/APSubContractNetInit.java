@@ -93,9 +93,7 @@ public class APSubContractNetInit extends ContractNetInitiator {
 
         if(collected >= this.trafficPoint.getTraffic())
         {
-            System.out.println("bannananas" + this.trafficPoint.getTraffic());
-            this.trafficPoint.setCollected(this.trafficPoint.getTraffic());
-            System.out.println("meias: " + this.trafficPoint.getCollected());
+            this.env.getTrafficPointByName(this.trafficPoint.getName()).setCollected(this.trafficPoint.getTraffic());
         }
 
     }

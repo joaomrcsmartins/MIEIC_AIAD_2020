@@ -87,6 +87,14 @@ public class Environment implements Serializable {
         return null;
     }
 
+    public TrafficPoint getTrafficPointByName(String name) {
+        for (TrafficPoint trafficPoint : traffic_points) {
+            if (trafficPoint.getName().equals(name))
+                return trafficPoint;
+        }
+        return null;
+    }
+
     public ArrayList<TrafficPoint> getTrafficPoints() {
         return traffic_points;
     }

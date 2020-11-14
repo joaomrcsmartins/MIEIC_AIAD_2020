@@ -90,6 +90,10 @@ public class TPContractNetInit extends ContractNetInitiator {
             this.trafficPoint.setCollected(collected);
             this.trafficPoint.addBehaviour(new TPRequestProtocolInit(this.trafficPoint, new ACLMessage(ACLMessage.REQUEST), this.env));
         }
+        else{
+            this.env.getTrafficPointByName(this.trafficPoint.getName()).setCollected(0);
+        }
+
     }
 
     @Override
