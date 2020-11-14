@@ -6,6 +6,7 @@ import aiad.access_point.AccessPoint;
 import aiad.access_point.FlyingAccessPoint;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 import jade.proto.ContractNetInitiator;
 
 import java.io.IOException;
@@ -44,9 +45,14 @@ public class AccessPointSubContractNetInit extends ContractNetInitiator {
     @Override
     protected void handleAllResponses(Vector responses, Vector acceptances) {
 
-        ArrayList<ACLMessage> aux = new ArrayList<>();
-        int collected = 0;
         System.out.println(" (Init.handleAllResponses)  got " + responses.size() + " responses! ");
+
+        ArrayList<ACLMessage> aux = new ArrayList<>();
+        ArrayList<String> aux_name = new ArrayList<>();
+
+        int collected = this.trafficPoint.getCollected();
+
+        System.out.println("colleted : " + collected);
 
         Collections.sort(responses, (Comparator<ACLMessage>) (aclMessage, t1) -> {
             String content = aclMessage.getContent();
@@ -58,6 +64,7 @@ public class AccessPointSubContractNetInit extends ContractNetInitiator {
 
         for (int i = 0; i < responses.size(); i++) {
             System.out.println(" (Init.handleAllResponses) Response from: " + ((ACLMessage) responses.get(i)).getSender().getLocalName() + " content:" + ((ACLMessage) responses.get(i)).getContent() );
+            aux_name.add(((ACLMessage) responses.get(i)).getSender().getName());
             ACLMessage msg_reply = ((ACLMessage) responses.get(i)).createReply();
             ACLMessage msg = (ACLMessage) responses.get(i);
             String parseResponse = msg.getContent();
@@ -83,10 +90,9 @@ public class AccessPointSubContractNetInit extends ContractNetInitiator {
             acceptances.add(auxiliar);
         }
 
-        //TODO: subcontract
-        //if(collected < this.trafficPoint.getTraffic())
 
     }
+
 
     @Override
     protected void handleAllResultNotifications(Vector resultNotifications) {

@@ -54,6 +54,7 @@ public class AccessPointSubContractNetResponder extends ContractNetResponder {
             // Drone will move closer to traffic point.
             Coordinates newPos = this.env.getPosInRange(requestPoint.getPosition(), requestPoint.getMaxRange());
             this.accessPoint.setPos(newPos);
+            System.out.println("new position : " + newPos);
 
             return inform;
 

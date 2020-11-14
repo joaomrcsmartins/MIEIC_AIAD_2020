@@ -9,6 +9,7 @@ package aiad.agentbehaviours;
         import jade.proto.AchieveREInitiator;
 
         import java.util.ArrayList;
+        import java.util.Random;
         import java.util.Vector;
 
 public class TrafficPointRequestProtocolInit extends
@@ -18,11 +19,11 @@ public class TrafficPointRequestProtocolInit extends
     Environment env;
     Integer currentReceiverDrone;
 
-    public TrafficPointRequestProtocolInit(TrafficPoint a, ACLMessage msg, Environment env, Integer currentReceiverDrone) {
+    public TrafficPointRequestProtocolInit(TrafficPoint a, ACLMessage msg, Environment env) {
         super(a, msg);
         this.trafficPoint = a;
         this.env = env;
-        this.currentReceiverDrone = currentReceiverDrone;
+        this.currentReceiverDrone = new Random().nextInt() % env.getNearDrones(a).size();
     }
 
     @Override
@@ -42,10 +43,8 @@ public class TrafficPointRequestProtocolInit extends
     }
 
     @Override
-    protected void handleFailure(ACLMessage failure) {
-        // Retry with new drone. TODO: make sure there are no synchronization errors, for instance another drone being added to the vector before we call this.
-        //this.trafficPoint.addBehaviour(new TrafficPointRequestProtocolInit(this.trafficPoint, new ACLMessage(ACLMessage.CFP), this.env, this.currentReceiverDrone++));
-        //super.handleFailure(refuse);
+    protected void handleRefuse(ACLMessage refuse) {
+       System.out.println("handle refuse");
     }
 
     @Override

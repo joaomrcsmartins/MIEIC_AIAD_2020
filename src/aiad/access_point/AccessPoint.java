@@ -102,7 +102,12 @@ public class AccessPoint extends Agent {
     @Override
     protected void setup() {
         MessageTemplate template = MessageTemplate.MatchPerformative(ACLMessage.CFP);
+        /*MessageTemplate templatesubcontract = MessageTemplate.and(
+                MessageTemplate.,
+                MessageTemplate.MatchPerformative(ACLMessage.REQUEST) );*/
+
         addBehaviour(new AccessPointContractNetResponder(this, template, this.env));
+        addBehaviour(new AccessPointRequestProtocolResponse(this, MessageTemplate.MatchPerformative(ACLMessage.REQUEST), this.env));
         //TODO: modify template
         addBehaviour(new AccessPointSubContractNetResponder(this,template, this.env));
 

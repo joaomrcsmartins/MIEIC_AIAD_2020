@@ -91,10 +91,8 @@ public class TrafficPointContractNetInit extends ContractNetInitiator {
         //TODO: subcontract
         if(collected < this.trafficPoint.getTraffic())
         {
-            this.trafficPoint.addBehaviour(new TrafficPointRequestProtocolInit(this.trafficPoint, new ACLMessage(ACLMessage.REQUEST), this.env, 0));
-            AccessPoint toanswer = this.env.getDroneByName(aux_name.get(0));
-            toanswer.addBehaviour(new AccessPointRequestProtocolResponse(toanswer, MessageTemplate.MatchPerformative(ACLMessage.REQUEST), this.env));
-            
+            this.trafficPoint.setCollected(collected);
+            this.trafficPoint.addBehaviour(new TrafficPointRequestProtocolInit(this.trafficPoint, new ACLMessage(ACLMessage.REQUEST), this.env));
         }
     }
 
