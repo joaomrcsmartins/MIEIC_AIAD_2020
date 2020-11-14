@@ -39,6 +39,7 @@ public class AccessPointSubContractNetResponder extends ContractNetResponder {
 
     @Override
     protected ACLMessage handleAcceptProposal(ACLMessage cfp, ACLMessage propose, ACLMessage accept) throws FailureException {
+
         System.out.println(" (SubContractNet-handleAcceptProposal)  FAP Agent " + this.accessPoint.getLocalName() + ": Proposal accepted" + " from " + cfp.getSender().getName());
         TrafficPoint requestPoint = null;
         try {
@@ -54,7 +55,7 @@ public class AccessPointSubContractNetResponder extends ContractNetResponder {
             // Drone will move closer to traffic point.
             Coordinates newPos = this.env.getPosInRange(requestPoint.getPosition(), requestPoint.getMaxRange());
             this.accessPoint.setPos(newPos);
-            System.out.println("new position : " + newPos);
+            System.out.println("(SubContractNet-handleAcceptProposal) New position : " + newPos);
 
             return inform;
 

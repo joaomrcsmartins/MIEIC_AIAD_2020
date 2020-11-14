@@ -54,17 +54,6 @@ public class AccessPointContractNetResponder extends ContractNetResponder {
             System.out.println("(ContractNet-handleAcceptProposal) FAP Agent " + this.accessPoint.getLocalName() + ": Request accepted, connecting to Traffic Point" + " from " + cfp.getSender().getName());
             jade.lang.acl.ACLMessage inform = accept.createReply();
             inform.setPerformative(jade.lang.acl.ACLMessage.INFORM);
-
-            //testing: inform former traffic point that will no longer support it
-           /* TrafficPoint tp_client = this.accessPoint.getCloserClient();
-            if(tp_client != null)
-            {
-                this.accessPoint.addBehaviour(new RequestTrafficPointShutdownRequestInit(this.accessPoint,new ACLMessage(ACLMessage.CFP),tp_client));
-                MessageTemplate template = MessageTemplate.MatchPerformative(ACLMessage.CFP);
-                tp_client.addBehaviour(new RequestTrafficPointShutdownRequestResponder(tp_client,template));
-            }*/
-
-
             return inform;
         } else {
             System.out.println(" (ContractNet-handleAcceptProposal) FAP Agent " + this.accessPoint.getLocalName() + ": Request denied, refusing connection" + " from " + cfp.getSender().getName());

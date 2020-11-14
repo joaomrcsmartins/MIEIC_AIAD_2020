@@ -53,8 +53,6 @@ public class AccessPointSubContractNetInit extends ContractNetInitiator {
 
         int collected = this.trafficPoint.getCollected();
 
-        System.out.println("colleted : " + collected);
-
         Collections.sort(responses, (Comparator<ACLMessage>) (aclMessage, t1) -> {
             String content = aclMessage.getContent();
             String content2 = t1.getContent();

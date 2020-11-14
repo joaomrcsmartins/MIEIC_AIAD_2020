@@ -89,7 +89,6 @@ public class TrafficPointContractNetInit extends ContractNetInitiator {
             acceptances.add(auxiliar);
         }
 
-        //TODO: subcontract
         if(collected < this.trafficPoint.getTraffic())
         {
             this.trafficPoint.setCollected(collected);

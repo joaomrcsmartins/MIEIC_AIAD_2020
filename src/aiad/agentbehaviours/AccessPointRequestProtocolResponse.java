@@ -26,7 +26,6 @@ public class AccessPointRequestProtocolResponse extends AchieveREResponder {
         try {
             TrafficPoint tp = (TrafficPoint) request.getContentObject();
             System.out.println("Traffic point traffic: " + tp.getTraffic());
-            //TODO: modify ACL type
             this.accessPoint.addBehaviour(new AccessPointSubContractNetInit(this.accessPoint, tp, new ACLMessage(ACLMessage.CFP), this.env));
 
         }
