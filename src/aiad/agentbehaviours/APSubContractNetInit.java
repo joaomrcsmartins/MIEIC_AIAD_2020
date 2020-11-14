@@ -3,10 +3,8 @@ package aiad.agentbehaviours;
 import aiad.Environment;
 import aiad.TrafficPoint;
 import aiad.access_point.AccessPoint;
-import aiad.access_point.FlyingAccessPoint;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
 import jade.proto.ContractNetInitiator;
 
 import java.io.IOException;
@@ -51,23 +49,23 @@ public class APSubContractNetInit extends ContractNetInitiator {
         ArrayList<ACLMessage> aux = new ArrayList<>();
         ArrayList<String> aux_name = new ArrayList<>();
 
-        int collected = this.trafficPoint.getCollected();
+        double collected = this.trafficPoint.getCollected();
 
         Collections.sort(responses, (Comparator<ACLMessage>) (aclMessage, t1) -> {
             String content = aclMessage.getContent();
             String content2 = t1.getContent();
-            double value = (content.equals("proposal-refused")) ? 0.0: Double.parseDouble(content);
+            double value = (content.equals("proposal-refused")) ? 0.0 : Double.parseDouble(content);
             double value2 = (content2.equals("proposal-refused")) ? 0.0 : Double.parseDouble(content2);
             return (int) (value2 - value);
         });
 
-        for (int i = 0; i < responses.size(); i++) {
-            System.out.println(" (Init.handleAllResponses) Response from: " + ((ACLMessage) responses.get(i)).getSender().getLocalName() + " content:" + ((ACLMessage) responses.get(i)).getContent() );
-            aux_name.add(((ACLMessage) responses.get(i)).getSender().getName());
-            ACLMessage msg_reply = ((ACLMessage) responses.get(i)).createReply();
-            ACLMessage msg = (ACLMessage) responses.get(i);
+        for (Object respons : responses) {
+            System.out.println(" (Init.handleAllResponses) Response from: " + ((ACLMessage) respons).getSender().getLocalName() + " content:" + ((ACLMessage) respons).getContent());
+            aux_name.add(((ACLMessage) respons).getSender().getName());
+            ACLMessage msg_reply = ((ACLMessage) respons).createReply();
+            ACLMessage msg = (ACLMessage) respons;
             String parseResponse = msg.getContent();
-            double value = (parseResponse.equals("proposal-refused"))? 0 :Double.parseDouble(parseResponse);
+            double value = (parseResponse.equals("proposal-refused")) ? 0 : Double.parseDouble(parseResponse);
             if (this.trafficPoint.getTraffic() >= collected + value || collected < this.trafficPoint.getTraffic()) {
                 msg_reply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
                 try {
@@ -83,21 +81,18 @@ public class APSubContractNetInit extends ContractNetInitiator {
             }
         }
 
-        for (ACLMessage auxiliar : aux) {
-            if (collected < this.trafficPoint.getTraffic())
-            {
-                auxiliar.setPerformative(ACLMessage.REJECT_PROPOSAL);
+        for (ACLMessage auxiliary : aux) {
+            if (collected < this.trafficPoint.getTraffic()) {
+                auxiliary.setPerformative(ACLMessage.REJECT_PROPOSAL);
             }
-            acceptances.add(auxiliar);
+            acceptances.add(auxiliary);
         }
 
-        if(collected >= this.trafficPoint.getTraffic())
-        {
+        if (collected >= this.trafficPoint.getTraffic()) {
             this.env.getTrafficPointByName(this.trafficPoint.getName()).setCollected(this.trafficPoint.getTraffic());
         }
 
     }
-
 
     @Override
     protected void handleAllResultNotifications(Vector resultNotifications) {

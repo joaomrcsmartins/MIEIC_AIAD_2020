@@ -1,8 +1,6 @@
 package aiad;
 
 import aiad.access_point.AccessPoint;
-import aiad.access_point.FlyingAccessPoint;
-import aiad.agentbehaviours.TrafficPointContractNetInit;
 import aiad.agentbehaviours.TPContractNetInit;
 import aiad.agentbehaviours.TPCyclicContractNet;
 import jade.core.Agent;
@@ -16,11 +14,12 @@ public class TrafficPoint extends Agent implements Serializable {
     protected transient Environment env;
     static double MAX_RANGE = 10.0;
 
-    int collected;
+    double collected;
 
-    public double getMaxRange(){
+    public double getMaxRange() {
         return MAX_RANGE;
     }
+
     public Double getTraffic() {
         return traffic;
     }
@@ -49,11 +48,11 @@ public class TrafficPoint extends Agent implements Serializable {
         this.collected = 0;
     }
 
-    public void setCollected(int collected) {
+    public void setCollected(double collected) {
         this.collected = collected;
     }
 
-    public int getCollected() {
+    public double getCollected() {
         return collected;
     }
 

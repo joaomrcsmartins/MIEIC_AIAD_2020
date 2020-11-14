@@ -40,6 +40,6 @@ public class FlyingAccessPoint extends AccessPoint {
     @Override
     protected void setup() {
         super.setup();
-        //TODO: add setup agent behavior when communicating with other FAPs
+        //TODO: add setup agent behavior related to the drone functions
     }
 }

@@ -27,9 +27,7 @@ public class APRequestProtocolResponse extends AchieveREResponder {
             TrafficPoint tp = (TrafficPoint) request.getContentObject();
             System.out.println("Traffic point traffic: " + tp.getTraffic());
             this.accessPoint.addBehaviour(new APSubContractNetInit(this.accessPoint, tp, new ACLMessage(ACLMessage.CFP), this.env));
-
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return response;

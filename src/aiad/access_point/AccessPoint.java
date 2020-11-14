@@ -68,10 +68,6 @@ public class AccessPoint extends Agent {
         return env;
     }
 
-    public ClientPair getCloserClient() {
-        return clientPoints.peek();
-    }
-
     public PriorityQueue<ClientPair> getClientPoints() {
         return clientPoints;
     }
@@ -101,23 +97,22 @@ public class AccessPoint extends Agent {
 
     @Override
     protected void setup() {
-        MessageTemplate templatesubcontract = MessageTemplate.and(
+        MessageTemplate templateSubContract = MessageTemplate.and(
                 MessageTemplate.MatchConversationId("sub-contract-net"),
-                MessageTemplate.MatchPerformative(ACLMessage.CFP) );
+                MessageTemplate.MatchPerformative(ACLMessage.CFP));
 
-        MessageTemplate templatecontract = MessageTemplate.and(
+        MessageTemplate templateContract = MessageTemplate.and(
                 MessageTemplate.MatchConversationId("contract-net"),
-                MessageTemplate.MatchPerformative(ACLMessage.CFP) );
+                MessageTemplate.MatchPerformative(ACLMessage.CFP));
 
-        //TODO: modify template
-        addBehaviour(new APContractNetResponder(this, templatecontract, this.env));
-        addBehaviour(new APSubContractNetResponder(this, templatesubcontract, this.env));
+        addBehaviour(new APContractNetResponder(this, templateContract, this.env));
+        addBehaviour(new APSubContractNetResponder(this, templateSubContract, this.env));
         addBehaviour(new APRequestProtocolResponse(this, MessageTemplate.MatchPerformative(ACLMessage.REQUEST), this.env));
 
     }
 
     public double evaluateRequest(double requestedTraffic) {
-        if(getAvailableTraffic() == 0)
+        if (getAvailableTraffic() == 0)
             return 0;
 
         double optimizableTraffic = requestedTraffic - getAvailableTraffic();

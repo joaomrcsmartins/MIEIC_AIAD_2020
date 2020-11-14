@@ -29,7 +29,7 @@ public class APContractNetResponder extends ContractNetResponder {
         //if (proposal > 0) {
         boolean proposal = this.accessPoint.isAvailable();
         if (proposal) {
-            System.out.println(" (ContractNet-handleCpf) FAP agent " + this.accessPoint.getLocalName() + ": Proposing " + this.accessPoint.getAvailableTraffic() + " to "+ cfp.getSender().getLocalName());
+            System.out.println(" (ContractNet-handleCpf) FAP agent " + this.accessPoint.getLocalName() + ": Proposing " + this.accessPoint.getAvailableTraffic() + " to " + cfp.getSender().getLocalName());
             ACLMessage propose = cfp.createReply();
             propose.setPerformative(ACLMessage.PROPOSE);
             propose.setContent(String.valueOf(this.accessPoint.getAvailableTraffic()));

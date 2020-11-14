@@ -27,12 +27,12 @@ public class ClientPair extends Pair implements Comparable {
 
     @Override
     public int compareTo(Object o) {
-            if(this == o) return 0;
-            if (!(o instanceof ClientPair)) throw new ClassCastException("Object is not of type ClientPair");
-            ClientPair cp2 = (ClientPair) o;
-            Double o1Value = this.getValue();
-            Double o2Value = cp2.getValue();
-            return o1Value.compareTo(o2Value);
+        if (this == o) return 0;
+        if (!(o instanceof ClientPair)) throw new ClassCastException("Object is not of type ClientPair");
+        ClientPair cp2 = (ClientPair) o;
+        Double o1Value = this.getValue();
+        Double o2Value = cp2.getValue();
+        return o1Value.compareTo(o2Value);
     }
 
 

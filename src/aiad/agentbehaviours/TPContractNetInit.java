@@ -47,7 +47,7 @@ public class TPContractNetInit extends ContractNetInitiator {
         ArrayList<ACLMessage> aux = new ArrayList<>();
         ArrayList<String> aux_name = new ArrayList<>();
 
-        int collected = 0;
+        double collected = 0;
         System.out.println(" (Init.handleAllResponses)  got " + responses.size() + " responses! ");
 
         Collections.sort(responses, (Comparator<ACLMessage>) (aclMessage, t1) -> {
@@ -58,11 +58,11 @@ public class TPContractNetInit extends ContractNetInitiator {
             return (int) (value2 - value);
         });
 
-        for (int i = 0; i < responses.size(); i++) {
-            System.out.println(" (Init.handleAllResponses) Response from: " + ((ACLMessage) responses.get(i)).getSender().getLocalName() + " content:" + ((ACLMessage) responses.get(i)).getContent());
-            aux_name.add(((ACLMessage) responses.get(i)).getSender().getName());
-            ACLMessage msg_reply = ((ACLMessage) responses.get(i)).createReply();
-            ACLMessage msg = (ACLMessage) responses.get(i);
+        for (Object response : responses) {
+            System.out.println(" (Init.handleAllResponses) Response from: " + ((ACLMessage) response).getSender().getLocalName() + " content:" + ((ACLMessage) response).getContent());
+            aux_name.add(((ACLMessage) response).getSender().getName());
+            ACLMessage msg_reply = ((ACLMessage) response).createReply();
+            ACLMessage msg = (ACLMessage) response;
             String parseResponse = msg.getContent();
             double value = (parseResponse.equals("proposal-refused")) ? 0 : Double.parseDouble(parseResponse);
             if (this.trafficPoint.getTraffic() >= collected + value || collected < this.trafficPoint.getTraffic()) {
@@ -80,17 +80,16 @@ public class TPContractNetInit extends ContractNetInitiator {
             }
         }
 
-        for (ACLMessage auxiliar : aux) {
+        for (ACLMessage auxiliary : aux) {
             if (collected < this.trafficPoint.getTraffic())
-                auxiliar.setPerformative(ACLMessage.REJECT_PROPOSAL);
-            acceptances.add(auxiliar);
+                auxiliary.setPerformative(ACLMessage.REJECT_PROPOSAL);
+            acceptances.add(auxiliary);
         }
 
         if (collected < this.trafficPoint.getTraffic()) {
             this.trafficPoint.setCollected(collected);
             this.trafficPoint.addBehaviour(new TPRequestProtocolInit(this.trafficPoint, new ACLMessage(ACLMessage.REQUEST), this.env));
-        }
-        else{
+        } else {
             this.env.getTrafficPointByName(this.trafficPoint.getName()).setCollected(0);
         }
 

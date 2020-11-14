@@ -54,12 +54,12 @@ public class Environment implements Serializable {
     //TODO: create more data
     private void createAccessPoints() throws StaleProxyException {
         //TODO: create real id
-        FlyingAccessPoint fap = new FlyingAccessPoint(120,new Coordinates(15,10));
+        FlyingAccessPoint fap = new FlyingAccessPoint(120, new Coordinates(15, 10));
         AgentController aa = this.ac.acceptNewAgent("zoe", fap);
         aa.start();
         drones.add(fap);
         //TODO: create real id
-        FlyingAccessPoint fap2 = new FlyingAccessPoint(80,new Coordinates(16,20));
+        FlyingAccessPoint fap2 = new FlyingAccessPoint(80, new Coordinates(16, 20));
         AgentController aa2 = this.ac.acceptNewAgent("daisy", fap2);
         aa2.start();
         drones.add(fap2);
@@ -68,7 +68,7 @@ public class Environment implements Serializable {
     //TODO: create more data
     private void createTrafficPoints() throws StaleProxyException {
         //TODO: create id
-        /*TrafficPoint tp = new TrafficPoint(80, new Coordinates(20, 0));
+        /*TrafficPoint tp = new TrafficPoint(80.0, new Coordinates(20, 20));
         AgentController aa = this.ac.acceptNewAgent("loki", tp);
         aa.start();
         traffic_points.add(tp);*/
@@ -145,7 +145,7 @@ public class Environment implements Serializable {
 
     public Coordinates getPosInRange(Coordinates pos, double range) {
         Random rand = new Random();
-        Integer dir = rand.nextInt(4);
+        int dir = rand.nextInt(4);
         switch (dir) {
             case (0):
                 return new Coordinates(pos.getX() + (int) range, pos.getY());

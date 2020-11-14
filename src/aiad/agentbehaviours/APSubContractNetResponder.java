@@ -26,7 +26,7 @@ public class APSubContractNetResponder extends ContractNetResponder {
         System.out.println(" (SubContractNet-handleCpf) FAP agent " + this.accessPoint.getLocalName() + ": CFP received from " + cfp.getSender().getLocalName() + ". Traffic requested is " + cfp.getContent());
         boolean proposal = this.accessPoint.isAvailable();
         if (proposal) {
-            System.out.println(" (SubContractNet-handleCpf) FAP agent " + this.accessPoint.getLocalName() + ": Proposing " + this.accessPoint.getAvailableTraffic() + " to "+ cfp.getSender().getLocalName());
+            System.out.println(" (SubContractNet-handleCpf) FAP agent " + this.accessPoint.getLocalName() + ": Proposing " + this.accessPoint.getAvailableTraffic() + " to " + cfp.getSender().getLocalName());
             ACLMessage propose = cfp.createReply();
             propose.setPerformative(ACLMessage.PROPOSE);
             propose.setContent(String.valueOf(this.accessPoint.getAvailableTraffic()));
@@ -48,16 +48,16 @@ public class APSubContractNetResponder extends ContractNetResponder {
             e.printStackTrace();
             throw new FailureException("failed-read-trafficPoint-obj");
         }
-            System.out.println("(SubContractNet-handleAcceptProposal) FAP Agent " + this.accessPoint.getLocalName() + ": Request accepted, connecting to Traffic Point" + " from " + cfp.getSender().getName());
-            jade.lang.acl.ACLMessage inform = accept.createReply();
-            inform.setPerformative(jade.lang.acl.ACLMessage.INFORM);
+        System.out.println("(SubContractNet-handleAcceptProposal) FAP Agent " + this.accessPoint.getLocalName() + ": Request accepted, connecting to Traffic Point" + " from " + cfp.getSender().getName());
+        jade.lang.acl.ACLMessage inform = accept.createReply();
+        inform.setPerformative(jade.lang.acl.ACLMessage.INFORM);
 
-            // Drone will move closer to traffic point.
-            Coordinates newPos = this.env.getPosInRange(requestPoint.getPosition(), requestPoint.getMaxRange());
-            this.accessPoint.setPos(newPos);
-            System.out.println("(SubContractNet-handleAcceptProposal) New position : " + newPos);
+        // Drone will move closer to traffic point.
+        Coordinates newPos = this.env.getPosInRange(requestPoint.getPosition(), requestPoint.getMaxRange());
+        this.accessPoint.setPos(newPos);
+        System.out.println("(SubContractNet-handleAcceptProposal) New position : " + newPos);
 
-            return inform;
+        return inform;
 
     }
 
