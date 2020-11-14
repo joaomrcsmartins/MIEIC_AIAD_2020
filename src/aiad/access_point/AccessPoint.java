@@ -106,10 +106,10 @@ public class AccessPoint extends Agent {
                 MessageTemplate.,
                 MessageTemplate.MatchPerformative(ACLMessage.REQUEST) );*/
 
-        addBehaviour(new AccessPointContractNetResponder(this, template, this.env));
-        addBehaviour(new AccessPointRequestProtocolResponse(this, MessageTemplate.MatchPerformative(ACLMessage.REQUEST), this.env));
         //TODO: modify template
-        addBehaviour(new AccessPointSubContractNetResponder(this,template, this.env));
+        addBehaviour(new AccessPointContractNetResponder(this, MessageTemplate.MatchConversationId("contract-net"), this.env));
+        addBehaviour(new AccessPointSubContractNetResponder(this, MessageTemplate.MatchConversationId("sub-contract-net"), this.env));
+        addBehaviour(new AccessPointRequestProtocolResponse(this, MessageTemplate.MatchPerformative(ACLMessage.REQUEST), this.env));
 
     }
 

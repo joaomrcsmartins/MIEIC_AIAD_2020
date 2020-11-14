@@ -32,6 +32,7 @@ public class TrafficPointContractNetInit extends ContractNetInitiator {
     protected Vector prepareCfps(ACLMessage cfp) {
         Vector v = new Vector();
         cfp.setContent(String.valueOf(trafficPoint.getTraffic()));
+        cfp.setConversationId("contract-net");
         ArrayList<FlyingAccessPoint> near_drones = env.getNearDrones(trafficPoint);
 
         for (int i = 0; i < near_drones.size(); i++) {
