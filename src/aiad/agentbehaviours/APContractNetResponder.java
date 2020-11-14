@@ -10,12 +10,12 @@ import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
 import jade.proto.ContractNetResponder;
 
-public class AccessPointContractNetResponder extends ContractNetResponder {
+public class APContractNetResponder extends ContractNetResponder {
 
     AccessPoint accessPoint;
     Environment env;
 
-    public AccessPointContractNetResponder(AccessPoint a, MessageTemplate mt, Environment env) {
+    public APContractNetResponder(AccessPoint a, MessageTemplate mt, Environment env) {
         super(a, mt);
         this.accessPoint = a;
         this.env = env;

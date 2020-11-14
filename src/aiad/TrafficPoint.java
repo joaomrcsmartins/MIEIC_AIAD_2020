@@ -3,6 +3,8 @@ package aiad;
 import aiad.access_point.AccessPoint;
 import aiad.access_point.FlyingAccessPoint;
 import aiad.agentbehaviours.TrafficPointContractNetInit;
+import aiad.agentbehaviours.TPContractNetInit;
+import aiad.agentbehaviours.TPCyclicContractNet;
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
 
@@ -31,6 +33,10 @@ public class TrafficPoint extends Agent implements Serializable {
         return position;
     }
 
+    public Environment getEnv() {
+        return env;
+    }
+
     public void setPosition(Coordinates position) {
         this.position = position;
     }
@@ -51,7 +57,7 @@ public class TrafficPoint extends Agent implements Serializable {
 
     @Override
     public void setup() {
-        addBehaviour(new TrafficPointContractNetInit(this, new ACLMessage(ACLMessage.CFP), this.env));
+        addBehaviour(new TPCyclicContractNet(this));
     }
 
     public double isNearDrone(AccessPoint drone) {

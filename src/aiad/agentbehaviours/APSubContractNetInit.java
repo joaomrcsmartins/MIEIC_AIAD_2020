@@ -5,7 +5,6 @@ import aiad.TrafficPoint;
 import aiad.access_point.AccessPoint;
 import aiad.access_point.FlyingAccessPoint;
 import jade.core.AID;
-import jade.domain.FIPAAgentManagement.RefuseException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.ContractNetInitiator;
@@ -16,24 +15,24 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Vector;
 
-
-public class TrafficPointContractNetInit extends ContractNetInitiator {
-
+public class APSubContractNetInit extends ContractNetInitiator {
+    AccessPoint accessPoint;
     TrafficPoint trafficPoint;
     Environment env;
 
-    public TrafficPointContractNetInit(TrafficPoint a, ACLMessage msg, Environment env) {
-        super(a, msg);
-        this.trafficPoint = a;
+    public APSubContractNetInit(AccessPoint accessPoint, TrafficPoint trafficPoint, ACLMessage msg, Environment env) {
+        super(accessPoint, msg);
+        this.accessPoint = accessPoint;
+        this.trafficPoint = trafficPoint;
         this.env = env;
     }
 
     @Override
     protected Vector prepareCfps(ACLMessage cfp) {
         Vector v = new Vector();
-        cfp.setContent(String.valueOf(trafficPoint.getTraffic()));
-        cfp.setConversationId("contract-net");
-        ArrayList<AccessPoint> near_drones = env.getNearDrones(trafficPoint);
+        cfp.setContent(" (Init.prepareCfps) This is my new capacity: " + trafficPoint.getTraffic());
+        cfp.setConversationId("sub-contract-net");
+        ArrayList<AccessPoint> near_drones = env.getNearDrones(accessPoint);
 
         for (int i = 0; i < near_drones.size(); i++) {
             cfp.addReceiver(new AID(near_drones.get(i).getLocalName(), false));
@@ -47,11 +46,12 @@ public class TrafficPointContractNetInit extends ContractNetInitiator {
     @Override
     protected void handleAllResponses(Vector responses, Vector acceptances) {
 
+        System.out.println(" (Init.handleAllResponses)  got " + responses.size() + " responses! ");
+
         ArrayList<ACLMessage> aux = new ArrayList<>();
         ArrayList<String> aux_name = new ArrayList<>();
 
-        int collected = 0;
-        System.out.println(" (Init.handleAllResponses)  got " + responses.size() + " responses! ");
+        int collected = this.trafficPoint.getCollected();
 
         Collections.sort(responses, (Comparator<ACLMessage>) (aclMessage, t1) -> {
             String content = aclMessage.getContent();
@@ -83,22 +83,23 @@ public class TrafficPointContractNetInit extends ContractNetInitiator {
             }
         }
 
+        int flag = 0;
         for (ACLMessage auxiliar : aux) {
             if (collected < this.trafficPoint.getTraffic())
+            {
                 auxiliar.setPerformative(ACLMessage.REJECT_PROPOSAL);
+                flag = 1;
+            }
             acceptances.add(auxiliar);
         }
 
-        if(collected < this.trafficPoint.getTraffic())
-        {
-            this.trafficPoint.setCollected(collected);
-            this.trafficPoint.addBehaviour(new TrafficPointRequestProtocolInit(this.trafficPoint, new ACLMessage(ACLMessage.REQUEST), this.env));
-        }
+        if(flag == 0)
+            this.trafficPoint.setCollected(this.trafficPoint.getTraffic());
     }
+
 
     @Override
     protected void handleAllResultNotifications(Vector resultNotifications) {
         System.out.println(" (Init.handleAllResultNotifications) got " + resultNotifications.size() + " result notifs!");
     }
-
 }

@@ -3,10 +3,10 @@ package aiad.access_point;
 import aiad.Coordinates;
 import aiad.Environment;
 import aiad.TrafficPoint;
-import aiad.agentbehaviours.AccessPointContractNetResponder;
+import aiad.agentbehaviours.APContractNetResponder;
+import aiad.agentbehaviours.APRequestProtocolResponse;
+import aiad.agentbehaviours.APSubContractNetResponder;
 import aiad.util.ClientPair;
-import aiad.agentbehaviours.AccessPointRequestProtocolResponse;
-import aiad.agentbehaviours.AccessPointSubContractNetResponder;
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
@@ -110,9 +110,9 @@ public class AccessPoint extends Agent {
                 MessageTemplate.MatchPerformative(ACLMessage.CFP) );
 
         //TODO: modify template
-        addBehaviour(new AccessPointContractNetResponder(this, templatecontract, this.env));
-        addBehaviour(new AccessPointSubContractNetResponder(this, templatesubcontract, this.env));
-        addBehaviour(new AccessPointRequestProtocolResponse(this, MessageTemplate.MatchPerformative(ACLMessage.REQUEST), this.env));
+        addBehaviour(new APContractNetResponder(this, templatecontract, this.env));
+        addBehaviour(new APSubContractNetResponder(this, templatesubcontract, this.env));
+        addBehaviour(new APRequestProtocolResponse(this, MessageTemplate.MatchPerformative(ACLMessage.REQUEST), this.env));
 
     }
 

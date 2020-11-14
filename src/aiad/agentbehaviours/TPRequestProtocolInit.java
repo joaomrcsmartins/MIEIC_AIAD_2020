@@ -13,14 +13,14 @@ package aiad.agentbehaviours;
         import java.util.Random;
         import java.util.Vector;
 
-public class TrafficPointRequestProtocolInit extends
+public class TPRequestProtocolInit extends
         AchieveREInitiator {
 
     TrafficPoint trafficPoint;
     Environment env;
     Integer currentReceiverDrone;
 
-    public TrafficPointRequestProtocolInit(TrafficPoint a, ACLMessage msg, Environment env) {
+    public TPRequestProtocolInit(TrafficPoint a, ACLMessage msg, Environment env) {
         super(a, msg);
         this.trafficPoint = a;
         this.env = env;
