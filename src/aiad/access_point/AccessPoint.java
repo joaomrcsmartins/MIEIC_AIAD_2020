@@ -4,18 +4,19 @@ import aiad.Coordinates;
 import aiad.Environment;
 import aiad.TrafficPoint;
 import aiad.agentbehaviours.AccessPointContractNetResponder;
+import aiad.util.ClientPair;
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
-import java.util.Comparator;
+import java.util.Optional;
 import java.util.PriorityQueue;
 
 public class AccessPoint extends Agent {
     static double MAX_RANGE = 20.0; //fixed value, but might change later
     private final double trafficCapacity;
     private double availableTraffic;
-    private PriorityQueue<TrafficPoint> clientPoints;
+    private final PriorityQueue<ClientPair> clientPoints;
     private Coordinates pos;
     private Environment env;
 
@@ -23,7 +24,7 @@ public class AccessPoint extends Agent {
         this.trafficCapacity = trafficCapacity;
         this.availableTraffic = trafficCapacity;
         this.pos = pos;
-        this.clientPoints = new PriorityQueue<TrafficPoint>();
+        this.clientPoints = new PriorityQueue<>();
         this.env = Environment.getInstance();
     }
 
@@ -43,15 +44,6 @@ public class AccessPoint extends Agent {
         return pos;
     }
 
-    public Environment getEnv() {
-        return env;
-    }
-
-    public TrafficPoint getCloserClient(){
-        return clientPoints.peek();
-    }
-
-
     public void setPos(Coordinates pos) {
         this.pos = pos;
     }
@@ -66,22 +58,34 @@ public class AccessPoint extends Agent {
 
     }
 
+    public Environment getEnv() {
+        return env;
+    }
+
+    public ClientPair getCloserClient() {
+        return clientPoints.peek();
+    }
+
+    public PriorityQueue<ClientPair> getClientPoints() {
+        return clientPoints;
+    }
+
     public boolean addClient(TrafficPoint point) {
-        if (point.getTraffic() > getAvailableTraffic()) {
+        double servedTraffic;
+        if (getAvailableTraffic() < point.getTraffic()) {
+            servedTraffic = getAvailableTraffic();
             this.availableTraffic = 0;
             //TODO: behavior when the drone cannot deal with the request single-handedly
             System.out.println("Not enough traffic available to fulfill the request!");
         } else
-            this.availableTraffic -= point.getTraffic();
-        return this.clientPoints.add(point);
+            this.availableTraffic -= servedTraffic = point.getTraffic();
+        return this.clientPoints.add(new ClientPair(point, servedTraffic));
     }
 
-    public void removeClient(TrafficPoint point) {
-        if (!this.clientPoints.contains(point)) return;
-        this.clientPoints.remove(point);
-        //TODO: deal with the case when a AP doesn't fulfill the request of the client on its own
-        //TODO: so that the available traffic doesn't grow past the maximum capacity
-        this.availableTraffic += point.getTraffic();
+    public boolean removeClient(ClientPair client) {
+        if (!this.clientPoints.contains(client)) return false;
+        this.availableTraffic += client.getValue();
+        return this.clientPoints.remove(client);
     }
 
     public boolean serveRequest(TrafficPoint point) {
@@ -94,5 +98,21 @@ public class AccessPoint extends Agent {
         MessageTemplate template = MessageTemplate.MatchPerformative(ACLMessage.CFP);
         addBehaviour(new AccessPointContractNetResponder(this, template, this.env));
 
+    }
+
+    public double evaluateRequest(double requestedTraffic) {
+        if(getAvailableTraffic() == 0)
+            return 0;
+
+        double optimizableTraffic = requestedTraffic - getAvailableTraffic();
+        if (optimizableTraffic > 0) {
+            //find the first client that isn't fully satisfied by the AP and whose supplied traffic is enough to fully satisfy this request
+            Optional<ClientPair> result = clientPoints.stream().filter(client -> !client.isSatisfied() && client.getValue() >= optimizableTraffic).findFirst();
+            if (result.isEmpty())
+                return getAvailableTraffic(); //when no optimization is possible, return the available value
+            else
+                removeClient(result.get()); //otherwise removes a not fully satisfied client to have necessary traffic to fully satisfy this one
+        }
+        return requestedTraffic; //fully satisfies the request the available traffic is enough or an optimization is made
     }
 }

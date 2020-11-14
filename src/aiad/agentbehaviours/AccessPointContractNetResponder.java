@@ -24,8 +24,9 @@ public class AccessPointContractNetResponder extends ContractNetResponder {
     @Override
     protected ACLMessage handleCfp(ACLMessage cfp) throws RefuseException {
         System.out.println(" (handleCpf) FAP agent " + this.accessPoint.getLocalName() + ": CFP received from " + cfp.getSender().getLocalName() + ". Traffic requested is " + cfp.getContent());
-        boolean proposal = this.accessPoint.isAvailable();
-        if (proposal) {
+        double requestedTraffic = Double.parseDouble(cfp.getContent());
+        double proposal = this.accessPoint.evaluateRequest(requestedTraffic);
+        if (proposal > 0) {
             System.out.println(" (handleCpf) FAP agent " + this.accessPoint.getLocalName() + ": Proposing " + this.accessPoint.getAvailableTraffic() + " to "+ cfp.getSender().getLocalName());
             ACLMessage propose = cfp.createReply();
             propose.setPerformative(ACLMessage.PROPOSE);
