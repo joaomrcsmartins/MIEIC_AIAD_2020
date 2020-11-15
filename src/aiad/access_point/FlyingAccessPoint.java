@@ -13,9 +13,6 @@ public class FlyingAccessPoint extends AccessPoint {
         this.charging = false;
     }
 
-    public boolean isNear(FlyingAccessPoint drone) {
-        return drone.getPos().getDistance(this.getPos()) <= MAX_RANGE;
-    }
 
     public boolean isAvailable() {
         return !charging && super.isAvailable();
@@ -43,6 +40,6 @@ public class FlyingAccessPoint extends AccessPoint {
     @Override
     protected void setup() {
         super.setup();
-        //TODO: add setup agent behavior when communicating with other FAPs
+        //TODO: add setup agent behavior related to the drone functions
     }
 }

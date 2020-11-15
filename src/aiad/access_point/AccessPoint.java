@@ -3,7 +3,10 @@ package aiad.access_point;
 import aiad.Coordinates;
 import aiad.Environment;
 import aiad.TrafficPoint;
-import aiad.agentbehaviours.AccessPointContractNetResponder;
+import aiad.agentbehaviours.APContractNetResponder;
+import aiad.agentbehaviours.APCyclicContractNet;
+import aiad.agentbehaviours.APRequestProtocolResponse;
+import aiad.agentbehaviours.APSubContractNetResponder;
 import aiad.util.ClientPair;
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
@@ -44,6 +47,10 @@ public class AccessPoint extends Agent {
         return pos;
     }
 
+    public boolean isNear(AccessPoint drone) {
+        return drone.getPos().getDistance(this.getPos()) <= MAX_RANGE;
+    }
+
     public void setPos(Coordinates pos) {
         this.pos = pos;
     }
@@ -60,10 +67,6 @@ public class AccessPoint extends Agent {
 
     public Environment getEnv() {
         return env;
-    }
-
-    public ClientPair getCloserClient() {
-        return clientPoints.peek();
     }
 
     public PriorityQueue<ClientPair> getClientPoints() {
@@ -95,13 +98,23 @@ public class AccessPoint extends Agent {
 
     @Override
     protected void setup() {
-        MessageTemplate template = MessageTemplate.MatchPerformative(ACLMessage.CFP);
-        addBehaviour(new AccessPointContractNetResponder(this, template, this.env));
+        MessageTemplate templateSubContract = MessageTemplate.and(
+                MessageTemplate.MatchConversationId("sub-contract-net"),
+                MessageTemplate.MatchPerformative(ACLMessage.CFP));
+
+        MessageTemplate templateContract = MessageTemplate.and(
+                MessageTemplate.MatchConversationId("contract-net"),
+                MessageTemplate.MatchPerformative(ACLMessage.CFP));
+
+        addBehaviour(new APContractNetResponder(this, templateContract, this.env));
+        addBehaviour(new APCyclicContractNet(this));
+        addBehaviour(new APSubContractNetResponder(this, templateSubContract, this.env));
+        addBehaviour(new APRequestProtocolResponse(this, MessageTemplate.MatchPerformative(ACLMessage.REQUEST), this.env));
 
     }
 
     public double evaluateRequest(double requestedTraffic) {
-        if(getAvailableTraffic() == 0)
+        if (getAvailableTraffic() == 0)
             return 0;
 
         double optimizableTraffic = requestedTraffic - getAvailableTraffic();

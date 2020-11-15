@@ -1,7 +1,8 @@
 package aiad;
 
-import aiad.access_point.FlyingAccessPoint;
-import aiad.agentbehaviours.TrafficPointContractNetInit;
+import aiad.access_point.AccessPoint;
+import aiad.agentbehaviours.TPContractNetInit;
+import aiad.agentbehaviours.TPCyclicContractNet;
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
 
@@ -13,19 +14,27 @@ public class TrafficPoint extends Agent implements Serializable {
     protected transient Environment env;
     static double MAX_RANGE = 10.0;
 
-    public double getMaxRange(){
+    double collected;
+
+    public double getMaxRange() {
         return MAX_RANGE;
     }
+
     public Double getTraffic() {
         return traffic;
     }
 
     public void setTraffic(Double traffic) {
         this.traffic = traffic;
+        addBehaviour(new TPContractNetInit(this, new ACLMessage(ACLMessage.CFP), this.getEnv()));
     }
 
     public Coordinates getPosition() {
         return position;
+    }
+
+    public Environment getEnv() {
+        return env;
     }
 
     public void setPosition(Coordinates position) {
@@ -36,17 +45,24 @@ public class TrafficPoint extends Agent implements Serializable {
         this.traffic = traffic;
         this.position = position;
         this.env = Environment.getInstance();
+        this.collected = 0;
+    }
+
+    public void setCollected(double collected) {
+        this.collected = collected;
+    }
+
+    public double getCollected() {
+        return collected;
     }
 
     @Override
     public void setup() {
-        addBehaviour(new TrafficPointContractNetInit(this, new ACLMessage(ACLMessage.CFP), this.env));
+        addBehaviour(new TPCyclicContractNet(this));
     }
 
-    public double isNearDrone(FlyingAccessPoint drone) {
+    public double isNearDrone(AccessPoint drone) {
         return position.getDistance(drone.getPos());
     }
-
-
 
 }
