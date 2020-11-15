@@ -3,7 +3,7 @@ package aiad.util;
 import aiad.Coordinates;
 import aiad.Environment;
 import aiad.TrafficPoint;
-import aiad.access_point.FlyingAccessPoint;
+import aiad.access_point.AccessPoint;
 
 import javax.swing.*;
 import java.awt.*;
@@ -87,7 +87,7 @@ public class NetworkMap extends Canvas {
     }
 
     private void paintFlyingAccessPoints(Graphics g) {
-        for (FlyingAccessPoint drone : env.getDrones()) {
+        for (AccessPoint drone : env.getDrones()) {
             g.setColor(Color.BLUE);
             Coordinates coords = drone.getPos();
             g.fillOval(coords.getX() , coords.getY() , 10, 10);

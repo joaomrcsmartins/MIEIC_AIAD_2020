@@ -1,7 +1,6 @@
 package aiad;
 
 import aiad.access_point.AccessPoint;
-import aiad.access_point.FlyingAccessPoint;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.core.Runtime;
@@ -23,7 +22,7 @@ public class Environment implements Serializable {
     private static ContainerController ac;
 
     private ArrayList<TrafficPoint> traffic_points;
-    private ArrayList<FlyingAccessPoint> drones;
+    private ArrayList<AccessPoint> drones;
 
     private Environment() {
         rt = Runtime.instance();
@@ -51,33 +50,26 @@ public class Environment implements Serializable {
         return env_instance;
     }
 
-    //TODO: create more data
     private void createAccessPoints() throws StaleProxyException {
-        //TODO: create real id
-        FlyingAccessPoint fap = new FlyingAccessPoint(100, new Coordinates(120, 100));
+        AccessPoint fap = new AccessPoint(100, new Coordinates(120, 100));
         AgentController aa = this.ac.acceptNewAgent("zoe", fap);
         aa.start();
         drones.add(fap);
-        //TODO: create real id
-        FlyingAccessPoint fap2 = new FlyingAccessPoint(80, new Coordinates(20, 100));
+        AccessPoint fap2 = new AccessPoint(80, new Coordinates(20, 100));
         AgentController aa2 = this.ac.acceptNewAgent("daisy", fap2);
         aa2.start();
         drones.add(fap2);
-        //TODO: create real id
-        FlyingAccessPoint fap3 = new FlyingAccessPoint(140, new Coordinates(300, 100));
+        AccessPoint fap3 = new AccessPoint(140, new Coordinates(300, 100));
         AgentController aa3 = this.ac.acceptNewAgent("luna", fap3);
         aa3.start();
         drones.add(fap3);
     }
 
-    //TODO: create more data
     private void createTrafficPoints() throws StaleProxyException {
-        //TODO: create id
         TrafficPoint tp = new TrafficPoint(120.0, new Coordinates(150, 100));
         AgentController aa = this.ac.acceptNewAgent("loki", tp);
         aa.start();
         traffic_points.add(tp);
-        //TODO: create id
         TrafficPoint tp2 = new TrafficPoint(120.0, new Coordinates(250, 100));
         AgentController aa2 = this.ac.acceptNewAgent("bobby", tp2);
         aa2.start();
@@ -85,7 +77,7 @@ public class Environment implements Serializable {
     }
 
     public AccessPoint getDroneByName(String name) {
-        for (FlyingAccessPoint drone : drones) {
+        for (AccessPoint drone : drones) {
             if (drone.getName().equals(name))
                 return drone;
         }
@@ -104,7 +96,7 @@ public class Environment implements Serializable {
         return traffic_points;
     }
 
-    public ArrayList<FlyingAccessPoint> getDrones() {
+    public ArrayList<AccessPoint> getDrones() {
         return drones;
     }
 
@@ -131,21 +123,8 @@ public class Environment implements Serializable {
         return near_drones;
     }
 
-    public boolean verifyNewPosition(Coordinates coord) {
-        for (FlyingAccessPoint drone : drones) {
-            if (drone.getPos().equals(coord))
-                return false;
-        }
-        for (TrafficPoint trafficPoint : traffic_points) {
-            if (trafficPoint.getPosition().equals(coord))
-                return false;
-        }
-        return true;
-    }
-
     public void startSystem() {
         createPoints();
-        //TODO: trigger the agents activity
     }
 
     public Coordinates getPosInRange(Coordinates pos, double range) {
