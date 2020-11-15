@@ -2,8 +2,8 @@ package aiad.util;
 
 import aiad.Coordinates;
 import aiad.Environment;
-import aiad.TrafficPoint;
-import aiad.access_point.AccessPoint;
+import aiad.agents.TrafficPoint;
+import aiad.agents.AccessPoint;
 
 import javax.swing.*;
 import java.awt.*;
