@@ -1,6 +1,6 @@
 package aiad.util;
 
-import aiad.TrafficPoint;
+import aiad.agents.TrafficPoint;
 
 public class ClientPair extends Pair implements Comparable {
     public ClientPair(TrafficPoint key, Double value) {

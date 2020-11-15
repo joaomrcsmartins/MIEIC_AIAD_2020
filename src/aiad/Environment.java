@@ -1,6 +1,7 @@
 package aiad;
 
-import aiad.access_point.AccessPoint;
+import aiad.agents.AccessPoint;
+import aiad.agents.TrafficPoint;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.core.Runtime;

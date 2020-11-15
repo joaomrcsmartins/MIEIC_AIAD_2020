@@ -1,8 +1,7 @@
-package aiad.access_point;
+package aiad.agents;
 
 import aiad.Coordinates;
 import aiad.Environment;
-import aiad.TrafficPoint;
 import aiad.agentbehaviours.APContractNetResponder;
 import aiad.agentbehaviours.APCyclicContractNet;
 import aiad.agentbehaviours.APRequestProtocolResponse;

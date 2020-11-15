@@ -1,6 +1,6 @@
 package aiad.agentbehaviours;
 
-import aiad.TrafficPoint;
+import aiad.agents.TrafficPoint;
 import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
 

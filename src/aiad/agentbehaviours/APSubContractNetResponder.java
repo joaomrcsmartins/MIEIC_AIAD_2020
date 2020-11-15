@@ -2,8 +2,8 @@ package aiad.agentbehaviours;
 
 import aiad.Coordinates;
 import aiad.Environment;
-import aiad.TrafficPoint;
-import aiad.access_point.AccessPoint;
+import aiad.agents.AccessPoint;
+import aiad.agents.TrafficPoint;
 import aiad.util.ClientPair;
 import jade.domain.FIPAAgentManagement.FailureException;
 import jade.domain.FIPAAgentManagement.RefuseException;

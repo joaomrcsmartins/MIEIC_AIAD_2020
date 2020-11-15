@@ -1,10 +1,9 @@
-package aiad;
+package aiad.agents;
 
-import aiad.access_point.AccessPoint;
-import aiad.agentbehaviours.TPContractNetInit;
+import aiad.Coordinates;
 import aiad.agentbehaviours.TPCyclicContractNet;
+import aiad.Environment;
 import jade.core.Agent;
-import jade.lang.acl.ACLMessage;
 
 import java.io.Serializable;
 
