@@ -28,6 +28,7 @@ public class APSubContractNetInit extends ContractNetInitiator {
     @Override
     protected Vector prepareCfps(ACLMessage cfp) {
         Vector v = new Vector();
+        System.out.println("traffic point " + trafficPoint.getName());
         cfp.setContent(trafficPoint.getName());
         cfp.setConversationId("sub-contract-net");
         ArrayList<AccessPoint> near_drones = env.getNearDrones(accessPoint);
@@ -51,6 +52,9 @@ public class APSubContractNetInit extends ContractNetInitiator {
 
         double collected = this.trafficPoint.getCollected();
 
+        if (collected == 0)
+            collected += this.accessPoint.getAvailableTraffic();
+
         Collections.sort(responses, (Comparator<ACLMessage>) (aclMessage, t1) -> {
             String content = aclMessage.getContent();
             String content2 = t1.getContent();
@@ -66,6 +70,7 @@ public class APSubContractNetInit extends ContractNetInitiator {
             ACLMessage msg = (ACLMessage) respons;
             String parseResponse = msg.getContent();
             double value = (parseResponse.equals("proposal-refused")) ? 0 : Double.parseDouble(parseResponse);
+
             if (this.trafficPoint.getTraffic() >= collected + value || collected < this.trafficPoint.getTraffic()) {
                 msg_reply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
                 try {
