@@ -28,7 +28,7 @@ public class APSubContractNetInit extends ContractNetInitiator {
     @Override
     protected Vector prepareCfps(ACLMessage cfp) {
         Vector v = new Vector();
-        cfp.setContent(" (Init.prepareCfps) This is my new capacity: " + trafficPoint.getTraffic());
+        cfp.setContent(trafficPoint.getName());
         cfp.setConversationId("sub-contract-net");
         ArrayList<AccessPoint> near_drones = env.getNearDrones(accessPoint);
 

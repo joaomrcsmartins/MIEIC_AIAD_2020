@@ -4,6 +4,7 @@ import aiad.Coordinates;
 import aiad.Environment;
 import aiad.TrafficPoint;
 import aiad.access_point.AccessPoint;
+import aiad.util.ClientPair;
 import jade.domain.FIPAAgentManagement.FailureException;
 import jade.domain.FIPAAgentManagement.RefuseException;
 import jade.lang.acl.ACLMessage;
@@ -23,7 +24,14 @@ public class APSubContractNetResponder extends ContractNetResponder {
 
     @Override
     protected ACLMessage handleCfp(ACLMessage cfp) throws RefuseException {
-        System.out.println(" (SubContractNet-handleCpf) FAP agent " + this.accessPoint.getLocalName() + ": CFP received from " + cfp.getSender().getLocalName() + ". Traffic requested is " + cfp.getContent());
+        System.out.println(" (SubContractNet-handleCpf) FAP agent " + this.accessPoint.getLocalName() + ": CFP received from " + cfp.getSender().getLocalName() + ". Request original from: " + cfp.getContent());
+
+        ClientPair trafficPoint_pair = this.accessPoint.getClientByName(cfp.getContent());
+        if (trafficPoint_pair != null) {
+            System.out.println("will remove point");
+            this.accessPoint.removeClient(trafficPoint_pair);
+        }
+
         boolean proposal = this.accessPoint.isAvailable();
         if (proposal) {
             System.out.println(" (SubContractNet-handleCpf) FAP agent " + this.accessPoint.getLocalName() + ": Proposing " + this.accessPoint.getAvailableTraffic() + " to " + cfp.getSender().getLocalName());

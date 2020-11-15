@@ -68,6 +68,7 @@ public class TPContractNetInit extends ContractNetInitiator {
             if (this.trafficPoint.getTraffic() >= collected + value || collected < this.trafficPoint.getTraffic()) {
                 msg_reply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
                 try {
+                    System.out.println(trafficPoint);
                     msg_reply.setContentObject(trafficPoint);
                 } catch (IOException e) {
                     e.printStackTrace();

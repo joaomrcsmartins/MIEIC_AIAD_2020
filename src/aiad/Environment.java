@@ -51,26 +51,26 @@ public class Environment implements Serializable {
     }
 
     private void createAccessPoints() throws StaleProxyException {
-        AccessPoint fap = new AccessPoint(100, new Coordinates(18, 10));
+        AccessPoint fap = new AccessPoint(100, new Coordinates(120, 100));
         AgentController aa = this.ac.acceptNewAgent("zoe", fap);
         aa.start();
         drones.add(fap);
-        AccessPoint fap2 = new AccessPoint(80, new Coordinates(0, 10));
+        AccessPoint fap2 = new AccessPoint(80, new Coordinates(20, 100));
         AgentController aa2 = this.ac.acceptNewAgent("daisy", fap2);
         aa2.start();
         drones.add(fap2);
-        AccessPoint fap3 = new AccessPoint(140, new Coordinates(30, 10));
+        AccessPoint fap3 = new AccessPoint(140, new Coordinates(300, 100));
         AgentController aa3 = this.ac.acceptNewAgent("luna", fap3);
         aa3.start();
         drones.add(fap3);
     }
 
     private void createTrafficPoints() throws StaleProxyException {
-        TrafficPoint tp = new TrafficPoint(120.0, new Coordinates(15, 10));
+        TrafficPoint tp = new TrafficPoint(120.0, new Coordinates(150, 100));
         AgentController aa = this.ac.acceptNewAgent("loki", tp);
         aa.start();
         traffic_points.add(tp);
-        TrafficPoint tp2 = new TrafficPoint(120.0, new Coordinates(25, 10));
+        TrafficPoint tp2 = new TrafficPoint(120.0, new Coordinates(250, 100));
         AgentController aa2 = this.ac.acceptNewAgent("bobby", tp2);
         aa2.start();
         traffic_points.add(tp2);
