@@ -6,7 +6,7 @@ import jade.lang.acl.ACLMessage;
 
 public class TPCyclicContractNet extends TickerBehaviour {
     private TrafficPoint tp;
-    private static int period = 6000;
+    private static int period = 5000;
 
     public TPCyclicContractNet(TrafficPoint tp) {
         super(tp, period);
@@ -17,7 +17,7 @@ public class TPCyclicContractNet extends TickerBehaviour {
     protected void onTick() {
         System.out.println(tp.getName() + " collected : " + tp.getCollected());
         System.out.println(tp.getName() + " traffic : " + tp.getTraffic());
-        if (tp.getCollected() == tp.getTraffic() || tp.getCollected() == 0 ) {
+        if (tp.getCollected() == tp.getTraffic() || tp.getCollected() == 0) {
             tp.addBehaviour(new TPContractNetInit(tp, new ACLMessage(ACLMessage.CFP), tp.getEnv()));
         }
     }

@@ -73,10 +73,10 @@ public class Environment implements Serializable {
     //TODO: create more data
     private void createTrafficPoints() throws StaleProxyException {
         //TODO: create id
-        /*TrafficPoint tp = new TrafficPoint(120.0, new Coordinates(15, 10));
+        TrafficPoint tp = new TrafficPoint(120.0, new Coordinates(15, 10));
         AgentController aa = this.ac.acceptNewAgent("loki", tp);
         aa.start();
-        traffic_points.add(tp);*/
+        traffic_points.add(tp);
         //TODO: create id
         TrafficPoint tp2 = new TrafficPoint(120.0, new Coordinates(25, 10));
         AgentController aa2 = this.ac.acceptNewAgent("bobby", tp2);

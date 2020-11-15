@@ -58,7 +58,6 @@ public class TrafficPoint extends Agent implements Serializable {
 
     @Override
     public void setup() {
-        //addBehaviour(new TPContractNetInit(this, new ACLMessage(ACLMessage.CFP), this.getEnv()));
         addBehaviour(new TPCyclicContractNet(this));
     }
 

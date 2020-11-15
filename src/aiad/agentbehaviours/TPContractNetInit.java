@@ -86,12 +86,10 @@ public class TPContractNetInit extends ContractNetInitiator {
             acceptances.add(auxiliary);
         }
 
-        System.out.println("initcollected: " + collected);
         if (collected < this.trafficPoint.getTraffic()) {
             this.trafficPoint.setCollected(collected);
             this.trafficPoint.addBehaviour(new TPRequestProtocolInit(this.trafficPoint, new ACLMessage(ACLMessage.REQUEST), this.env));
         } else {
-            System.out.println("setcollectedname: " + this.trafficPoint.getName());
             this.env.getTrafficPointByName(this.trafficPoint.getName()).setCollected(1);
         }
 

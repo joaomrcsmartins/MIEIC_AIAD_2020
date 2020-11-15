@@ -4,6 +4,7 @@ import aiad.Coordinates;
 import aiad.Environment;
 import aiad.TrafficPoint;
 import aiad.agentbehaviours.APContractNetResponder;
+import aiad.agentbehaviours.APCyclicContractNet;
 import aiad.agentbehaviours.APRequestProtocolResponse;
 import aiad.agentbehaviours.APSubContractNetResponder;
 import aiad.util.ClientPair;
@@ -106,6 +107,7 @@ public class AccessPoint extends Agent {
                 MessageTemplate.MatchPerformative(ACLMessage.CFP));
 
         addBehaviour(new APContractNetResponder(this, templateContract, this.env));
+        addBehaviour(new APCyclicContractNet(this));
         addBehaviour(new APSubContractNetResponder(this, templateSubContract, this.env));
         addBehaviour(new APRequestProtocolResponse(this, MessageTemplate.MatchPerformative(ACLMessage.REQUEST), this.env));
 
