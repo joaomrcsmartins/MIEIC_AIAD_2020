@@ -61,11 +61,11 @@ public class APSubContractNetResponder extends ContractNetResponder {
 
         Coordinates coord = this.accessPoint.getClientIntersection(requestPoint.getPosition());
         if (coord == null) {
-            Coordinates newPos = this.env.getPosInRange(requestPoint.getPosition(), TrafficPoint.MAX_RANGE);
+            coord = this.env.getPosInRange(requestPoint.getPosition(), TrafficPoint.MAX_RANGE);
             this.accessPoint.removeClients();
-            this.env.getDroneByName(this.accessPoint.getName()).setPos(newPos);
-            System.out.println("(SubContractNet-handleAcceptProposal) New position : " + newPos);
         }
+        System.out.println("(SubContractNet-handleAcceptProposal) New position : " + coord);
+        this.env.getDroneByName(this.accessPoint.getName()).setPos(coord);
 
         return inform;
 
