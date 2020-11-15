@@ -143,7 +143,8 @@ public class NetworkMap extends Canvas {
         paintTrafficPoints(g);
         paintFlyingAccessPoints(g);
         g.setColor(base);
-        g.drawString("Time Passed: " + time + "s", 20, 20);
+        g.drawString("Time Passed: " + time + "s", 20, 500);
+        g.drawString("Percentage of traffic covered: " + env.getPercentageOfTrafficCovered() + " %", 20, 520);
         time++;
         try {
             sleep(1000);
