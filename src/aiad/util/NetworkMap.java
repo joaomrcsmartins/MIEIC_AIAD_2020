@@ -7,6 +7,9 @@ import aiad.access_point.FlyingAccessPoint;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import static java.lang.Thread.sleep;
 
@@ -14,13 +17,59 @@ public class NetworkMap extends Canvas {
     private final Environment env;
     public int time = 0;
 
+    protected ArrayList<JRadioButton> radioButtons = new ArrayList<>();
+    protected JTextArea area;
+
     public NetworkMap(Environment env) {
         this.env = env;
         JFrame frame = new JFrame("Network Map");
+        paintTextArea(frame);
+        paintButton(frame);
+        paintTrafficPointsAvailable(frame);
         this.setSize(600, 600);
         frame.add(this);
         frame.pack();
         frame.setVisible(true);
+    }
+
+    private void paintTrafficPointsAvailable(JFrame frame) {
+        ButtonGroup bg = new ButtonGroup();
+        int i = 0;
+        for( TrafficPoint tp : this.env.getTrafficPoints())
+        {
+            JRadioButton r1= new JRadioButton(tp.getLocalName());
+            r1.setName(tp.getName());
+            r1.setBounds(300, 480 + i, 100, 30);
+            bg.add(r1);
+            frame.add(r1);
+            i += 30;
+            radioButtons.add(r1);
+        }
+
+    }
+
+    private void paintTextArea(JFrame frame) {
+        JTextArea area = new JTextArea("0");
+        area.setBounds(400, 500, 50, 20);
+        frame.add(area);
+        this.area = area;
+    }
+
+    public void paintButton(JFrame frame) {
+        JButton b = new JButton("Submit");
+        b.setBounds(500, 500, 95, 30);
+        b.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for(JRadioButton radio: radioButtons)
+                    if(radio.isSelected()) {
+                        TrafficPoint point = env.getTrafficPointByName(radio.getName());
+                        System.out.println(point);
+                        point.setTraffic((double) Integer.parseInt(area.getText()));
+                    }
+            }
+        });
+        frame.add(b);
     }
 
     private void paintLegend(Graphics g) {
