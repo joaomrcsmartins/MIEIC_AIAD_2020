@@ -60,8 +60,13 @@ public class APSubContractNetResponder extends ContractNetResponder {
         inform.setPerformative(jade.lang.acl.ACLMessage.INFORM);
 
         Coordinates newPos = this.env.getPosInRange(requestPoint.getPosition(), TrafficPoint.MAX_RANGE);
-        this.env.getDroneByName(this.accessPoint.getName()).setPos(newPos);
-        System.out.println("(SubContractNet-handleAcceptProposal) New position : " + newPos);
+
+        Coordinates coord = null;
+        if (coord == null) {
+            this.accessPoint.removeClients();
+            this.env.getDroneByName(this.accessPoint.getName()).setPos(newPos);
+            System.out.println("(SubContractNet-handleAcceptProposal) New position : " + newPos);
+        }
 
         return inform;
 

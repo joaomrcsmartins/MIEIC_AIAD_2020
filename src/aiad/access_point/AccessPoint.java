@@ -16,7 +16,7 @@ import java.util.Optional;
 import java.util.PriorityQueue;
 
 public class AccessPoint extends Agent {
-    static double MAX_RANGE = 200.0; 
+    static double MAX_RANGE = 200.0;
     private final double trafficCapacity;
     private double availableTraffic;
     private final PriorityQueue<ClientPair> clientPoints;
@@ -74,12 +74,11 @@ public class AccessPoint extends Agent {
     }
 
     public ClientPair getClientByName(String clientname) {
-       for(ClientPair clientPair : clientPoints)
-       {
-           if(clientPair.getKey().getName().equals(clientname))
-               return clientPair;
-       }
-       return null;
+        for (ClientPair clientPair : clientPoints) {
+            if (clientPair.getKey().getName().equals(clientname))
+                return clientPair;
+        }
+        return null;
     }
 
     public boolean addClient(TrafficPoint point) {
@@ -102,6 +101,14 @@ public class AccessPoint extends Agent {
     public boolean serveRequest(TrafficPoint point) {
         if (point == null || !isInRange(point) || !isAvailable()) return false;
         return addClient(point);
+    }
+
+    public void removeClients() {
+        for (ClientPair pair : clientPoints) {
+            pair.getKey().setCollected(0);
+        }
+        clientPoints.clear();
+
     }
 
     @Override
