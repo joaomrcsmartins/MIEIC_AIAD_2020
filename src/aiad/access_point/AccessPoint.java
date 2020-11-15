@@ -76,9 +76,7 @@ public class AccessPoint extends Agent {
     public ClientPair getClientByName(String clientname) {
        for(ClientPair clientPair : clientPoints)
        {
-           System.out.println("clientname: " + clientname);
-           System.out.println("key: " + clientPair.getKey().getName());
-           if(clientPair.getKey().getName() == clientname)
+           if(clientPair.getKey().getName().equals(clientname))
                return clientPair;
        }
        return null;
