@@ -12,7 +12,10 @@ import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
-import java.util.Optional;
+import java.awt.*;
+import java.awt.geom.Area;
+import java.awt.geom.Ellipse2D;
+import java.util.ArrayList;
 import java.util.PriorityQueue;
 
 public class AccessPoint extends Agent {
@@ -128,4 +131,29 @@ public class AccessPoint extends Agent {
 
     }
 
+    public Coordinates getClientIntersection(Coordinates requestPoint) {
+        if (this.getClientPoints().size() == 0) return null;
+        ArrayList<Coordinates> points = new ArrayList<>() {
+        };
+        this.getClientPoints().forEach(client -> points.add(client.getKey().getPosition()));
+        Ellipse2D circle = new Ellipse2D.Double(requestPoint.getX() - TrafficPoint.MAX_RANGE,
+                requestPoint.getY() - TrafficPoint.MAX_RANGE,
+                2 * TrafficPoint.MAX_RANGE,
+                2 * TrafficPoint.MAX_RANGE);
+        Area intersection = new Area(circle);
+
+        for (Coordinates point : points) {
+            circle.setFrame(point.getX() - TrafficPoint.MAX_RANGE,
+                    point.getY() - TrafficPoint.MAX_RANGE,
+                    2 * TrafficPoint.MAX_RANGE,
+                    2 * TrafficPoint.MAX_RANGE);
+            intersection.intersect(new Area(circle));
+            if (intersection.isEmpty())
+                return null;
+        }
+
+        Rectangle rectIntersection = intersection.getBounds();
+        return new Coordinates((int) rectIntersection.getCenterX(),
+                (int) rectIntersection.getCenterY());
+    }
 }
