@@ -26,7 +26,7 @@ public class TrafficPoint extends Agent implements Serializable {
 
     public void setTraffic(Double traffic) {
         this.traffic = traffic;
-        addBehaviour(new TPContractNetInit(this, new ACLMessage(ACLMessage.CFP), this.getEnv()));
+        this.collected = 0;
     }
 
     public Coordinates getPosition() {

@@ -64,7 +64,6 @@ public class NetworkMap extends Canvas {
                 for(JRadioButton radio: radioButtons)
                     if(radio.isSelected()) {
                         TrafficPoint point = env.getTrafficPointByName(radio.getName());
-                        System.out.println(point);
                         point.setTraffic((double) Integer.parseInt(area.getText()));
                     }
             }

@@ -73,6 +73,17 @@ public class AccessPoint extends Agent {
         return clientPoints;
     }
 
+    public ClientPair getClientByName(String clientname) {
+       for(ClientPair clientPair : clientPoints)
+       {
+           System.out.println("clientname: " + clientname);
+           System.out.println("key: " + clientPair.getKey().getName());
+           if(clientPair.getKey().getName() == clientname)
+               return clientPair;
+       }
+       return null;
+    }
+
     public boolean addClient(TrafficPoint point) {
         double servedTraffic;
         if (getAvailableTraffic() < point.getTraffic()) {
