@@ -60,7 +60,7 @@ public class APSubContractNetResponder extends ContractNetResponder {
         jade.lang.acl.ACLMessage inform = accept.createReply();
         inform.setPerformative(jade.lang.acl.ACLMessage.INFORM);
 
-        Coordinates newPos = this.env.getPosInRange(requestPoint.getPosition(), requestPoint.getMaxRange());
+        Coordinates newPos = this.env.getPosInRange(requestPoint.getPosition(), TrafficPoint.MAX_RANGE);
         this.env.getDroneByName(this.accessPoint.getName()).setPos(newPos);
         System.out.println("(SubContractNet-handleAcceptProposal) New position : " + newPos);
 

@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 import static java.lang.Thread.sleep;
 
@@ -19,6 +20,13 @@ public class NetworkMap extends Canvas {
 
     protected ArrayList<JRadioButton> radioButtons = new ArrayList<>();
     protected JTextArea area;
+
+    private static final Color FAPColor = Color.BLUE;
+    private static final Color TPColor = Color.RED;
+    private static final Color ConnectionColor = Color.MAGENTA;
+    private static final Color RangeColor = Color.PINK;
+
+    private static final int pointRadius = 5;
 
     public NetworkMap(Environment env) {
         this.env = env;
@@ -35,9 +43,8 @@ public class NetworkMap extends Canvas {
     private void paintTrafficPointsAvailable(JFrame frame) {
         ButtonGroup bg = new ButtonGroup();
         int i = 0;
-        for( TrafficPoint tp : this.env.getTrafficPoints())
-        {
-            JRadioButton r1= new JRadioButton(tp.getLocalName());
+        for (TrafficPoint tp : this.env.getTrafficPoints()) {
+            JRadioButton r1 = new JRadioButton(tp.getLocalName());
             r1.setName(tp.getName());
             r1.setBounds(300, 480 + i, 100, 30);
             bg.add(r1);
@@ -61,8 +68,8 @@ public class NetworkMap extends Canvas {
         b.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                for(JRadioButton radio: radioButtons)
-                    if(radio.isSelected()) {
+                for (JRadioButton radio : radioButtons)
+                    if (radio.isSelected()) {
                         TrafficPoint point = env.getTrafficPointByName(radio.getName());
                         point.setTraffic((double) Integer.parseInt(area.getText()));
                     }
@@ -78,41 +85,55 @@ public class NetworkMap extends Canvas {
         g.drawString("FAP", bounds.width - 70, 20);
         g.drawString("TrafficPoint", bounds.width - 70, 40);
         g.drawString("TP Range", bounds.width - 70, 60);
-        g.setColor(Color.BLUE);
-        g.fillOval(bounds.width - 90, 10, 10, 10);
-        g.setColor(Color.RED);
-        g.fillOval(bounds.width - 90, 30, 10, 10);
-        g.setColor(Color.PINK);
+        g.setColor(FAPColor);
+        g.fillOval(bounds.width - 90, 10, pointRadius*2, pointRadius*2);
+        g.setColor(TPColor);
+        g.fillOval(bounds.width - 90, 30, pointRadius*2, pointRadius*2);
+        g.setColor(RangeColor);
         g.fillOval(bounds.width - 92, 48, 15, 15);
     }
 
     private void paintFlyingAccessPoints(Graphics g) {
         for (AccessPoint drone : env.getDrones()) {
-            g.setColor(Color.BLUE);
+            g.setColor(FAPColor);
             Coordinates coords = drone.getPos();
-            g.fillOval(coords.getX() , coords.getY() , 10, 10);
-            g.setColor(Color.MAGENTA);
+            g.fillOval(coords.getX(), coords.getY(), pointRadius*2, pointRadius*2);
+            g.setColor(ConnectionColor);
             for (ClientPair client : drone.getClientPoints()) {
                 Coordinates cli_coords = client.getKey().getPosition();
-                g.drawLine(coords.getX() + 5, coords.getY() + 5, cli_coords.getX()  + 5, cli_coords.getY()  + 5);
+                g.drawLine(coords.getX() + pointRadius, coords.getY() + pointRadius, cli_coords.getX() + pointRadius, cli_coords.getY() + pointRadius);
             }
         }
     }
 
-    private void paintTrafficPoints(Graphics g) {
-        for (TrafficPoint tp : env.getTrafficPoints()) {
-            Coordinates coords = tp.getPosition();
-            g.setColor(Color.PINK);
-            int range = (int) tp.getMaxRange() ;
-            g.fillOval(coords.getX()  - range / 2 + 5,
-                    coords.getY()  - range / 2 + 5,
+    private void paintTPRangeAreas(Graphics g, ArrayList<Coordinates> tps,int range) {
+        g.setColor(RangeColor);
+        for( Coordinates tp:tps) {
+            g.fillOval(tp.getX() - range / 2 + pointRadius,
+                    tp.getY() - range / 2 + pointRadius,
                     range,
                     range
-
-                    );
-            g.setColor(Color.RED);
-            g.fillOval(coords.getX(), coords.getY() , 10, 10);
+            );
         }
+    }
+
+    private void paintTP(Graphics g, ArrayList<Coordinates> tps, int range) {
+        for(Coordinates coords : tps) {
+            g.setColor(Color.BLACK);
+            g.drawOval(coords.getX() - (range+2) / 2 + pointRadius,
+                    coords.getY() - (range+2) / 2 + pointRadius,
+                    range + 1,
+                    range + 1
+            );
+            g.setColor(TPColor);
+            g.fillOval(coords.getX(), coords.getY(), pointRadius*2, pointRadius*2);
+        }
+    }
+    private void paintTrafficPoints(Graphics g) {
+        int range = (int) TrafficPoint.MAX_RANGE * 2;
+        ArrayList<Coordinates> tps = env.getTrafficPoints().stream().map(TrafficPoint::getPosition).collect(Collectors.toCollection(ArrayList::new));
+        paintTPRangeAreas(g,tps,range);
+        paintTP(g,tps,range);
     }
 
     @Override
