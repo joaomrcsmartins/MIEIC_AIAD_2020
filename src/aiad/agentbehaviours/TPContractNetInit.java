@@ -19,10 +19,13 @@ public class TPContractNetInit extends ContractNetInitiator {
     TrafficPoint trafficPoint;
     Environment env;
 
+    int collected_aux;
+
     public TPContractNetInit(TrafficPoint a, ACLMessage msg, Environment env) {
         super(a, msg);
         this.trafficPoint = a;
         this.env = env;
+        this.collected_aux = 0;
     }
 
     @Override
@@ -40,6 +43,21 @@ public class TPContractNetInit extends ContractNetInitiator {
         return v;
     }
 
+    public String parseResponse(String response) {
+        if (response.contains(":")) {
+            return response.substring(0, response.indexOf(":"));
+        } else
+            return response;
+    }
+
+    public String collectedAux(String response) {
+        if (response.contains(":")) {
+            collected_aux += Double.parseDouble(response.substring(0, response.indexOf(":")));
+            return response.substring(0, response.indexOf(":"));
+        } else
+            return response;
+    }
+
 
     @Override
     protected void handleAllResponses(Vector responses, Vector acceptances) {
@@ -51,8 +69,8 @@ public class TPContractNetInit extends ContractNetInitiator {
         System.out.println(" (Init.handleAllResponses)  got " + responses.size() + " responses! ");
 
         Collections.sort(responses, (Comparator<ACLMessage>) (aclMessage, t1) -> {
-            String content = aclMessage.getContent();
-            String content2 = t1.getContent();
+            String content = parseResponse(aclMessage.getContent());
+            String content2 = parseResponse(t1.getContent());
             double value = (content.equals("proposal-refused")) ? 0.0 : Double.parseDouble(content);
             double value2 = (content2.equals("proposal-refused")) ? 0.0 : Double.parseDouble(content2);
             return (int) (value2 - value);
@@ -64,11 +82,10 @@ public class TPContractNetInit extends ContractNetInitiator {
             ACLMessage msg_reply = ((ACLMessage) response).createReply();
             ACLMessage msg = (ACLMessage) response;
             String parseResponse = msg.getContent();
-            double value = (parseResponse.equals("proposal-refused")) ? 0 : Double.parseDouble(parseResponse);
+            double value = parseResponse.equals("proposal-refused") ? 0 : Double.parseDouble(collectedAux(parseResponse));
             if (this.trafficPoint.getTraffic() >= collected + value || collected < this.trafficPoint.getTraffic()) {
                 msg_reply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
                 try {
-                    System.out.println(trafficPoint);
                     msg_reply.setContentObject(trafficPoint);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -88,7 +105,7 @@ public class TPContractNetInit extends ContractNetInitiator {
         }
 
         if (collected < this.trafficPoint.getTraffic()) {
-            this.trafficPoint.setCollected(collected);
+            this.trafficPoint.setCollected(collected - collected_aux);
             this.trafficPoint.addBehaviour(new TPRequestProtocolInit(this.trafficPoint, new ACLMessage(ACLMessage.REQUEST), this.env));
         } else {
             this.env.getTrafficPointByName(this.trafficPoint.getName()).setCollected(1);

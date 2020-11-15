@@ -28,7 +28,6 @@ public class APSubContractNetResponder extends ContractNetResponder {
 
         ClientPair trafficPoint_pair = this.accessPoint.getClientByName(cfp.getContent());
         if (trafficPoint_pair != null) {
-            System.out.println("will remove point");
             this.accessPoint.removeClient(trafficPoint_pair);
         }
 
@@ -56,13 +55,17 @@ public class APSubContractNetResponder extends ContractNetResponder {
             e.printStackTrace();
             throw new FailureException("failed-read-trafficPoint-obj");
         }
-        System.out.println("(SubContractNet-handleAcceptProposal) FAP Agent " + this.accessPoint.getLocalName() + ": Request accepted, connecting to Traffic Point" + " from " + cfp.getSender().getName());
+        System.out.println("(SubContractNet-handleAcceptProposal) FAP Agent " + this.accessPoint.getLocalName() + ": Request from " + cfp.getSender().getLocalName() + " was accepted");
         jade.lang.acl.ACLMessage inform = accept.createReply();
         inform.setPerformative(jade.lang.acl.ACLMessage.INFORM);
 
-        Coordinates newPos = this.env.getPosInRange(requestPoint.getPosition(), TrafficPoint.MAX_RANGE);
-        this.env.getDroneByName(this.accessPoint.getName()).setPos(newPos);
-        System.out.println("(SubContractNet-handleAcceptProposal) New position : " + newPos);
+        Coordinates coord = this.accessPoint.getClientIntersection(requestPoint.getPosition());
+        if (coord == null) {
+            coord = this.env.getPosInRange(requestPoint.getPosition(), TrafficPoint.MAX_RANGE);
+            this.accessPoint.removeClients();
+        }
+        System.out.println("(SubContractNet-handleAcceptProposal) New position : " + coord);
+        this.env.getDroneByName(this.accessPoint.getName()).setPos(coord);
 
         return inform;
 
