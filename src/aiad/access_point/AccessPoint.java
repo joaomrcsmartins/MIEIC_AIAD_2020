@@ -57,7 +57,7 @@ public class AccessPoint extends Agent {
 
     public boolean isInRange(TrafficPoint tp) {
         double dist = pos.getDistance(tp.getPosition());
-        if (dist <= tp.getMaxRange()) {
+        if (dist <= TrafficPoint.MAX_RANGE) {
             return true;
         }
         return false;
