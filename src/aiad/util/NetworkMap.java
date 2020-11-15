@@ -90,11 +90,11 @@ public class NetworkMap extends Canvas {
         for (FlyingAccessPoint drone : env.getDrones()) {
             g.setColor(Color.BLUE);
             Coordinates coords = drone.getPos();
-            g.fillOval(coords.getX() * 10, coords.getY() * 10, 10, 10);
+            g.fillOval(coords.getX() , coords.getY() , 10, 10);
             g.setColor(Color.MAGENTA);
             for (ClientPair client : drone.getClientPoints()) {
                 Coordinates cli_coords = client.getKey().getPosition();
-                g.drawLine(coords.getX() * 10 + 5, coords.getY() * 10 + 5, cli_coords.getX() * 10 + 5, cli_coords.getY() * 10 + 5);
+                g.drawLine(coords.getX() + 5, coords.getY() + 5, cli_coords.getX()  + 5, cli_coords.getY()  + 5);
             }
         }
     }
@@ -103,15 +103,15 @@ public class NetworkMap extends Canvas {
         for (TrafficPoint tp : env.getTrafficPoints()) {
             Coordinates coords = tp.getPosition();
             g.setColor(Color.PINK);
-            int range = (int) tp.getMaxRange() * 10;
-            g.fillArc(coords.getX() * 10 - range / 2 + 5,
-                    coords.getY() * 10 - range / 2 + 5,
+            int range = (int) tp.getMaxRange() ;
+            g.fillOval(coords.getX()  - range / 2 + 5,
+                    coords.getY()  - range / 2 + 5,
                     range,
-                    range,
-                    0,
-                    360);
+                    range
+
+                    );
             g.setColor(Color.RED);
-            g.fillOval(coords.getX() * 10, coords.getY() * 10, 10, 10);
+            g.fillOval(coords.getX(), coords.getY() , 10, 10);
         }
     }
 

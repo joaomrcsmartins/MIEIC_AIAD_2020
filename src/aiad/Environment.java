@@ -54,17 +54,17 @@ public class Environment implements Serializable {
     //TODO: create more data
     private void createAccessPoints() throws StaleProxyException {
         //TODO: create real id
-        FlyingAccessPoint fap = new FlyingAccessPoint(100, new Coordinates(18, 10));
+        FlyingAccessPoint fap = new FlyingAccessPoint(100, new Coordinates(120, 100));
         AgentController aa = this.ac.acceptNewAgent("zoe", fap);
         aa.start();
         drones.add(fap);
         //TODO: create real id
-        FlyingAccessPoint fap2 = new FlyingAccessPoint(80, new Coordinates(0, 10));
+        FlyingAccessPoint fap2 = new FlyingAccessPoint(80, new Coordinates(20, 100));
         AgentController aa2 = this.ac.acceptNewAgent("daisy", fap2);
         aa2.start();
         drones.add(fap2);
         //TODO: create real id
-        FlyingAccessPoint fap3 = new FlyingAccessPoint(140, new Coordinates(30, 10));
+        FlyingAccessPoint fap3 = new FlyingAccessPoint(140, new Coordinates(300, 100));
         AgentController aa3 = this.ac.acceptNewAgent("luna", fap3);
         aa3.start();
         drones.add(fap3);
@@ -73,12 +73,12 @@ public class Environment implements Serializable {
     //TODO: create more data
     private void createTrafficPoints() throws StaleProxyException {
         //TODO: create id
-        TrafficPoint tp = new TrafficPoint(120.0, new Coordinates(15, 10));
+        TrafficPoint tp = new TrafficPoint(120.0, new Coordinates(150, 100));
         AgentController aa = this.ac.acceptNewAgent("loki", tp);
         aa.start();
         traffic_points.add(tp);
         //TODO: create id
-        TrafficPoint tp2 = new TrafficPoint(120.0, new Coordinates(25, 10));
+        TrafficPoint tp2 = new TrafficPoint(120.0, new Coordinates(250, 100));
         AgentController aa2 = this.ac.acceptNewAgent("bobby", tp2);
         aa2.start();
         traffic_points.add(tp2);

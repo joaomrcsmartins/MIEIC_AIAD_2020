@@ -16,7 +16,7 @@ import java.util.Optional;
 import java.util.PriorityQueue;
 
 public class AccessPoint extends Agent {
-    static double MAX_RANGE = 20.0; //fixed value, but might change later
+    static double MAX_RANGE = 200.0; //fixed value, but might change later
     private final double trafficCapacity;
     private double availableTraffic;
     private final PriorityQueue<ClientPair> clientPoints;
@@ -55,15 +55,15 @@ public class AccessPoint extends Agent {
         this.pos = pos;
     }
 
-    public boolean isInRange(Coordinates pos2) {
-        double dist = pos.getDistance(pos2);
-        if (dist <= MAX_RANGE) {
-            //System.out.println("Point in " + this.pos + " and point in " + pos2 + " have distance " + dist + " within range " + MAX_RANGE);
+    public boolean isInRange(TrafficPoint tp) {
+        double dist = pos.getDistance(tp.getPosition());
+        if (dist <= tp.getMaxRange()) {
             return true;
         }
         return false;
 
     }
+
 
     public Environment getEnv() {
         return env;
@@ -101,7 +101,7 @@ public class AccessPoint extends Agent {
     }
 
     public boolean serveRequest(TrafficPoint point) {
-        if (point == null || !isInRange(point.getPosition()) || !isAvailable()) return false;
+        if (point == null || !isInRange(point) || !isAvailable()) return false;
         return addClient(point);
     }
 

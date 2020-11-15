@@ -12,7 +12,7 @@ public class TrafficPoint extends Agent implements Serializable {
     protected Double traffic;
     protected Coordinates position;
     protected transient Environment env;
-    static double MAX_RANGE = 10.0;
+    static double MAX_RANGE = 100.0;
 
     double collected;
 
