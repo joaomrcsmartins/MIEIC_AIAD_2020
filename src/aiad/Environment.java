@@ -128,20 +128,12 @@ public class Environment implements Serializable {
     }
 
     public Coordinates getPosInRange(Coordinates pos, double range) {
-        Random rand = new Random();
-        int dir = rand.nextInt(4);
-        switch (dir) {
-            case (0):
-                return new Coordinates(pos.getX() + (int) range, pos.getY());
-            case (1):
-                return new Coordinates(max(pos.getX() - (int) range, 0), pos.getY());
-            case (2):
-                return new Coordinates(pos.getX(), pos.getY() + (int) range);
-            case (3):
-                return new Coordinates(pos.getX(), max(pos.getY() - (int) range, 0));
-            default:
-                return pos;
-        }
-
+        Random rand = new Random(System.currentTimeMillis());
+        double angle = rand.nextDouble() * 2 * Math.PI;
+        double reach = rand.nextDouble() * range;
+        int newX = max((int) (pos.getX() + (reach * Math.cos(angle))), 0);
+        int newY = max((int) (pos.getY() + (reach * Math.sin(angle))), 0);
+        Coordinates newC = new Coordinates(newX, newY);
+        return newC;
     }
 }
