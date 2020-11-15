@@ -137,4 +137,19 @@ public class Environment implements Serializable {
         Coordinates newC = new Coordinates(newX, newY);
         return newC;
     }
+
+    public double getPercentageOfTrafficCovered(){
+        double allTraffic = 0, trafficCovered = 0;
+        for(TrafficPoint tp : this.traffic_points){
+            allTraffic += tp.getTraffic();
+
+            // If getCollected() == 1, then the entire traffic of the tp is covered.
+            trafficCovered = tp.getCollected() == 1? trafficCovered + tp.getTraffic() : trafficCovered;
+        }
+
+        // If there is no traffic to be covered, we will assume all is covered.
+        if(allTraffic == 0) return 100;
+
+        return trafficCovered/allTraffic * 100;
+    }
 }
