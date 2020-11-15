@@ -16,7 +16,7 @@ import java.util.Optional;
 import java.util.PriorityQueue;
 
 public class AccessPoint extends Agent {
-    static double MAX_RANGE = 20.0; //fixed value, but might change later
+    static double MAX_RANGE = 20.0;
     private final double trafficCapacity;
     private double availableTraffic;
     private final PriorityQueue<ClientPair> clientPoints;
@@ -58,7 +58,6 @@ public class AccessPoint extends Agent {
     public boolean isInRange(Coordinates pos2) {
         double dist = pos.getDistance(pos2);
         if (dist <= MAX_RANGE) {
-            //System.out.println("Point in " + this.pos + " and point in " + pos2 + " have distance " + dist + " within range " + MAX_RANGE);
             return true;
         }
         return false;
@@ -78,7 +77,6 @@ public class AccessPoint extends Agent {
         if (getAvailableTraffic() < point.getTraffic()) {
             servedTraffic = getAvailableTraffic();
             this.availableTraffic = 0;
-            //TODO: behavior when the drone cannot deal with the request single-handedly
             System.out.println("Not enough traffic available to fulfill the request!");
         } else
             this.availableTraffic -= servedTraffic = point.getTraffic();
@@ -113,19 +111,4 @@ public class AccessPoint extends Agent {
 
     }
 
-    public double evaluateRequest(double requestedTraffic) {
-        if (getAvailableTraffic() == 0)
-            return 0;
-
-        double optimizableTraffic = requestedTraffic - getAvailableTraffic();
-        if (optimizableTraffic > 0) {
-            //find the first client that isn't fully satisfied by the AP and whose supplied traffic is enough to fully satisfy this request
-            Optional<ClientPair> result = clientPoints.stream().filter(client -> !client.isSatisfied() && client.getValue() >= optimizableTraffic).findFirst();
-            if (result.isEmpty())
-                return getAvailableTraffic(); //when no optimization is possible, return the available value
-            else
-                removeClient(result.get()); //otherwise removes a not fully satisfied client to have necessary traffic to fully satisfy this one
-        }
-        return requestedTraffic; //fully satisfies the request the available traffic is enough or an optimization is made
-    }
 }
