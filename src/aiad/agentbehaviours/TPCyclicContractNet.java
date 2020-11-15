@@ -15,8 +15,6 @@ public class TPCyclicContractNet extends TickerBehaviour {
 
     @Override
     protected void onTick() {
-        System.out.println(tp.getName() + " collected : " + tp.getCollected());
-        System.out.println(tp.getName() + " traffic : " + tp.getTraffic());
         if (tp.getCollected() == tp.getTraffic() || tp.getCollected() == 0) {
             tp.addBehaviour(new TPContractNetInit(tp, new ACLMessage(ACLMessage.CFP), tp.getEnv()));
         }
