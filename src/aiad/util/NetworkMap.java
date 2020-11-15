@@ -28,7 +28,9 @@ public class NetworkMap extends Canvas {
 
     private static final int pointRadius = 5;
 
-    public NetworkMap(Environment env) {
+    private CsvFileWriter csvMetricsFile;
+
+    public NetworkMap(Environment env, CsvFileWriter csvMetricsFile) {
         this.env = env;
         JFrame frame = new JFrame("Network Map");
         paintTextArea(frame);
@@ -38,6 +40,7 @@ public class NetworkMap extends Canvas {
         frame.add(this);
         frame.pack();
         frame.setVisible(true);
+        this.csvMetricsFile = csvMetricsFile;
     }
 
     private void paintTrafficPointsAvailable(JFrame frame) {
@@ -145,6 +148,8 @@ public class NetworkMap extends Canvas {
         g.setColor(base);
         g.drawString("Time Passed: " + time + "s", 20, 500);
         g.drawString("Percentage of traffic covered: " + env.getPercentageOfTrafficCovered() + " %", 20, 520);
+
+        this.csvMetricsFile.write( time + "," +  env.getPercentageOfTrafficCovered());
         time++;
         try {
             sleep(1000);
