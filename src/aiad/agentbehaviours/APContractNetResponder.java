@@ -1,8 +1,8 @@
 package aiad.agentbehaviours;
 
-import aiad.Environment;
-import aiad.agents.TrafficPoint;
+import aiad.Launcher;
 import aiad.agents.AccessPoint;
+import aiad.agents.TrafficPoint;
 import aiad.util.ClientPair;
 import jade.domain.FIPAAgentManagement.FailureException;
 import jade.domain.FIPAAgentManagement.RefuseException;
@@ -14,9 +14,9 @@ import sajas.proto.ContractNetResponder;
 public class APContractNetResponder extends ContractNetResponder {
 
     AccessPoint accessPoint;
-    Environment env;
+    Launcher.Environment env;
 
-    public APContractNetResponder(AccessPoint a, MessageTemplate mt, Environment env) {
+    public APContractNetResponder(AccessPoint a, MessageTemplate mt, Launcher.Environment env) {
         super(a, mt);
         this.accessPoint = a;
         this.env = env;

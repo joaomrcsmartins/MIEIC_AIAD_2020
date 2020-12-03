@@ -1,8 +1,8 @@
 package aiad.agentbehaviours;
 
-import aiad.Environment;
-import aiad.agents.TrafficPoint;
+import aiad.Launcher;
 import aiad.agents.AccessPoint;
+import aiad.agents.TrafficPoint;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import sajas.proto.ContractNetInitiator;
@@ -16,9 +16,9 @@ import java.util.Vector;
 public class APSubContractNetInit extends ContractNetInitiator {
     AccessPoint accessPoint;
     TrafficPoint trafficPoint;
-    Environment env;
+    Launcher.Environment env;
 
-    public APSubContractNetInit(AccessPoint accessPoint, TrafficPoint trafficPoint, ACLMessage msg, Environment env) {
+    public APSubContractNetInit(AccessPoint accessPoint, TrafficPoint trafficPoint, ACLMessage msg, Launcher.Environment env) {
         super(accessPoint, msg);
         this.accessPoint = accessPoint;
         this.trafficPoint = trafficPoint;

@@ -1,15 +1,15 @@
 package aiad.agents;
 
 import aiad.Coordinates;
-import aiad.Environment;
+import aiad.Launcher;
 import aiad.agentbehaviours.APContractNetResponder;
 import aiad.agentbehaviours.APCyclicContractNet;
 import aiad.agentbehaviours.APRequestProtocolResponse;
 import aiad.agentbehaviours.APSubContractNetResponder;
 import aiad.util.ClientPair;
-import sajas.core.Agent;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import sajas.core.Agent;
 import uchicago.src.sim.network.DefaultDrawableNode;
 
 import java.awt.*;
@@ -24,7 +24,7 @@ public class AccessPoint extends Agent {
     private double availableTraffic;
     private final PriorityQueue<ClientPair> clientPoints;
     private Coordinates pos;
-    private Environment env;
+    private Launcher.Environment env;
     DefaultDrawableNode myNode;
 
     public AccessPoint(double trafficCapacity, Coordinates pos) {
@@ -32,7 +32,7 @@ public class AccessPoint extends Agent {
         this.availableTraffic = trafficCapacity;
         this.pos = pos;
         this.clientPoints = new PriorityQueue<>();
-        this.env = Environment.getInstance();
+        this.env = Launcher.Environment.getInstance();
     }
 
     public double getTrafficCapacity() {
@@ -73,7 +73,7 @@ public class AccessPoint extends Agent {
         this.myNode = node;
     }
 
-    public Environment getEnv() {
+    public Launcher.Environment getEnv() {
         return env;
     }
 
@@ -161,4 +161,14 @@ public class AccessPoint extends Agent {
         return new Coordinates((int) rectIntersection.getCenterX(),
                 (int) rectIntersection.getCenterY());
     }
+
+    // Simulation Util Functions
+
+    //TODO: check this function purpose
+    public double getMovingAverage() {
+        int count = clientPoints.stream().mapToInt(client -> client.getValue().equals(client.getKey().traffic) ? 1 : 0).sum();
+        int n = clientPoints.size();
+        return ((double) count) / n;
+    }
+
 }

@@ -1,7 +1,7 @@
 package aiad.agentbehaviours;
 
 import aiad.Coordinates;
-import aiad.Environment;
+import aiad.Launcher;
 import aiad.agents.AccessPoint;
 import aiad.agents.TrafficPoint;
 import aiad.util.ClientPair;
@@ -14,9 +14,9 @@ import sajas.proto.ContractNetResponder;
 
 public class APSubContractNetResponder extends ContractNetResponder {
     AccessPoint accessPoint;
-    Environment env;
+    Launcher.Environment env;
 
-    public APSubContractNetResponder(AccessPoint a, MessageTemplate mt, Environment env) {
+    public APSubContractNetResponder(AccessPoint a, MessageTemplate mt, Launcher.Environment env) {
         super(a, mt);
         this.accessPoint = a;
         this.env = env;

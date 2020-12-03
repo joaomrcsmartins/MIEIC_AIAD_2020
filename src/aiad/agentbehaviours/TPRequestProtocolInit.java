@@ -1,8 +1,8 @@
 package aiad.agentbehaviours;
 
-import aiad.Environment;
-import aiad.agents.TrafficPoint;
+import aiad.Launcher;
 import aiad.agents.AccessPoint;
+import aiad.agents.TrafficPoint;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import sajas.proto.AchieveREInitiator;
@@ -15,10 +15,10 @@ public class TPRequestProtocolInit extends
         AchieveREInitiator {
 
     TrafficPoint trafficPoint;
-    Environment env;
+    Launcher.Environment env;
     Integer currentReceiverDrone;
 
-    public TPRequestProtocolInit(TrafficPoint a, ACLMessage msg, Environment env) {
+    public TPRequestProtocolInit(TrafficPoint a, ACLMessage msg, Launcher.Environment env) {
         super(a, msg);
         this.trafficPoint = a;
         this.env = env;

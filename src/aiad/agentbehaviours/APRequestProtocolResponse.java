@@ -1,8 +1,8 @@
 package aiad.agentbehaviours;
 
-import aiad.Environment;
-import aiad.agents.TrafficPoint;
+import aiad.Launcher;
 import aiad.agents.AccessPoint;
+import aiad.agents.TrafficPoint;
 import jade.domain.FIPAAgentManagement.RefuseException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
@@ -11,9 +11,9 @@ import sajas.proto.AchieveREResponder;
 public class APRequestProtocolResponse extends AchieveREResponder {
 
     AccessPoint accessPoint;
-    Environment env;
+    Launcher.Environment env;
 
-    public APRequestProtocolResponse(AccessPoint a, MessageTemplate mt, Environment env) {
+    public APRequestProtocolResponse(AccessPoint a, MessageTemplate mt, Launcher.Environment env) {
         super(a, mt);
         this.accessPoint = a;
         this.env = env;

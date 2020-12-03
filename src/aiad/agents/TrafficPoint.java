@@ -1,10 +1,9 @@
 package aiad.agents;
 
 import aiad.Coordinates;
+import aiad.Launcher;
 import aiad.agentbehaviours.TPCyclicContractNet;
-import aiad.Environment;
 import sajas.core.Agent;
-import serviceConsumerProviderVis.onto.ContractOutcome;
 import uchicago.src.sim.network.DefaultDrawableNode;
 
 import java.io.Serializable;
@@ -12,7 +11,7 @@ import java.io.Serializable;
 public class TrafficPoint extends Agent implements Serializable {
     protected Double traffic;
     protected Coordinates position;
-    protected transient Environment env;
+    protected transient Launcher.Environment env;
     public static double MAX_RANGE = 100.0;
 
     DefaultDrawableNode myNode;
@@ -32,7 +31,7 @@ public class TrafficPoint extends Agent implements Serializable {
         return position;
     }
 
-    public Environment getEnv() {
+    public Launcher.Environment getEnv() {
         return env;
     }
 
@@ -43,7 +42,7 @@ public class TrafficPoint extends Agent implements Serializable {
     public TrafficPoint(Double traffic, Coordinates position) {
         this.traffic = traffic;
         this.position = position;
-        this.env = Environment.getInstance();
+        this.env = Launcher.Environment.getInstance();
         this.collected = 0;
     }
 
@@ -63,6 +62,8 @@ public class TrafficPoint extends Agent implements Serializable {
     public double isNearDrone(AccessPoint drone) {
         return position.getDistance(drone.getPos());
     }
+
+    // Simulation Util Functions
 
     public void setNode(DefaultDrawableNode node) {
         this.myNode = node;
