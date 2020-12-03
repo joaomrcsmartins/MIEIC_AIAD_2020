@@ -4,9 +4,9 @@ import aiad.agents.AccessPoint;
 import aiad.agents.TrafficPoint;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
-import jade.core.Runtime;
-import jade.wrapper.AgentController;
-import jade.wrapper.ContainerController;
+import sajas.core.Runtime;
+import sajas.wrapper.AgentController;
+import sajas.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
 
 import java.io.Serializable;
@@ -18,19 +18,10 @@ import static java.lang.Integer.max;
 public class Environment implements Serializable {
     private static Environment env_instance = null;
 
-    private static Runtime rt;
-    private static Profile profile;
-    private static ContainerController ac;
-
     private ArrayList<TrafficPoint> traffic_points;
     private ArrayList<AccessPoint> drones;
 
     private Environment() {
-        rt = Runtime.instance();
-        profile = new ProfileImpl();
-        profile.setParameter(Profile.GUI, "true");
-        ac = rt.createMainContainer(profile);
-
         traffic_points = new ArrayList<>();
         drones = new ArrayList<>();
 

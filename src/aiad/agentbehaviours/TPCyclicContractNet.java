@@ -1,7 +1,7 @@
 package aiad.agentbehaviours;
 
 import aiad.agents.TrafficPoint;
-import jade.core.behaviours.TickerBehaviour;
+import sajas.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
 
 public class TPCyclicContractNet extends TickerBehaviour {

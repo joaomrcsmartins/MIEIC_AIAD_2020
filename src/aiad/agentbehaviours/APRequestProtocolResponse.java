@@ -6,7 +6,7 @@ import aiad.agents.AccessPoint;
 import jade.domain.FIPAAgentManagement.RefuseException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
-import jade.proto.AchieveREResponder;
+import sajas.proto.AchieveREResponder;
 
 public class APRequestProtocolResponse extends AchieveREResponder {
 

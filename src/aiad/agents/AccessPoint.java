@@ -7,9 +7,10 @@ import aiad.agentbehaviours.APCyclicContractNet;
 import aiad.agentbehaviours.APRequestProtocolResponse;
 import aiad.agentbehaviours.APSubContractNetResponder;
 import aiad.util.ClientPair;
-import jade.core.Agent;
+import sajas.core.Agent;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import uchicago.src.sim.network.DefaultDrawableNode;
 
 import java.awt.*;
 import java.awt.geom.Area;
@@ -24,6 +25,7 @@ public class AccessPoint extends Agent {
     private final PriorityQueue<ClientPair> clientPoints;
     private Coordinates pos;
     private Environment env;
+    DefaultDrawableNode myNode;
 
     public AccessPoint(double trafficCapacity, Coordinates pos) {
         this.trafficCapacity = trafficCapacity;
@@ -66,6 +68,10 @@ public class AccessPoint extends Agent {
 
     }
 
+
+    public void setNode(DefaultDrawableNode node) {
+        this.myNode = node;
+    }
 
     public Environment getEnv() {
         return env;

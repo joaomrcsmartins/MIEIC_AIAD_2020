@@ -1,7 +1,7 @@
 package aiad.agentbehaviours;
 
 import aiad.agents.AccessPoint;
-import jade.core.behaviours.TickerBehaviour;
+import sajas.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 

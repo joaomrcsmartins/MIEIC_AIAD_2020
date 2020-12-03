@@ -5,7 +5,7 @@ import aiad.agents.TrafficPoint;
 import aiad.agents.AccessPoint;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import jade.proto.ContractNetInitiator;
+import sajas.proto.ContractNetInitiator;
 
 import java.io.IOException;
 import java.util.ArrayList;
