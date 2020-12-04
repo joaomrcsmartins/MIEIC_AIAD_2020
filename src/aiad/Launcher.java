@@ -29,14 +29,7 @@ public class Launcher extends Repast3Launcher {
 
     private static final boolean BATCH_MODE = true;
 
-    private int N = 10;
-
-    private int FILTER_SIZE = 5;
-
-    private double FAILURE_PROBABILITY_GOOD_PROVIDER = 0.2;
-    private double FAILURE_PROBABILITY_BAD_PROVIDER = 0.8;
-
-    private int N_CONTRACTS = 100;
+    private int N = 1;
 
     public static final boolean USE_RESULTS_COLLECTOR = true;
 
@@ -74,42 +67,10 @@ public class Launcher extends Repast3Launcher {
         this.N = N;
     }
 
-    public int getFILTER_SIZE() {
-        return FILTER_SIZE;
-    }
-
-    public void setFILTER_SIZE(int FILTER_SIZE) {
-        this.FILTER_SIZE = FILTER_SIZE;
-    }
-
-    public double getFAILURE_PROBABILITY_GOOD_PROVIDER() {
-        return FAILURE_PROBABILITY_GOOD_PROVIDER;
-    }
-
-    public void setFAILURE_PROBABILITY_GOOD_PROVIDER(double FAILURE_PROBABILITY_GOOD_PROVIDER) {
-        this.FAILURE_PROBABILITY_GOOD_PROVIDER = FAILURE_PROBABILITY_GOOD_PROVIDER;
-    }
-
-    public double getFAILURE_PROBABILITY_BAD_PROVIDER() {
-        return FAILURE_PROBABILITY_BAD_PROVIDER;
-    }
-
-    public void setFAILURE_PROBABILITY_BAD_PROVIDER(double FAILURE_PROBABILITY_BAD_PROVIDER) {
-        this.FAILURE_PROBABILITY_BAD_PROVIDER = FAILURE_PROBABILITY_BAD_PROVIDER;
-    }
-
-    public int getN_CONTRACTS() {
-        return N_CONTRACTS;
-    }
-
-    public void setN_CONTRACTS(int N_CONTRACTS) {
-        this.N_CONTRACTS = N_CONTRACTS;
-    }
-
     //este
     @Override
     public String[] getInitParam() {
-        return new String[] {"N", "FILTER_SIZE", "FAILURE_PROBABILITY_GOOD_PROVIDER", "FAILURE_PROBABILITY_BAD_PROVIDER", "N_CONTRACTS"};
+        return new String[] {"N"};
     }
 
     //este
@@ -151,23 +112,27 @@ public class Launcher extends Repast3Launcher {
             AID resultsCollectorAID = null;
             // create trafficpoints
             for (int i = 0; i < N_TRAFFICPOINT; i++) {
-                TrafficPoint pa = new TrafficPoint((double) 120, new Coordinates(150,100));
+                int x = random.nextInt(20);
+                int y = random.nextInt(20);
+                TrafficPoint pa = new TrafficPoint((double) 120, new Coordinates(x,y));
                 agentContainer.acceptNewAgent("TrafficPoint" + i, pa).start();
                 DefaultDrawableNode node =
                         generateNode("TrafficPoint" + i, Color.RED,
-                                random.nextInt(WIDTH/2),random.nextInt(HEIGHT/2));
+                                x,y);
                 traffic_points.add(pa);
                 nodes.add(node);
                 pa.setNode(node);
             }
             // create drones
             for (int i = 0; i < N_DRONE; i++) {
-                AccessPoint ca = new AccessPoint(120, new Coordinates(120, 100));
+                int x = random.nextInt(20);
+                int y = random.nextInt(20);
+                AccessPoint ca = new AccessPoint(120, new Coordinates(x,y));
                 mainContainer.acceptNewAgent("Drone" + i, ca).start();
                 drones.add(ca);
                 DefaultDrawableNode node =
                         generateNode("Drone" + i, Color.BLUE,
-                                WIDTH/2+random.nextInt(WIDTH/2),HEIGHT/2+random.nextInt(HEIGHT/2));
+                                x,y);
                 nodes.add(node);
                 ca.setNode(node);
             }
@@ -208,7 +173,7 @@ public class Launcher extends Repast3Launcher {
     }
 
     private DisplaySurface dsurf;
-    private int WIDTH = 200, HEIGHT = 200;
+    private int WIDTH = 250, HEIGHT = 250;
     private OpenSequenceGraph plot;
 
     private void buildAndScheduleDisplay() {
@@ -225,17 +190,19 @@ public class Launcher extends Repast3Launcher {
 
         // graph
         if (plot != null) plot.dispose();
-        plot = new OpenSequenceGraph("Service performance", this);
+        plot = new OpenSequenceGraph("Evolução do tráfego assegurado ao longo do tempo", this);
         plot.setAxisTitles("time", "% successful service executions");
 
-        plot.addSequence("Consumers", new Sequence() {
+        plot.addSequence("Trafico", new Sequence() {
             public double getSValue() {
                 // iterate through consumers
-                double v = 0.0;
-                for(int i = 0; i < drones.size(); i++) {
-                    v += drones.get(i).getMovingAverage();
+                double traffic_provided = 0.0;
+                double traffic_all = 0.0;
+                for(int i = 0; i < traffic_points.size(); i++) {
+                    traffic_provided += traffic_points.get(i).getCollected() == 1 ? traffic_points.get(i).getTraffic() : 0;
+                    traffic_all += traffic_points.get(i).getTraffic();
                 }
-                return v / drones.size();
+                return traffic_provided/traffic_all;
             }
         });
         plot.display();
