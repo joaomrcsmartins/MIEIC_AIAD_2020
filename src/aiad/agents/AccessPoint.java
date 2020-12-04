@@ -133,7 +133,6 @@ public class AccessPoint extends Agent {
         addBehaviour(new APCyclicContractNet(this));
         addBehaviour(new APSubContractNetResponder(this, templateSubContract, this.env));
         addBehaviour(new APRequestProtocolResponse(this, MessageTemplate.MatchPerformative(ACLMessage.REQUEST), this.env));
-
     }
 
     public Coordinates getClientIntersection(Coordinates requestPoint) {

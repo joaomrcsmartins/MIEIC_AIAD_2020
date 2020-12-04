@@ -16,11 +16,12 @@ public class APCyclicContractNet extends TickerBehaviour {
 
     @Override
     protected void onTick() {
+        System.out.println("baannas");
         MessageTemplate templateContract = MessageTemplate.and(
                 MessageTemplate.MatchConversationId("contract-net"),
                 MessageTemplate.MatchPerformative(ACLMessage.CFP));
 
-        this.ap.removeBehaviour(new APContractNetResponder(this.ap, templateContract, this.ap.getEnv()));
+        //this.ap.removeBehaviour(new APContractNetResponder(this.ap, templateContract, this.ap.getEnv()));
         this.ap.addBehaviour(new APContractNetResponder(this.ap, templateContract, this.ap.getEnv()));
     }
 

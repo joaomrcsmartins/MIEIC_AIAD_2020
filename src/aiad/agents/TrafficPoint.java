@@ -2,7 +2,9 @@ package aiad.agents;
 
 import aiad.Coordinates;
 import aiad.Launcher;
+import aiad.agentbehaviours.TPContractNetInit;
 import aiad.agentbehaviours.TPCyclicContractNet;
+import jade.lang.acl.ACLMessage;
 import sajas.core.Agent;
 import uchicago.src.sim.network.DefaultDrawableNode;
 
@@ -57,6 +59,7 @@ public class TrafficPoint extends Agent implements Serializable {
     @Override
     public void setup() {
         addBehaviour(new TPCyclicContractNet(this));
+        addBehaviour(new TPContractNetInit(this, new ACLMessage(ACLMessage.CFP), this.getEnv()));
     }
 
     public double isNearDrone(AccessPoint drone) {

@@ -51,8 +51,8 @@ public class Launcher extends Repast3Launcher {
     }
 
     public static DefaultDrawableNode getNode(String label) {
-        for(DefaultDrawableNode node : nodes) {
-            if(node.getNodeLabel().equals(label)) {
+        for (DefaultDrawableNode node : nodes) {
+            if (node.getNodeLabel().equals(label)) {
                 return node;
             }
         }
@@ -70,7 +70,7 @@ public class Launcher extends Repast3Launcher {
     //este
     @Override
     public String[] getInitParam() {
-        return new String[] {"N"};
+        return new String[]{"N"};
     }
 
     //este
@@ -87,7 +87,7 @@ public class Launcher extends Repast3Launcher {
         Profile p1 = new ProfileImpl();
         mainContainer = rt.createMainContainer(p1);
 
-        if(SEPARATE_CONTAINERS) {
+        if (SEPARATE_CONTAINERS) {
             Profile p2 = new ProfileImpl();
             agentContainer = rt.createAgentContainer(p2);
         } else {
@@ -101,7 +101,7 @@ public class Launcher extends Repast3Launcher {
         Random random = new Random(System.currentTimeMillis());
 
         int N_TRAFFICPOINT = N;
-        int N_DRONE = 4*N;
+        int N_DRONE = N;
 
         traffic_points = new ArrayList<>();
         drones = new ArrayList<>();
@@ -112,40 +112,45 @@ public class Launcher extends Repast3Launcher {
             AID resultsCollectorAID = null;
             // create trafficpoints
             for (int i = 0; i < N_TRAFFICPOINT; i++) {
-                int x = random.nextInt(20);
-                int y = random.nextInt(20);
-                TrafficPoint pa = new TrafficPoint((double) 120, new Coordinates(x,y));
+                //int x = random.nextInt(10);
+                //int y = random.nextInt(10);
+
+                TrafficPoint pa = new TrafficPoint((double) 120, new Coordinates(0, 5));
                 agentContainer.acceptNewAgent("TrafficPoint" + i, pa).start();
                 DefaultDrawableNode node =
                         generateNode("TrafficPoint" + i, Color.RED,
-                                x,y);
+                                0, 5);
                 traffic_points.add(pa);
                 nodes.add(node);
                 pa.setNode(node);
             }
             // create drones
             for (int i = 0; i < N_DRONE; i++) {
-                int x = random.nextInt(20);
-                int y = random.nextInt(20);
-                AccessPoint ca = new AccessPoint(120, new Coordinates(x,y));
+                //int x = random.nextInt(10);
+                //int y = random.nextInt(10);
+                AccessPoint ca = new AccessPoint(120, new Coordinates(5, 0));
                 mainContainer.acceptNewAgent("Drone" + i, ca).start();
                 drones.add(ca);
                 DefaultDrawableNode node =
                         generateNode("Drone" + i, Color.BLUE,
-                                x,y);
+                                5, 0);
                 nodes.add(node);
                 ca.setNode(node);
             }
 
+            System.out.println("traff" + traffic_points);
+            System.out.println("drones" + drones);
+            Environment.setInstance(traffic_points, drones);
 
         } catch (StaleProxyException e) {
             e.printStackTrace();
         }
 
+
     }
 
     private DefaultDrawableNode generateNode(String label, Color color, int x, int y) {
-        OvalNetworkItem oval = new OvalNetworkItem(x,y);
+        OvalNetworkItem oval = new OvalNetworkItem(x, y);
         oval.allowResizing(false);
         oval.setHeight(5);
         oval.setWidth(5);
@@ -167,7 +172,7 @@ public class Launcher extends Repast3Launcher {
     @Override
     public void begin() {
         super.begin();
-        if(!runInBatchMode) {
+        if (!runInBatchMode) {
             buildAndScheduleDisplay();
         }
     }
@@ -182,7 +187,7 @@ public class Launcher extends Repast3Launcher {
         if (dsurf != null) dsurf.dispose();
         dsurf = new DisplaySurface(this, "Service Consumer/Provider Display");
         registerDisplaySurface("Service Consumer/Provider Display", dsurf);
-        Network2DDisplay display = new Network2DDisplay(nodes,WIDTH,HEIGHT);
+        Network2DDisplay display = new Network2DDisplay(nodes, WIDTH, HEIGHT);
         dsurf.addDisplayableProbeable(display, "Network Display");
         dsurf.addZoomable(display);
         addSimEventListener(dsurf);
@@ -198,11 +203,11 @@ public class Launcher extends Repast3Launcher {
                 // iterate through consumers
                 double traffic_provided = 0.0;
                 double traffic_all = 0.0;
-                for(int i = 0; i < traffic_points.size(); i++) {
+                for (int i = 0; i < traffic_points.size(); i++) {
                     traffic_provided += traffic_points.get(i).getCollected() == 1 ? traffic_points.get(i).getTraffic() : 0;
                     traffic_all += traffic_points.get(i).getTraffic();
                 }
-                return traffic_provided/traffic_all;
+                return traffic_provided / traffic_all;
             }
         });
         plot.display();
@@ -214,6 +219,7 @@ public class Launcher extends Repast3Launcher {
 
     /**
      * Launching Repast3
+     *
      * @param args
      */
     public static void main(String[] args) {
@@ -229,10 +235,11 @@ public class Launcher extends Repast3Launcher {
     //////////////////////////////////////////////////////////////////////////////////////
     public static class Environment {
         private static Environment env_instance = null;
-        private final ArrayList<TrafficPoint> traffic_points;
-        private final ArrayList<AccessPoint> drones;
+        private ArrayList<TrafficPoint> traffic_points;
+        private ArrayList<AccessPoint> drones;
 
         public Environment() {
+            System.out.println("nvbfejejkhgsrttfdvxjfds");
             traffic_points = new ArrayList<>();
             drones = new ArrayList<>();
         }
@@ -240,8 +247,19 @@ public class Launcher extends Repast3Launcher {
         public Environment(ArrayList<TrafficPoint> tps, ArrayList<AccessPoint> ap) {
             traffic_points = tps;
             drones = ap;
+            System.out.println("traffic points " + tps);
+            System.out.println("drones" + ap);
             env_instance = this;
         }
+
+        public void setTrafficPoints(ArrayList<TrafficPoint> tps) {
+            traffic_points = tps;
+        }
+
+        public void setDrones(ArrayList<AccessPoint> ap) {
+            drones = ap;
+        }
+
 
         public AccessPoint getDroneByName(String name) {
             for (AccessPoint drone : drones) {
@@ -268,6 +286,7 @@ public class Launcher extends Repast3Launcher {
         }
 
         public ArrayList<AccessPoint> getNearDrones(AccessPoint actual_drone) {
+            System.out.println(drones);
             ArrayList<AccessPoint> near_drones = new ArrayList<>();
             for (AccessPoint drone : drones) {
                 if (drone.getName().equals(actual_drone.getName()))
@@ -319,6 +338,15 @@ public class Launcher extends Repast3Launcher {
             if (env_instance == null)
                 env_instance = new Environment();
             return env_instance;
+        }
+
+        public static void setInstance(ArrayList<TrafficPoint> traffic_points, ArrayList<AccessPoint> access_points) {
+            if (env_instance == null)
+                env_instance = new Environment(traffic_points, access_points);
+            else {
+                env_instance.setDrones(access_points);
+                env_instance.setTrafficPoints(traffic_points);
+            }
         }
     }
 }
