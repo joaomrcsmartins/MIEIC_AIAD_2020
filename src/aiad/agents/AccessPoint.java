@@ -7,6 +7,7 @@ import aiad.agentbehaviours.APCyclicContractNet;
 import aiad.agentbehaviours.APRequestProtocolResponse;
 import aiad.agentbehaviours.APSubContractNetResponder;
 import aiad.util.ClientPair;
+import aiad.util.Edge;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import sajas.core.Agent;
@@ -25,7 +26,7 @@ public class AccessPoint extends Agent {
     private final PriorityQueue<ClientPair> clientPoints;
     private Coordinates pos;
     private Launcher.Environment env;
-    DefaultDrawableNode myNode;
+    private DefaultDrawableNode myNode;
 
     public AccessPoint(double trafficCapacity, Coordinates pos) {
         this.trafficCapacity = trafficCapacity;
@@ -97,12 +98,23 @@ public class AccessPoint extends Agent {
             System.out.println("Not enough traffic available to fulfill the request!");
         } else
             this.availableTraffic -= servedTraffic = point.getTraffic();
+
+        if (this.myNode != null) {
+            DefaultDrawableNode to = Launcher.getNode(point.getTPName());
+            Edge edge = new Edge(this.myNode, to);
+            edge.setColor(Color.MAGENTA);
+            this.myNode.addOutEdge(edge);
+        }
         return this.clientPoints.add(new ClientPair(point, servedTraffic));
     }
 
     public boolean removeClient(ClientPair client) {
         if (!this.clientPoints.contains(client)) return false;
         this.availableTraffic += client.getValue();
+        if (this.myNode != null) {
+            DefaultDrawableNode to = Launcher.getNode(client.getKey().getTPName());
+            this.myNode.removeEdgesTo(to);
+        }
         return this.clientPoints.remove(client);
     }
 
@@ -112,11 +124,16 @@ public class AccessPoint extends Agent {
     }
 
     public void removeClients() {
+
         for (ClientPair pair : clientPoints) {
             pair.getKey().setCollected(0);
         }
-        clientPoints.clear();
 
+        if (myNode != null) {
+            this.myNode.clearOutEdges();
+        }
+
+        clientPoints.clear();
     }
 
     @Override

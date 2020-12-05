@@ -115,21 +115,21 @@ public class Launcher extends Repast3Launcher {
                 //int x = random.nextInt(10);
                 //int y = random.nextInt(10);
 
-                TrafficPoint pa = new TrafficPoint((double) 120, new Coordinates(0, 5));
-                agentContainer.acceptNewAgent("TrafficPoint" + i, pa).start();
+                TrafficPoint tp = new TrafficPoint((double) 120, new Coordinates(0, 5));
+                agentContainer.acceptNewAgent("TrafficPoint" + i, tp).start();
                 DefaultDrawableNode node =
                         generateNode("TrafficPoint" + i, Color.RED,
                                 0, 5);
-                traffic_points.add(pa);
+                traffic_points.add(tp);
                 nodes.add(node);
-                pa.setNode(node);
+                tp.setNode(node);
             }
             // create drones
             for (int i = 0; i < N_DRONE; i++) {
                 //int x = random.nextInt(10);
                 //int y = random.nextInt(10);
                 AccessPoint ca = new AccessPoint(120, new Coordinates(5, 0));
-                mainContainer.acceptNewAgent("Drone" + i, ca).start();
+                agentContainer.acceptNewAgent("Drone" + i, ca).start();
                 drones.add(ca);
                 DefaultDrawableNode node =
                         generateNode("Drone" + i, Color.BLUE,
@@ -138,8 +138,6 @@ public class Launcher extends Repast3Launcher {
                 ca.setNode(node);
             }
 
-            System.out.println("traff" + traffic_points);
-            System.out.println("drones" + drones);
             Environment.setInstance(traffic_points, drones);
 
         } catch (StaleProxyException e) {
@@ -239,7 +237,6 @@ public class Launcher extends Repast3Launcher {
         private ArrayList<AccessPoint> drones;
 
         public Environment() {
-            System.out.println("nvbfejejkhgsrttfdvxjfds");
             traffic_points = new ArrayList<>();
             drones = new ArrayList<>();
         }
@@ -247,8 +244,6 @@ public class Launcher extends Repast3Launcher {
         public Environment(ArrayList<TrafficPoint> tps, ArrayList<AccessPoint> ap) {
             traffic_points = tps;
             drones = ap;
-            System.out.println("traffic points " + tps);
-            System.out.println("drones" + ap);
             env_instance = this;
         }
 

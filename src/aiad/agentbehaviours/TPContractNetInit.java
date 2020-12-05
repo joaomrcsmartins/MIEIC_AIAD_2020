@@ -3,7 +3,6 @@ package aiad.agentbehaviours;
 import aiad.Launcher;
 import aiad.agents.AccessPoint;
 import aiad.agents.TrafficPoint;
-import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import sajas.proto.ContractNetInitiator;
 
@@ -37,7 +36,7 @@ public class TPContractNetInit extends ContractNetInitiator {
         ArrayList<AccessPoint> near_drones = env.getNearDrones(trafficPoint);
         System.out.println(near_drones.size());
         for (int i = 0; i < near_drones.size(); i++) {
-            cfp.addReceiver(new AID(near_drones.get(i).getLocalName(), false));
+            cfp.addReceiver(new sajas.core.AID(near_drones.get(i).getLocalName(), false));
         }
         v.add(cfp);
 

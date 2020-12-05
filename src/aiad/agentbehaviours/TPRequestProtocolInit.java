@@ -3,7 +3,6 @@ package aiad.agentbehaviours;
 import aiad.Launcher;
 import aiad.agents.AccessPoint;
 import aiad.agents.TrafficPoint;
-import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import sajas.proto.AchieveREInitiator;
 
@@ -32,7 +31,7 @@ public class TPRequestProtocolInit extends
         try {
             request.setContentObject(this.trafficPoint);
             ArrayList<AccessPoint> near_drones = env.getNearDrones(trafficPoint);
-            request.addReceiver(new AID(near_drones.get(currentReceiverDrone).getLocalName(), false));
+            request.addReceiver(new sajas.core.AID(near_drones.get(currentReceiverDrone).getLocalName(), false));
             v.add(request);
         } catch (Exception e) {
             e.printStackTrace();

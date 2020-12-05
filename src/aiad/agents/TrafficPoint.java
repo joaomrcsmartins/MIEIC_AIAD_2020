@@ -4,6 +4,7 @@ import aiad.Coordinates;
 import aiad.Launcher;
 import aiad.agentbehaviours.TPContractNetInit;
 import aiad.agentbehaviours.TPCyclicContractNet;
+import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import sajas.core.Agent;
 import uchicago.src.sim.network.DefaultDrawableNode;
@@ -11,12 +12,13 @@ import uchicago.src.sim.network.DefaultDrawableNode;
 import java.io.Serializable;
 
 public class TrafficPoint extends Agent implements Serializable {
+    private String tpName;
     protected Double traffic;
     protected Coordinates position;
     protected transient Launcher.Environment env;
     public static double MAX_RANGE = 10.0;
 
-    DefaultDrawableNode myNode;
+    private transient DefaultDrawableNode myNode;
 
     double collected;
 
@@ -72,4 +74,17 @@ public class TrafficPoint extends Agent implements Serializable {
         this.myNode = node;
     }
 
+    public DefaultDrawableNode getNode() {
+        return myNode;
+    }
+
+    public String getTPName() {
+        return tpName;
+    }
+
+    @Override
+    public void setAID(AID aid) {
+        super.setAID(aid);
+        tpName = aid.getLocalName();
+    }
 }
