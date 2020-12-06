@@ -60,6 +60,7 @@ public class TPContractNetInit extends ContractNetInitiator {
     @Override
     protected void handleAllResponses(Vector responses, Vector acceptances) {
 
+        System.out.println("init responses " + this.trafficPoint.getTPName());
         ArrayList<ACLMessage> aux = new ArrayList<>();
         ArrayList<String> aux_name = new ArrayList<>();
 
@@ -102,11 +103,12 @@ public class TPContractNetInit extends ContractNetInitiator {
             acceptances.add(auxiliary);
         }
 
+
         if (collected < this.trafficPoint.getTraffic()) {
             this.trafficPoint.setCollected(collected - collected_aux);
             this.trafficPoint.addBehaviour(new TPRequestProtocolInit(this.trafficPoint, new ACLMessage(ACLMessage.REQUEST), this.env));
         } else {
-            this.env.getTrafficPointByName(this.trafficPoint.getName()).setCollected(1);
+            this.env.getTrafficPointByName(this.trafficPoint.getTPName()).setCollected(1);
         }
 
     }

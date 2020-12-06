@@ -27,7 +27,7 @@ public class APContractNetResponder extends ContractNetResponder {
         boolean removed = false;
         System.out.println(" (ContractNet-handleCpf) FAP agent " + this.accessPoint.getLocalName() + ": CFP received from " + cfp.getSender().getLocalName() + ". Traffic requested is " + cfp.getContent());
 
-        ClientPair trafficPoint_pair = this.accessPoint.getClientByName(cfp.getSender().getName());
+        ClientPair trafficPoint_pair = this.accessPoint.getClientByName(cfp.getSender().getLocalName());
         if (trafficPoint_pair != null) {
             removed = true;
             this.accessPoint.removeClient(trafficPoint_pair);

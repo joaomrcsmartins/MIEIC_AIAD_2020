@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.PriorityQueue;
 
 public class AccessPoint extends Agent {
-    static double MAX_RANGE = 20.0;
+    static double MAX_RANGE = 200.0;
     private final double trafficCapacity;
     private double availableTraffic;
     private final PriorityQueue<ClientPair> clientPoints;
@@ -57,6 +57,8 @@ public class AccessPoint extends Agent {
     }
 
     public void setPos(Coordinates pos) {
+        myNode.setX(pos.getX());
+        myNode.setY(pos.getY());
         this.pos = pos;
     }
 

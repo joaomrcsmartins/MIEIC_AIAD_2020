@@ -111,32 +111,59 @@ public class Launcher extends Repast3Launcher {
 
             AID resultsCollectorAID = null;
             // create trafficpoints
-            for (int i = 0; i < N_TRAFFICPOINT; i++) {
+            //for (int i = 0; i < N_TRAFFICPOINT; i++) {
                 //int x = random.nextInt(10);
                 //int y = random.nextInt(10);
 
-                TrafficPoint tp = new TrafficPoint((double) 120, new Coordinates(0 +i*5, 5 + i*5));
-                agentContainer.acceptNewAgent("TrafficPoint" + i, tp).start();
+                TrafficPoint tp = new TrafficPoint((double) 120, new Coordinates(150, 200));
+                agentContainer.acceptNewAgent("loki" , tp).start();
                 DefaultDrawableNode node =
-                        generateNode("TrafficPoint" + i, Color.RED,
-                                0 +i*5, 5 +i*5);
+                        generateNode("loki", Color.RED,
+                                150, 200);
                 traffic_points.add(tp);
                 nodes.add(node);
                 tp.setNode(node);
-            }
+
+            TrafficPoint tp2 = new TrafficPoint((double) 120, new Coordinates(250, 200));
+            agentContainer.acceptNewAgent("bobby" , tp2).start();
+            DefaultDrawableNode node2 =
+                    generateNode("bobby", Color.RED,
+                            250, 200);
+            traffic_points.add(tp2);
+            nodes.add(node2);
+            tp2.setNode(node2);
+            //}
             // create drones
-            for (int i = 0; i < N_DRONE; i++) {
+           // for (int i = 0; i < N_DRONE; i++) {
                 //int x = random.nextInt(10);
                 //int y = random.nextInt(10);
-                AccessPoint ca = new AccessPoint(120, new Coordinates(5 +i*5, 0 +i*5));
-                agentContainer.acceptNewAgent("Drone" + i, ca).start();
+                AccessPoint ca = new AccessPoint(100, new Coordinates(160,200));
+                agentContainer.acceptNewAgent("dronezoe" , ca).start();
                 drones.add(ca);
-                DefaultDrawableNode node =
-                        generateNode("Drone" + i, Color.BLUE,
-                                5 +i*5, 0 +i*5);
-                nodes.add(node);
-                ca.setNode(node);
-            }
+                DefaultDrawableNode node3 =
+                        generateNode("dronezoe", Color.BLUE,
+                                160,200);
+                nodes.add(node3);
+                ca.setNode(node3);
+           // }
+
+            AccessPoint ca2 = new AccessPoint(80, new Coordinates(20,200));
+            agentContainer.acceptNewAgent("dronedaisy" , ca2).start();
+            drones.add(ca2);
+            DefaultDrawableNode node4 =
+                    generateNode("dronedaisy", Color.BLUE,
+                            20,200);
+            nodes.add(node4);
+            ca2.setNode(node4);
+
+            AccessPoint ca3 = new AccessPoint(140, new Coordinates(300,200));
+            agentContainer.acceptNewAgent("droneluna" , ca3).start();
+            drones.add(ca3);
+            DefaultDrawableNode node5 =
+                    generateNode("droneluna", Color.BLUE,
+                            300,200);
+            nodes.add(node5);
+            ca3.setNode(node5);
 
             Environment.setInstance(traffic_points, drones);
 
@@ -176,7 +203,7 @@ public class Launcher extends Repast3Launcher {
     }
 
     private DisplaySurface dsurf;
-    private int WIDTH = 250, HEIGHT = 250;
+    private int WIDTH = 300, HEIGHT = 300;
     private OpenSequenceGraph plot;
 
     private void buildAndScheduleDisplay() {
@@ -266,7 +293,7 @@ public class Launcher extends Repast3Launcher {
 
         public TrafficPoint getTrafficPointByName(String name) {
             for (TrafficPoint trafficPoint : traffic_points) {
-                if (trafficPoint.getName().equals(name))
+                if (trafficPoint.getTPName().equals(name))
                     return trafficPoint;
             }
             return null;

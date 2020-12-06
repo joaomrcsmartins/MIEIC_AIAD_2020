@@ -16,7 +16,7 @@ public class TrafficPoint extends Agent implements Serializable {
     protected Double traffic;
     protected Coordinates position;
     protected transient Launcher.Environment env;
-    public static double MAX_RANGE = 10.0;
+    public static double MAX_RANGE = 100.0;
 
     private transient DefaultDrawableNode myNode;
 

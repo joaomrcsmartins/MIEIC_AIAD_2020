@@ -27,6 +27,7 @@ public class APSubContractNetInit extends ContractNetInitiator {
     @Override
     protected Vector prepareCfps(ACLMessage cfp) {
         Vector v = new Vector();
+        System.out.println("cfp: " + cfp);
         System.out.println("traffic point " + trafficPoint.getName());
         cfp.setContent(trafficPoint.getName());
         cfp.setConversationId("sub-contract-net");
@@ -63,7 +64,7 @@ public class APSubContractNetInit extends ContractNetInitiator {
         });
 
         for (Object respons : responses) {
-            System.out.println(" (Init.handleAllResponses) Response from: " + ((ACLMessage) respons).getSender().getLocalName() + " content:" + ((ACLMessage) respons).getContent());
+            System.out.println(" (Init.handleAllResponses) Response from: " + ((ACLMessage) respons).getSender().getName() + " content:" + ((ACLMessage) respons).getContent());
             aux_name.add(((ACLMessage) respons).getSender().getName());
             ACLMessage msg_reply = ((ACLMessage) respons).createReply();
             ACLMessage msg = (ACLMessage) respons;
@@ -92,8 +93,9 @@ public class APSubContractNetInit extends ContractNetInitiator {
             acceptances.add(auxiliary);
         }
 
+        System.out.println("collected: " + collected);
         if (collected >= this.trafficPoint.getTraffic()) {
-            this.env.getTrafficPointByName(this.trafficPoint.getName()).setCollected(this.trafficPoint.getTraffic());
+            this.env.getTrafficPointByName(this.trafficPoint.getTPName()).setCollected(this.trafficPoint.getTraffic());
         }
 
     }
