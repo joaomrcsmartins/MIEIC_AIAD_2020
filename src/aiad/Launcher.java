@@ -29,7 +29,7 @@ public class Launcher extends Repast3Launcher {
 
     private static final boolean BATCH_MODE = true;
 
-    private int N = 1;
+    private int N = 5;
 
     public static final boolean USE_RESULTS_COLLECTOR = true;
 
@@ -101,7 +101,7 @@ public class Launcher extends Repast3Launcher {
         Random random = new Random(System.currentTimeMillis());
 
         int N_TRAFFICPOINT = N;
-        int N_DRONE = N;
+        int N_DRONE = N*2;
 
         traffic_points = new ArrayList<>();
         drones = new ArrayList<>();
@@ -115,11 +115,11 @@ public class Launcher extends Repast3Launcher {
                 //int x = random.nextInt(10);
                 //int y = random.nextInt(10);
 
-                TrafficPoint tp = new TrafficPoint((double) 120, new Coordinates(0, 5));
+                TrafficPoint tp = new TrafficPoint((double) 120, new Coordinates(0 +i*5, 5 + i*5));
                 agentContainer.acceptNewAgent("TrafficPoint" + i, tp).start();
                 DefaultDrawableNode node =
                         generateNode("TrafficPoint" + i, Color.RED,
-                                0, 5);
+                                0 +i*5, 5 +i*5);
                 traffic_points.add(tp);
                 nodes.add(node);
                 tp.setNode(node);
@@ -128,12 +128,12 @@ public class Launcher extends Repast3Launcher {
             for (int i = 0; i < N_DRONE; i++) {
                 //int x = random.nextInt(10);
                 //int y = random.nextInt(10);
-                AccessPoint ca = new AccessPoint(120, new Coordinates(5, 0));
+                AccessPoint ca = new AccessPoint(120, new Coordinates(5 +i*5, 0 +i*5));
                 agentContainer.acceptNewAgent("Drone" + i, ca).start();
                 drones.add(ca);
                 DefaultDrawableNode node =
                         generateNode("Drone" + i, Color.BLUE,
-                                5, 0);
+                                5 +i*5, 0 +i*5);
                 nodes.add(node);
                 ca.setNode(node);
             }
@@ -281,7 +281,6 @@ public class Launcher extends Repast3Launcher {
         }
 
         public ArrayList<AccessPoint> getNearDrones(AccessPoint actual_drone) {
-            System.out.println(drones);
             ArrayList<AccessPoint> near_drones = new ArrayList<>();
             for (AccessPoint drone : drones) {
                 if (drone.getName().equals(actual_drone.getName()))

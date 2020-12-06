@@ -29,12 +29,10 @@ public class TPContractNetInit extends ContractNetInitiator {
 
     @Override
     protected Vector prepareCfps(ACLMessage cfp) {
-        System.out.println("initiator");
         Vector v = new Vector();
         cfp.setContent(String.valueOf(trafficPoint.getTraffic()));
         cfp.setConversationId("contract-net");
         ArrayList<AccessPoint> near_drones = env.getNearDrones(trafficPoint);
-        System.out.println(near_drones.size());
         for (int i = 0; i < near_drones.size(); i++) {
             cfp.addReceiver(new sajas.core.AID(near_drones.get(i).getLocalName(), false));
         }
