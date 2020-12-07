@@ -29,7 +29,7 @@ public class Launcher extends Repast3Launcher {
 
     private static final boolean BATCH_MODE = true;
 
-    private int N = 10;
+    private int N = 20;
 
     public static final boolean USE_RESULTS_COLLECTOR = true;
 
@@ -111,8 +111,8 @@ public class Launcher extends Repast3Launcher {
 
             // create trafficpoints
             for (int i = 0; i < N_TRAFFICPOINT; i++) {
-                int x = random.nextInt(200);
-                int y = random.nextInt(200);
+                int x = random.nextInt(400);
+                int y = random.nextInt(400);
                 int value = random.nextInt(120);
 
                 TrafficPoint tp = new TrafficPoint((double) value, new Coordinates(x, y));
@@ -127,8 +127,8 @@ public class Launcher extends Repast3Launcher {
             }
             // create drones
             for (int i = 0; i < N_DRONE; i++) {
-                int x = random.nextInt(200);
-                int y = random.nextInt(200);
+                int x = random.nextInt(400);
+                int y = random.nextInt(400);
                 int value = random.nextInt(120);
                 AccessPoint ca = new AccessPoint(value, new Coordinates(x, y));
                 agentContainer.acceptNewAgent("ap" + i, ca).start();
@@ -178,7 +178,7 @@ public class Launcher extends Repast3Launcher {
     }
 
     private DisplaySurface dsurf;
-    private int WIDTH = 300, HEIGHT = 300;
+    private int WIDTH = 500, HEIGHT = 500;
     private OpenSequenceGraph plot;
 
     private void buildAndScheduleDisplay() {
