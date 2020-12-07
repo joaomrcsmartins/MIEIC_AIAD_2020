@@ -30,6 +30,7 @@ public class TPContractNetInit extends ContractNetInitiator {
     @Override
     protected Vector prepareCfps(ACLMessage cfp) {
         Vector v = new Vector();
+        System.out.println(" (Init.prepareCfps)  " + trafficPoint.getTPName());
         cfp.setContent(String.valueOf(trafficPoint.getTraffic()));
         cfp.setConversationId("contract-net");
         ArrayList<AccessPoint> near_drones = env.getNearDrones(trafficPoint);
@@ -60,7 +61,6 @@ public class TPContractNetInit extends ContractNetInitiator {
     @Override
     protected void handleAllResponses(Vector responses, Vector acceptances) {
 
-        System.out.println("init responses " + this.trafficPoint.getTPName());
         ArrayList<ACLMessage> aux = new ArrayList<>();
         ArrayList<String> aux_name = new ArrayList<>();
 

@@ -26,6 +26,7 @@ public class APContractNetResponder extends ContractNetResponder {
     protected ACLMessage handleCfp(ACLMessage cfp) throws RefuseException {
         boolean removed = false;
         System.out.println(" (ContractNet-handleCpf) FAP agent " + this.accessPoint.getLocalName() + ": CFP received from " + cfp.getSender().getLocalName() + ". Traffic requested is " + cfp.getContent());
+        System.out.println("traffic point reference: " + cfp.getSender() );
 
         ClientPair trafficPoint_pair = this.accessPoint.getClientByName(cfp.getSender().getLocalName());
         if (trafficPoint_pair != null) {

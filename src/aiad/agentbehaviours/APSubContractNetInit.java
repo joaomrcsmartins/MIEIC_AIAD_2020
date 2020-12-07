@@ -27,8 +27,6 @@ public class APSubContractNetInit extends ContractNetInitiator {
     @Override
     protected Vector prepareCfps(ACLMessage cfp) {
         Vector v = new Vector();
-        System.out.println("cfp: " + cfp);
-        System.out.println("traffic point " + trafficPoint.getName());
         cfp.setContent(trafficPoint.getName());
         cfp.setConversationId("sub-contract-net");
         ArrayList<AccessPoint> near_drones = env.getNearDrones(accessPoint);
@@ -93,7 +91,6 @@ public class APSubContractNetInit extends ContractNetInitiator {
             acceptances.add(auxiliary);
         }
 
-        System.out.println("collected: " + collected);
         if (collected >= this.trafficPoint.getTraffic()) {
             this.env.getTrafficPointByName(this.trafficPoint.getTPName()).setCollected(this.trafficPoint.getTraffic());
         }
