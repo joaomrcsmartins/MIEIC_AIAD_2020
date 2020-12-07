@@ -113,8 +113,9 @@ public class Launcher extends Repast3Launcher {
             for (int i = 0; i < N_TRAFFICPOINT; i++) {
                 int x = random.nextInt(200);
                 int y = random.nextInt(200);
+                int value = random.nextInt(120);
 
-                TrafficPoint tp = new TrafficPoint((double) 120, new Coordinates(x, y));
+                TrafficPoint tp = new TrafficPoint((double) value, new Coordinates(x, y));
                 agentContainer.acceptNewAgent("tp" + i, tp).start();
                 DefaultDrawableNode node =
                         generateNode("tp" + i, Color.RED,
@@ -128,7 +129,8 @@ public class Launcher extends Repast3Launcher {
             for (int i = 0; i < N_DRONE; i++) {
                 int x = random.nextInt(200);
                 int y = random.nextInt(200);
-                AccessPoint ca = new AccessPoint(120, new Coordinates(x, y));
+                int value = random.nextInt(120);
+                AccessPoint ca = new AccessPoint(value, new Coordinates(x, y));
                 agentContainer.acceptNewAgent("ap" + i, ca).start();
                 drones.add(ca);
                 DefaultDrawableNode node3 =
