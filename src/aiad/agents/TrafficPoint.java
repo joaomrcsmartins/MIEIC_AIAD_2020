@@ -61,6 +61,7 @@ public class TrafficPoint extends Agent implements Serializable {
     @Override
     public void setup() {
         addBehaviour(new TPCyclicContractNet(this));
+
     }
 
     public double isNearDrone(AccessPoint drone) {

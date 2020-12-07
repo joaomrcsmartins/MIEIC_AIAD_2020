@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Vector;
+import java.util.Random;
 
 
 public class TPContractNetInit extends ContractNetInitiator {
@@ -74,6 +75,30 @@ public class TPContractNetInit extends ContractNetInitiator {
             double value2 = (content2.equals("proposal-refused")) ? 0.0 : Double.parseDouble(content2);
             return (int) (value2 - value);
         });
+
+        //algo super shady
+        /*int i = 1;
+        ACLMessage max_msg = (ACLMessage) responses.get(0);
+        double max_value = (max_msg.getContent().equals("proposal-refused")) ? 0.0 : Double.parseDouble(max_msg.getContent());
+        for (; i < responses.size(); i++) {
+            ACLMessage aux_msg = (ACLMessage) responses.get(0);
+            double aux_value = (aux_msg.getContent().equals("proposal-refused")) ? 0.0 : Double.parseDouble(aux_msg.getContent());
+            if (max_value > aux_value)
+                break;
+        }
+
+        System.out.println("shady  initial: " + ((ACLMessage) responses.get(0)).getSender());
+
+        System.out.println("super shady: " + i);
+        Random random = new Random(System.currentTimeMillis());
+        int index = random.nextInt(i);
+        ACLMessage swap = (ACLMessage) responses.get(index);
+        responses.set(index, max_msg);
+        responses.set(0, swap);
+
+        System.out.println("shady 0: " + ((ACLMessage) responses.get(0)).getSender());
+        System.out.println("shady index: " + ((ACLMessage) responses.get(index)).getSender());*/
+
 
         for (Object response : responses) {
             System.out.println(" (Init.handleAllResponses) Response from: " + ((ACLMessage) response).getSender().getLocalName() + " content:" + ((ACLMessage) response).getContent());

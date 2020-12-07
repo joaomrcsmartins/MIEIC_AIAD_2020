@@ -148,7 +148,6 @@ public class AccessPoint extends Agent {
                 MessageTemplate.MatchConversationId("contract-net"),
                 MessageTemplate.MatchPerformative(ACLMessage.CFP));
 
-        addBehaviour(new APContractNetResponder(this, templateContract, this.env));
         addBehaviour(new APCyclicContractNet(this));
         addBehaviour(new APSubContractNetResponder(this, templateSubContract, this.env));
         addBehaviour(new APRequestProtocolResponse(this, MessageTemplate.MatchPerformative(ACLMessage.REQUEST), this.env));
