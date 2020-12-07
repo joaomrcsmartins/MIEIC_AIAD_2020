@@ -29,7 +29,7 @@ public class Launcher extends Repast3Launcher {
 
     private static final boolean BATCH_MODE = true;
 
-    private int N = 20;
+    private int N = 50;
 
     public static final boolean USE_RESULTS_COLLECTOR = true;
 

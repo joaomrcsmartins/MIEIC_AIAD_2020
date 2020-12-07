@@ -4,6 +4,7 @@ import aiad.Coordinates;
 import aiad.Launcher;
 import aiad.agentbehaviours.TPContractNetInit;
 import aiad.agentbehaviours.TPCyclicContractNet;
+import aiad.agentbehaviours.TPRequestProtocolInit;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import sajas.core.Agent;
@@ -17,7 +18,7 @@ public class TrafficPoint extends Agent implements Serializable {
     protected Coordinates position;
     protected transient Launcher.Environment env;
     public static double MAX_RANGE = 100.0;
-
+    TPRequestProtocolInit request;
     private transient DefaultDrawableNode myNode;
 
     double collected;
@@ -29,6 +30,14 @@ public class TrafficPoint extends Agent implements Serializable {
     public void setTraffic(Double traffic) {
         this.traffic = traffic;
         this.collected = 0;
+    }
+
+    public TPRequestProtocolInit getRequest() {
+        return request;
+    }
+
+    public void setRequest(TPRequestProtocolInit request) {
+        this.request = request;
     }
 
     public Coordinates getPosition() {

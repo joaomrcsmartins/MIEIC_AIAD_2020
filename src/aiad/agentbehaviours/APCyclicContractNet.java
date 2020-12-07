@@ -8,7 +8,7 @@ import jade.lang.acl.MessageTemplate;
 
 public class APCyclicContractNet extends TickerBehaviour {
     private AccessPoint ap;
-    private static int period = 1000;
+    private static int period = 3000;
     APContractNetResponder resp;
     APSubContractNetResponder sub;
     APRequestProtocolResponse request_resp;

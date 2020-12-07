@@ -2,14 +2,9 @@ package aiad.agents;
 
 import aiad.Coordinates;
 import aiad.Launcher;
-import aiad.agentbehaviours.APContractNetResponder;
-import aiad.agentbehaviours.APCyclicContractNet;
-import aiad.agentbehaviours.APRequestProtocolResponse;
-import aiad.agentbehaviours.APSubContractNetResponder;
+import aiad.agentbehaviours.*;
 import aiad.util.ClientPair;
 import aiad.util.Edge;
-import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
 import sajas.core.Agent;
 import uchicago.src.sim.network.DefaultDrawableNode;
 
@@ -27,6 +22,7 @@ public class AccessPoint extends Agent {
     private Coordinates pos;
     private Launcher.Environment env;
     private DefaultDrawableNode myNode;
+    APSubContractNetInit subcontract;
 
     public AccessPoint(double trafficCapacity, Coordinates pos) {
         this.trafficCapacity = trafficCapacity;
@@ -34,6 +30,14 @@ public class AccessPoint extends Agent {
         this.pos = pos;
         this.clientPoints = new PriorityQueue<>();
         this.env = Launcher.Environment.getInstance();
+    }
+
+    public APSubContractNetInit getSubcontract() {
+        return subcontract;
+    }
+
+    public void setSubcontract(APSubContractNetInit subcontract) {
+        this.subcontract = subcontract;
     }
 
     public double getTrafficCapacity() {

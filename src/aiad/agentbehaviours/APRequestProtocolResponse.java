@@ -21,12 +21,14 @@ public class APRequestProtocolResponse extends AchieveREResponder {
 
     @Override
     protected ACLMessage handleRequest(ACLMessage request) throws RefuseException {
+        this.accessPoint.removeBehaviour(this.accessPoint.getSubcontract());
         System.out.println("(handleRequest) " + this.accessPoint.getLocalName() + " Received request: " + request);
         ACLMessage response = new ACLMessage(ACLMessage.AGREE);
         try {
             TrafficPoint tp = (TrafficPoint) request.getContentObject();
             System.out.println("Traffic point traffic: " + tp.getTraffic());
-            this.accessPoint.addBehaviour(new APSubContractNetInit(this.accessPoint, tp, new ACLMessage(ACLMessage.CFP), this.env));
+            this.accessPoint.setSubcontract(new APSubContractNetInit(this.accessPoint, tp, new ACLMessage(ACLMessage.CFP), this.env));
+            this.accessPoint.addBehaviour(this.accessPoint.getSubcontract());
         } catch (Exception e) {
             e.printStackTrace();
         }
