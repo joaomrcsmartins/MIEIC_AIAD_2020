@@ -31,8 +31,10 @@ public class APSubContractNetResponder extends ContractNetResponder {
             this.accessPoint.removeClient(trafficPoint_pair);
         }
 
+        boolean isNear = this.env.isNear(cfp.getContent(), this.accessPoint.getPos());
+
         boolean proposal = this.accessPoint.isAvailable();
-        if (proposal) {
+        if (proposal && !isNear) {
             System.out.println(" (SubContractNet-handleCpf) FAP agent " + this.accessPoint.getLocalName() + ": Proposing " + this.accessPoint.getAvailableTraffic() + " to " + cfp.getSender().getLocalName());
             ACLMessage propose = cfp.createReply();
             propose.setPerformative(ACLMessage.PROPOSE);

@@ -233,7 +233,7 @@ public class Launcher extends Repast3Launcher {
 
         plot_ping_avg.addSequence("Trafico", new Sequence() {
             public double getSValue() {
-                return (double)Environment.pings/Environment.getInstance().getTrafficPoints().size();
+                return (double) Environment.pings / Environment.getInstance().getTrafficPoints().size();
             }
         });
         plot_ping_avg.display();
@@ -381,6 +381,14 @@ public class Launcher extends Repast3Launcher {
                 env_instance.setDrones(access_points);
                 env_instance.setTrafficPoints(traffic_points);
             }
+        }
+
+        public boolean isNear(String content, Coordinates pos) {
+            for (TrafficPoint tp : traffic_points) {
+                if (tp.getName().equals(content))
+                    return tp.getPosition().getDistance(pos) <= tp.MAX_RANGE;
+            }
+            return false;
         }
     }
 }

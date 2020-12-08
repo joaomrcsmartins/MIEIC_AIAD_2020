@@ -6,7 +6,7 @@ import jade.lang.acl.ACLMessage;
 
 public class TPCyclicContractNet extends TickerBehaviour {
     private TrafficPoint tp;
-    private static int period = 3000;
+    private static int period = 4000;
     TPContractNetInit init;
 
     public TPCyclicContractNet(TrafficPoint tp) {

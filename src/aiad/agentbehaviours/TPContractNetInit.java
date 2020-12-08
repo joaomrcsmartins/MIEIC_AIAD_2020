@@ -51,7 +51,7 @@ public class TPContractNetInit extends ContractNetInitiator {
 
     public String collectedAux(String response) {
         if (response.contains(":")) {
-            collected_aux += Double.parseDouble(response.substring(0, response.indexOf(":")));
+            //collected_aux += Double.parseDouble(response.substring(0, response.indexOf(":")));
             return response.substring(0, response.indexOf(":"));
         } else
             return response;
@@ -107,7 +107,7 @@ public class TPContractNetInit extends ContractNetInitiator {
 
 
         if (collected < this.trafficPoint.getTraffic()) {
-            this.trafficPoint.setCollected(collected - collected_aux);
+            this.trafficPoint.setCollected(collected);
             this.trafficPoint.setRequest(new TPRequestProtocolInit(this.trafficPoint, new ACLMessage(ACLMessage.REQUEST), this.env));
             this.trafficPoint.addBehaviour(this.trafficPoint.getRequest());
         } else {

@@ -50,9 +50,6 @@ public class APSubContractNetInit extends ContractNetInitiator {
 
         double collected = this.trafficPoint.getCollected();
 
-        if (collected == 0)
-            collected += this.accessPoint.getAvailableTraffic();
-
         Collections.sort(responses, (Comparator<ACLMessage>) (aclMessage, t1) -> {
             String content = aclMessage.getContent();
             String content2 = t1.getContent();
