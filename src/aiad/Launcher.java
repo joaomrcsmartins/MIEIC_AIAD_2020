@@ -181,6 +181,7 @@ public class Launcher extends Repast3Launcher {
     private int WIDTH = 500, HEIGHT = 500;
     private OpenSequenceGraph plot;
     private OpenSequenceGraph plot_ping;
+    private OpenSequenceGraph plot_ping_avg;
 
     private void buildAndScheduleDisplay() {
 
@@ -216,7 +217,7 @@ public class Launcher extends Repast3Launcher {
         // graph pings
         if (plot_ping != null) plot_ping.dispose();
         plot_ping = new OpenSequenceGraph("Evolução do  número de pings no sistema longo do tempo", this);
-        plot_ping.setAxisTitles("time", "% successful service executions");
+        plot_ping.setAxisTitles("time", "N pings");
 
         plot_ping.addSequence("Trafico", new Sequence() {
             public double getSValue() {
@@ -225,9 +226,23 @@ public class Launcher extends Repast3Launcher {
         });
         plot_ping.display();
 
+        // graph pings
+        if (plot_ping_avg != null) plot_ping_avg.dispose();
+        plot_ping_avg = new OpenSequenceGraph("Evolução do  número de pings por TP ao longo do tempo", this);
+        plot_ping_avg.setAxisTitles("time", "N pings por TP");
+
+        plot_ping_avg.addSequence("Trafico", new Sequence() {
+            public double getSValue() {
+                return (double)Environment.pings/Environment.getInstance().getTrafficPoints().size();
+            }
+        });
+        plot_ping_avg.display();
+
         getSchedule().scheduleActionAtInterval(1, dsurf, "updateDisplay", Schedule.LAST);
         getSchedule().scheduleActionAtInterval(100, plot, "step", Schedule.LAST);
         getSchedule().scheduleActionAtInterval(100, plot_ping, "step", Schedule.LAST);
+        getSchedule().scheduleActionAtInterval(100, plot_ping_avg, "step", Schedule.LAST);
+
     }
 
 

@@ -22,7 +22,6 @@ public class APSubContractNetInit extends ContractNetInitiator {
         this.accessPoint = accessPoint;
         this.trafficPoint = trafficPoint;
         this.env = env;
-        Launcher.Environment.addPing();
     }
 
     @Override
