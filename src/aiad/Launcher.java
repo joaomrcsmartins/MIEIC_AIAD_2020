@@ -2,7 +2,7 @@ package aiad;
 
 import aiad.agents.AccessPoint;
 import aiad.agents.TrafficPoint;
-import jade.core.AID;
+import aiad.util.TextDrawableNode;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.wrapper.StaleProxyException;
@@ -41,7 +41,7 @@ public class Launcher extends Repast3Launcher {
     private ArrayList<TrafficPoint> traffic_points;
     private ArrayList<AccessPoint> drones;
 
-    private static List<DefaultDrawableNode> nodes;
+    private static List<TextDrawableNode> nodes;
 
     private boolean runInBatchMode;
 
@@ -105,7 +105,7 @@ public class Launcher extends Repast3Launcher {
 
         traffic_points = new ArrayList<>();
         drones = new ArrayList<>();
-        nodes = new ArrayList<DefaultDrawableNode>();
+        nodes = new ArrayList<TextDrawableNode>();
 
         try {
 
@@ -117,9 +117,9 @@ public class Launcher extends Repast3Launcher {
 
                 TrafficPoint tp = new TrafficPoint((double) value, new Coordinates(x, y));
                 agentContainer.acceptNewAgent("tp" + i, tp).start();
-                DefaultDrawableNode node =
+                TextDrawableNode node =
                         generateNode("tp" + i, Color.RED,
-                                x, y);
+                                x, y, String.valueOf(value));
                 traffic_points.add(tp);
                 nodes.add(node);
                 tp.setNode(node);
@@ -133,9 +133,9 @@ public class Launcher extends Repast3Launcher {
                 AccessPoint ca = new AccessPoint(value, new Coordinates(x, y));
                 agentContainer.acceptNewAgent("ap" + i, ca).start();
                 drones.add(ca);
-                DefaultDrawableNode node3 =
+                TextDrawableNode node3 =
                         generateNode("ap" + i, Color.BLUE,
-                                x, y);
+                                x, y, String.valueOf(value));
                 nodes.add(node3);
                 ca.setNode(node3);
             }
@@ -149,13 +149,13 @@ public class Launcher extends Repast3Launcher {
 
     }
 
-    private DefaultDrawableNode generateNode(String label, Color color, int x, int y) {
+    private TextDrawableNode generateNode(String label, Color color, int x, int y, String value) {
         OvalNetworkItem oval = new OvalNetworkItem(x, y);
         oval.allowResizing(false);
         oval.setHeight(5);
         oval.setWidth(5);
 
-        DefaultDrawableNode node = new DefaultDrawableNode(label, oval);
+        TextDrawableNode node = new TextDrawableNode(label, value, oval);
         node.setColor(color);
 
         return node;
@@ -207,7 +207,7 @@ public class Launcher extends Repast3Launcher {
                     traffic_provided += traffic_points.get(i).getCollected() == 1 ? traffic_points.get(i).getTraffic() : 0;
                     traffic_all += traffic_points.get(i).getTraffic();
                 }
-                return traffic_provided / traffic_all;
+                return traffic_provided / traffic_all * 100;
             }
         });
         plot.display();
