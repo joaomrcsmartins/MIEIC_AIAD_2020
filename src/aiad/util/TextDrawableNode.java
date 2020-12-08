@@ -23,15 +23,9 @@ public class TextDrawableNode extends DefaultDrawableNode {
     @Override
     public void draw(SimGraphics simGraphics) {
         super.draw(simGraphics);
-        int newX = simGraphics.getDisplayWidth()/500 * (int)(origX*1.18);
-        int newY = simGraphics.getDisplayHeight()/500* (int)(origY*1.18);
-        textBox.setX(newX);
-        textBox.setY(newY);
-        System.out.println("Box x: " + textBox.getX());
-        System.out.println("\tBox y: " + textBox.getY());
-        System.out.println("\tSim wid: " + simGraphics.getDisplayWidth());
-        System.out.println("\tSim hei: " + simGraphics.getDisplayHeight());
+        int newX = (simGraphics.getCurWidth() / 5)*(origX) + simGraphics.getDisplayWidth() - (100*simGraphics.getCurWidth());
+        int newY = (simGraphics.getCurHeight() / 5)*(origY) + simGraphics.getDisplayHeight() - (100*simGraphics.getCurHeight());
+        textBox.setTextCoordinates(newX,newY);
         textBox.drawDisplay(simGraphics);
-        //simGraphics.drawOval(Color.CYAN);
     }
 }
