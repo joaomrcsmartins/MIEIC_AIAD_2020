@@ -22,6 +22,7 @@ public class TPRequestProtocolInit extends
         this.trafficPoint = a;
         this.env = env;
         this.currentReceiverDrone = Math.abs(new Random().nextInt() % env.getNearDrones(a).size());
+        Launcher.Environment.addPing();
     }
 
     @Override

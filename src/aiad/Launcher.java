@@ -180,6 +180,7 @@ public class Launcher extends Repast3Launcher {
     private DisplaySurface dsurf;
     private int WIDTH = 500, HEIGHT = 500;
     private OpenSequenceGraph plot;
+    private OpenSequenceGraph plot_ping;
 
     private void buildAndScheduleDisplay() {
 
@@ -212,8 +213,21 @@ public class Launcher extends Repast3Launcher {
         });
         plot.display();
 
+        // graph pings
+        if (plot_ping != null) plot_ping.dispose();
+        plot_ping = new OpenSequenceGraph("Evolução do  número de pings no sistema longo do tempo", this);
+        plot_ping.setAxisTitles("time", "% successful service executions");
+
+        plot_ping.addSequence("Trafico", new Sequence() {
+            public double getSValue() {
+                return Environment.pings;
+            }
+        });
+        plot_ping.display();
+
         getSchedule().scheduleActionAtInterval(1, dsurf, "updateDisplay", Schedule.LAST);
         getSchedule().scheduleActionAtInterval(100, plot, "step", Schedule.LAST);
+        getSchedule().scheduleActionAtInterval(100, plot_ping, "step", Schedule.LAST);
     }
 
 
@@ -238,6 +252,9 @@ public class Launcher extends Repast3Launcher {
         private ArrayList<TrafficPoint> traffic_points;
         private ArrayList<AccessPoint> drones;
 
+        public static int pings = 0;
+
+
         public Environment() {
             traffic_points = new ArrayList<>();
             drones = new ArrayList<>();
@@ -248,6 +265,12 @@ public class Launcher extends Repast3Launcher {
             drones = ap;
             env_instance = this;
         }
+
+
+        public static void addPing() {
+            Environment.pings++;
+        }
+
 
         public void setTrafficPoints(ArrayList<TrafficPoint> tps) {
             traffic_points = tps;

@@ -25,7 +25,7 @@ public class TPContractNetInit extends ContractNetInitiator {
         super(a, msg);
         this.trafficPoint = a;
         this.env = env;
-        this.collected_aux = 0;
+        Launcher.Environment.addPing();
     }
 
     @Override
