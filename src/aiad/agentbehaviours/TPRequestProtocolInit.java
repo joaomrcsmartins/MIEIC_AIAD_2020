@@ -14,7 +14,7 @@ public class TPRequestProtocolInit extends
         AchieveREInitiator {
 
     TrafficPoint trafficPoint;
-    Launcher.Environment env;
+    transient Launcher.Environment env;
     Integer currentReceiverDrone;
 
     public TPRequestProtocolInit(TrafficPoint a, ACLMessage msg, Launcher.Environment env) {
@@ -22,7 +22,7 @@ public class TPRequestProtocolInit extends
         this.trafficPoint = a;
         this.env = env;
         this.currentReceiverDrone = Math.abs(new Random().nextInt() % env.getNearDrones(a).size());
-        Launcher.Environment.addPing();
+        Launcher.Environment.sumRequest();
     }
 
     @Override

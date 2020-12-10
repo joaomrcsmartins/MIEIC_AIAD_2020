@@ -2,11 +2,9 @@ package aiad.agents;
 
 import aiad.Coordinates;
 import aiad.Launcher;
-import aiad.agentbehaviours.TPContractNetInit;
 import aiad.agentbehaviours.TPCyclicContractNet;
 import aiad.agentbehaviours.TPRequestProtocolInit;
 import jade.core.AID;
-import jade.lang.acl.ACLMessage;
 import sajas.core.Agent;
 import uchicago.src.sim.network.DefaultDrawableNode;
 
@@ -22,6 +20,8 @@ public class TrafficPoint extends Agent implements Serializable {
     private transient DefaultDrawableNode myNode;
 
     double collected;
+
+    private boolean satisfied;
 
     public Double getTraffic() {
         return traffic;
@@ -57,6 +57,7 @@ public class TrafficPoint extends Agent implements Serializable {
         this.position = position;
         this.env = Launcher.Environment.getInstance();
         this.collected = 0;
+        this.satisfied = false;
     }
 
     public void setCollected(double collected) {
@@ -77,8 +78,8 @@ public class TrafficPoint extends Agent implements Serializable {
         return position.getDistance(drone.getPos());
     }
 
-    // Simulation Util Functions
 
+    // Simulation Util Functions
     public void setNode(DefaultDrawableNode node) {
         this.myNode = node;
     }
@@ -95,5 +96,17 @@ public class TrafficPoint extends Agent implements Serializable {
     public void setAID(AID aid) {
         super.setAID(aid);
         tpName = aid.getLocalName();
+    }
+
+    public void satisfy() {
+        this.satisfied = true;
+    }
+
+    public boolean isSatisfied() {
+        return satisfied;
+    }
+
+    public void dissatisfy() {
+        this.satisfied = false;
     }
 }

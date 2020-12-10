@@ -24,7 +24,7 @@ public class TPContractNetInit extends ContractNetInitiator {
         super(a, msg);
         this.trafficPoint = a;
         this.env = env;
-        Launcher.Environment.addPing();
+        Launcher.Environment.sumRequest();
     }
 
     @Override
@@ -100,11 +100,11 @@ public class TPContractNetInit extends ContractNetInitiator {
         }
 
         for (ACLMessage auxiliary : aux) {
-            if (collected < this.trafficPoint.getTraffic())
+            if (collected < this.trafficPoint.getTraffic()) {
                 auxiliary.setPerformative(ACLMessage.REJECT_PROPOSAL);
+            }
             acceptances.add(auxiliary);
         }
-
 
         if (collected < this.trafficPoint.getTraffic()) {
             this.trafficPoint.setCollected(collected - collected_aux);
@@ -112,6 +112,7 @@ public class TPContractNetInit extends ContractNetInitiator {
             this.trafficPoint.addBehaviour(this.trafficPoint.getRequest());
         } else {
             this.env.getTrafficPointByName(this.trafficPoint.getTPName()).setCollected(1);
+            this.env.getTrafficPointByName(this.trafficPoint.getTPName()).satisfy();
         }
 
     }

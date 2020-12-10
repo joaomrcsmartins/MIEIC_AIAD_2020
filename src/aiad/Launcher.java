@@ -10,7 +10,7 @@ import sajas.core.Runtime;
 import sajas.sim.repast3.Repast3Launcher;
 import sajas.wrapper.ContainerController;
 import uchicago.src.sim.analysis.OpenSequenceGraph;
-import uchicago.src.sim.analysis.Sequence;
+import uchicago.src.sim.analysis.plot.OpenGraph;
 import uchicago.src.sim.engine.Schedule;
 import uchicago.src.sim.engine.SimInit;
 import uchicago.src.sim.gui.DisplaySurface;
@@ -101,7 +101,7 @@ public class Launcher extends Repast3Launcher {
         Random random = new Random(System.currentTimeMillis());
 
         int N_TRAFFICPOINT = N;
-        int N_DRONE = N * 2;
+        int N_DRONE = N / 2;
 
         traffic_points = new ArrayList<>();
         drones = new ArrayList<>();
@@ -179,9 +179,7 @@ public class Launcher extends Repast3Launcher {
 
     private DisplaySurface dsurf;
     private int WIDTH = 500, HEIGHT = 500;
-    private OpenSequenceGraph plot;
-    private OpenSequenceGraph plot_ping;
-    private OpenSequenceGraph plot_ping_avg;
+    private ArrayList<OpenSequenceGraph> plots = new ArrayList<>();
 
     private void buildAndScheduleDisplay() {
 
@@ -194,57 +192,64 @@ public class Launcher extends Repast3Launcher {
         dsurf.addZoomable(display);
         addSimEventListener(dsurf);
         dsurf.display();
-
-        // graph
-        if (plot != null) plot.dispose();
-        plot = new OpenSequenceGraph("Evolução do tráfego assegurado ao longo do tempo", this);
-        plot.setAxisTitles("time", "% successful service executions");
-
-        plot.addSequence("Trafico", new Sequence() {
-            public double getSValue() {
-                // iterate through consumers
-                double traffic_provided = 0.0;
-                double traffic_all = 0.0;
-                for (int i = 0; i < traffic_points.size(); i++) {
-                    traffic_provided += traffic_points.get(i).getCollected() == 1 ? traffic_points.get(i).getTraffic() : 0;
-                    traffic_all += traffic_points.get(i).getTraffic();
-                }
-                return traffic_provided / traffic_all * 100;
-            }
-        });
-        plot.display();
-
-        // graph pings
-        if (plot_ping != null) plot_ping.dispose();
-        plot_ping = new OpenSequenceGraph("Evolução do  número de pings no sistema longo do tempo", this);
-        plot_ping.setAxisTitles("time", "N pings");
-
-        plot_ping.addSequence("Trafico", new Sequence() {
-            public double getSValue() {
-                return Environment.pings;
-            }
-        });
-        plot_ping.display();
-
-        // graph pings
-        if (plot_ping_avg != null) plot_ping_avg.dispose();
-        plot_ping_avg = new OpenSequenceGraph("Evolução do  número de pings por TP ao longo do tempo", this);
-        plot_ping_avg.setAxisTitles("time", "N pings por TP");
-
-        plot_ping_avg.addSequence("Trafico", new Sequence() {
-            public double getSValue() {
-                return (double)Environment.pings/Environment.getInstance().getTrafficPoints().size();
-            }
-        });
-        plot_ping_avg.display();
-
         getSchedule().scheduleActionAtInterval(1, dsurf, "updateDisplay", Schedule.LAST);
-        getSchedule().scheduleActionAtInterval(100, plot, "step", Schedule.LAST);
-        getSchedule().scheduleActionAtInterval(100, plot_ping, "step", Schedule.LAST);
-        getSchedule().scheduleActionAtInterval(100, plot_ping_avg, "step", Schedule.LAST);
 
+        setupPlots();
     }
 
+    private void setupPlots() {
+        plots.forEach(OpenGraph::dispose);
+        plots.clear();
+
+        // plot requested traffic coverage
+        OpenSequenceGraph coveragePlot = new OpenSequenceGraph("Evolution of assured traffic over time", this);
+        coveragePlot.setAxisTitles("time", "% Traffic coverage");
+        coveragePlot.addSequence("", () -> {
+            // iterate through consumers
+            double traffic_provided = 0.0;
+            double traffic_all = 0.0;
+            for (TrafficPoint traffic_point : traffic_points) {
+                traffic_provided += traffic_point.getCollected() == 1 ? traffic_point.getTraffic() : 0;
+                traffic_all += traffic_point.getTraffic();
+            }
+            return traffic_provided / traffic_all * 100;
+        });
+        coveragePlot.display();
+        plots.add(coveragePlot);
+
+        // plot number of contracts
+        OpenSequenceGraph contractsPlot = new OpenSequenceGraph("Evolution of the number of contracts initiated over time", this);
+        contractsPlot.setAxisTitles("time", "N contracts");
+        contractsPlot.addSequence("", () -> Environment.contracts);
+        contractsPlot.display();
+        plots.add(contractsPlot);
+
+        // plot average number of requests per Traffic point
+        OpenSequenceGraph requestsAvgPlot = new OpenSequenceGraph("Evolution of the number of contracts per Traffic Point over time", this);
+        requestsAvgPlot.setAxisTitles("time", "N contracts per TP");
+        requestsAvgPlot.addSequence("", () -> (double) Environment.contracts / Environment.getInstance().getTrafficPoints().size());
+        requestsAvgPlot.display();
+        plots.add(requestsAvgPlot);
+
+        // plot percentage of satisfied Traffic Points
+        OpenSequenceGraph satisfiedPlot = new OpenSequenceGraph("Evolution of satisfied TPs over time", this);
+        satisfiedPlot.setAxisTitles("time", "% satisfied TP");
+        satisfiedPlot.addSequence("", () -> {
+            double satisfied = traffic_points.stream().filter(TrafficPoint::isSatisfied).count();
+            return satisfied / traffic_points.size() * 100;
+        });
+        satisfiedPlot.display();
+        plots.add(satisfiedPlot);
+
+        // plot ratio of subContracts per Contracts
+        OpenSequenceGraph ratioSubConPlot  = new OpenSequenceGraph("Evolution of the % of SubContracts over time", this);
+        ratioSubConPlot.setAxisTitles("time", "N SubCon / (N SubCon + N Con) ");
+        ratioSubConPlot.addSequence("", () -> (double)(Environment.subContracts*100)/(Environment.subContracts+Environment.contracts));
+        ratioSubConPlot.display();
+        plots.add(ratioSubConPlot);
+
+        plots.forEach(plot -> getSchedule().scheduleActionAtInterval(100, plot, "step", Schedule.LAST));
+    }
 
     /**
      * Launching Repast3
@@ -267,8 +272,8 @@ public class Launcher extends Repast3Launcher {
         private ArrayList<TrafficPoint> traffic_points;
         private ArrayList<AccessPoint> drones;
 
-        public static int pings = 0;
-
+        public static int contracts = 0;
+        public static int subContracts = 0;
 
         public Environment() {
             traffic_points = new ArrayList<>();
@@ -282,8 +287,12 @@ public class Launcher extends Repast3Launcher {
         }
 
 
-        public static void addPing() {
-            Environment.pings++;
+        public static void sumRequest() {
+            Environment.contracts++;
+        }
+
+        public static void sumSubContract() {
+            Environment.subContracts++;
         }
 
 

@@ -121,6 +121,8 @@ public class AccessPoint extends Agent {
             DefaultDrawableNode to = Launcher.getNode(client.getKey().getTPName());
             this.myNode.removeEdgesTo(to);
         }
+        client.getKey().dissatisfy();
+        client.getKey().setCollected(0);
         return this.clientPoints.remove(client);
     }
 
@@ -133,6 +135,7 @@ public class AccessPoint extends Agent {
 
         for (ClientPair pair : clientPoints) {
             pair.getKey().setCollected(0);
+            pair.getKey().dissatisfy();
         }
 
         if (myNode != null) {
