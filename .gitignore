@@ -29,5 +29,6 @@ hs_err_pid*
 
 # jade files
 jade
-APDescription.txt
-MTPs-Main-Container.txt
+
+*.txt
+*.csv
