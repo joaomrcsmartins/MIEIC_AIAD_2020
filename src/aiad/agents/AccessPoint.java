@@ -2,7 +2,8 @@ package aiad.agents;
 
 import aiad.Coordinates;
 import aiad.Launcher;
-import aiad.agentbehaviours.*;
+import aiad.agentbehaviours.APCyclicContractNet;
+import aiad.agentbehaviours.APSubContractNetInit;
 import aiad.util.ClientPair;
 import aiad.util.Edge;
 import sajas.core.Agent;
@@ -11,12 +12,36 @@ import uchicago.src.sim.network.DefaultDrawableNode;
 import java.awt.*;
 import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
-import java.util.ArrayList;
-import java.util.PriorityQueue;
+import java.util.*;
+import java.util.List;
 
 public class AccessPoint extends Agent {
+
+    public enum Capacity {
+        LOW(30),
+        MEDIUM(60),
+        HIGH(90),
+        VERY_HIGH(120);
+
+        private static final List<Capacity> values = List.of(values());
+        private static final Random random = new Random(System.currentTimeMillis());
+        private final int capacity;
+
+        Capacity(int capacity) {
+            this.capacity = capacity;
+        }
+
+        public static Capacity randomCapacity() {
+            return values.get(random.nextInt(values.size()));
+        }
+
+        public int getCapacity() {
+            return capacity;
+        }
+    }
+
     static double MAX_RANGE = 200.0;
-    private final double trafficCapacity;
+    private final Capacity trafficCapacity;
     private double availableTraffic;
     private final PriorityQueue<ClientPair> clientPoints;
     private Coordinates pos;
@@ -24,9 +49,9 @@ public class AccessPoint extends Agent {
     private DefaultDrawableNode myNode;
     APSubContractNetInit subcontract;
 
-    public AccessPoint(double trafficCapacity, Coordinates pos) {
-        this.trafficCapacity = trafficCapacity;
-        this.availableTraffic = trafficCapacity;
+    public AccessPoint(Coordinates pos) {
+        this.trafficCapacity = Capacity.randomCapacity();
+        this.availableTraffic = trafficCapacity.getCapacity();
         this.pos = pos;
         this.clientPoints = new PriorityQueue<>();
         this.env = Launcher.Environment.getInstance();
@@ -40,8 +65,8 @@ public class AccessPoint extends Agent {
         this.subcontract = subcontract;
     }
 
-    public double getTrafficCapacity() {
-        return trafficCapacity;
+    public int getTrafficCapacity() {
+        return trafficCapacity.getCapacity();
     }
 
     public double getAvailableTraffic() {

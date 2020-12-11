@@ -45,6 +45,10 @@ public class Launcher extends Repast3Launcher {
 
     private boolean runInBatchMode;
 
+    private DisplaySurface dsurf;
+    private final int WIDTH = 500, HEIGHT = 500;
+    private ArrayList<OpenSequenceGraph> plots = new ArrayList<>();
+
     public Launcher(boolean runInBatchMode) {
         super();
         this.runInBatchMode = runInBatchMode;
@@ -67,19 +71,16 @@ public class Launcher extends Repast3Launcher {
         this.N = N;
     }
 
-    //este
     @Override
     public String[] getInitParam() {
         return new String[]{"N"};
     }
 
-    //este
     @Override
     public String getName() {
         return "Service Consumer/Provider -- SAJaS Repast3 Test";
     }
 
-    //este
     @Override
     protected void launchJADE() {
 
@@ -101,11 +102,11 @@ public class Launcher extends Repast3Launcher {
         Random random = new Random(System.currentTimeMillis());
 
         int N_TRAFFICPOINT = N;
-        int N_DRONE = N / 2;
+        int N_DRONE = N * 2;
 
         traffic_points = new ArrayList<>();
         drones = new ArrayList<>();
-        nodes = new ArrayList<TextDrawableNode>();
+        nodes = new ArrayList<>();
 
         try {
 
@@ -129,13 +130,12 @@ public class Launcher extends Repast3Launcher {
             for (int i = 0; i < N_DRONE; i++) {
                 int x = random.nextInt(400);
                 int y = random.nextInt(400);
-                int value = random.nextInt(120);
-                AccessPoint ca = new AccessPoint(value, new Coordinates(x, y));
+                AccessPoint ca = new AccessPoint(new Coordinates(x, y));
                 agentContainer.acceptNewAgent("ap" + i, ca).start();
                 drones.add(ca);
                 TextDrawableNode node3 =
                         generateNode("ap" + i, Color.BLUE,
-                                x, y, String.valueOf(value));
+                                x, y, String.valueOf(ca.getTrafficCapacity()));
                 nodes.add(node3);
                 ca.setNode(node3);
             }
@@ -161,14 +161,6 @@ public class Launcher extends Repast3Launcher {
         return node;
     }
 
-//	@Override
-//	public void setup() {
-//		super.setup();
-//
-//		// property descriptors
-//		// ...
-//	}
-
     @Override
     public void begin() {
         super.begin();
@@ -176,10 +168,6 @@ public class Launcher extends Repast3Launcher {
             buildAndScheduleDisplay();
         }
     }
-
-    private DisplaySurface dsurf;
-    private int WIDTH = 500, HEIGHT = 500;
-    private ArrayList<OpenSequenceGraph> plots = new ArrayList<>();
 
     private void buildAndScheduleDisplay() {
 
@@ -193,7 +181,6 @@ public class Launcher extends Repast3Launcher {
         addSimEventListener(dsurf);
         dsurf.display();
         getSchedule().scheduleActionAtInterval(1, dsurf, "updateDisplay", Schedule.LAST);
-
         setupPlots();
     }
 
@@ -218,23 +205,23 @@ public class Launcher extends Repast3Launcher {
         plots.add(coveragePlot);
 
         // plot number of contracts
-        OpenSequenceGraph contractsPlot = new OpenSequenceGraph("Evolution of the number of contracts initiated over time", this);
+        OpenSequenceGraph contractsPlot = new OpenSequenceGraph("Evolution of the number of contracts initiated over time", this, "n_contracts.txt", 0);
         contractsPlot.setAxisTitles("time", "N contracts");
-        contractsPlot.addSequence("", () -> Environment.contracts);
+        contractsPlot.addSequence("N contracts / tick", () -> Environment.contracts);
         contractsPlot.display();
         plots.add(contractsPlot);
 
         // plot average number of requests per Traffic point
-        OpenSequenceGraph requestsAvgPlot = new OpenSequenceGraph("Evolution of the number of contracts per Traffic Point over time", this);
-        requestsAvgPlot.setAxisTitles("time", "N contracts per TP");
-        requestsAvgPlot.addSequence("", () -> (double) Environment.contracts / Environment.getInstance().getTrafficPoints().size());
-        requestsAvgPlot.display();
-        plots.add(requestsAvgPlot);
+        OpenSequenceGraph contractsAvgPlot = new OpenSequenceGraph("Evolution of the number of contracts per Traffic Point over time", this, "n_contracts_avg.txt", 0);
+        contractsAvgPlot.setAxisTitles("time", "N contracts per TP");
+        contractsAvgPlot.addSequence("N contracts avg / tick", () -> (double) Environment.contracts / Environment.getInstance().getTrafficPoints().size());
+        contractsAvgPlot.display();
+        plots.add(contractsAvgPlot);
 
         // plot percentage of satisfied Traffic Points
-        OpenSequenceGraph satisfiedPlot = new OpenSequenceGraph("Evolution of satisfied TPs over time", this);
+        OpenSequenceGraph satisfiedPlot = new OpenSequenceGraph("Evolution of satisfied TPs over time", this, "satisfied_tp.txt", 0);
         satisfiedPlot.setAxisTitles("time", "% satisfied TP");
-        satisfiedPlot.addSequence("", () -> {
+        satisfiedPlot.addSequence("Satisfied TPs / tick", () -> {
             double satisfied = traffic_points.stream().filter(TrafficPoint::isSatisfied).count();
             return satisfied / traffic_points.size() * 100;
         });
@@ -242,12 +229,13 @@ public class Launcher extends Repast3Launcher {
         plots.add(satisfiedPlot);
 
         // plot ratio of subContracts per Contracts
-        OpenSequenceGraph ratioSubConPlot  = new OpenSequenceGraph("Evolution of the % of SubContracts over time", this);
+        OpenSequenceGraph ratioSubConPlot = new OpenSequenceGraph("Evolution of the % of SubContracts over time", this, "ratio_subcontracts.txt", 0);
         ratioSubConPlot.setAxisTitles("time", "N SubCon / (N SubCon + N Con) ");
-        ratioSubConPlot.addSequence("", () -> (double)(Environment.subContracts*100)/(Environment.subContracts+Environment.contracts));
+        ratioSubConPlot.addSequence("Ratio of SubContracts / tick", () -> (double) (Environment.subContracts * 100) / (Environment.subContracts + Environment.contracts));
         ratioSubConPlot.display();
         plots.add(ratioSubConPlot);
 
+        plots.forEach(plot -> getSchedule().scheduleActionAtEnd(plot, "writeToFile"));
         plots.forEach(plot -> getSchedule().scheduleActionAtInterval(100, plot, "step", Schedule.LAST));
     }
 
@@ -265,7 +253,7 @@ public class Launcher extends Repast3Launcher {
     }
 
     //////////////////////////////////////////////////////////////////////////////////////
-    // Utilitary class from First Project
+    // Utilitarian class from First Project
     //////////////////////////////////////////////////////////////////////////////////////
     public static class Environment {
         private static Environment env_instance = null;
