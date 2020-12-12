@@ -196,7 +196,7 @@ public class Launcher extends Repast3Launcher {
         plots.clear();
 
         // plot requested traffic coverage
-        OpenSequenceGraph coveragePlot = new OpenSequenceGraph("Evolution of assured traffic over time", this);
+        OpenSequenceGraph coveragePlot = new OpenSequenceGraph("Evolution of assured traffic over time", this,"traffic_covered.txt",0);
         coveragePlot.setAxisTitles("time", "% Traffic coverage");
         coveragePlot.addSequence("Traffic Covered / tick", () -> {
             // iterate through consumers
