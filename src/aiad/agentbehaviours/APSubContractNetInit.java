@@ -1,11 +1,10 @@
 package aiad.agentbehaviours;
 
-import aiad.Environment;
-import aiad.agents.TrafficPoint;
+import aiad.Launcher;
 import aiad.agents.AccessPoint;
-import jade.core.AID;
+import aiad.agents.TrafficPoint;
 import jade.lang.acl.ACLMessage;
-import jade.proto.ContractNetInitiator;
+import sajas.proto.ContractNetInitiator;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,25 +15,25 @@ import java.util.Vector;
 public class APSubContractNetInit extends ContractNetInitiator {
     AccessPoint accessPoint;
     TrafficPoint trafficPoint;
-    Environment env;
+    Launcher.Environment env;
 
-    public APSubContractNetInit(AccessPoint accessPoint, TrafficPoint trafficPoint, ACLMessage msg, Environment env) {
+    public APSubContractNetInit(AccessPoint accessPoint, TrafficPoint trafficPoint, ACLMessage msg, Launcher.Environment env) {
         super(accessPoint, msg);
         this.accessPoint = accessPoint;
         this.trafficPoint = trafficPoint;
         this.env = env;
+        Launcher.Environment.sumSubContract();
     }
 
     @Override
     protected Vector prepareCfps(ACLMessage cfp) {
         Vector v = new Vector();
-        System.out.println("traffic point " + trafficPoint.getName());
         cfp.setContent(trafficPoint.getName());
         cfp.setConversationId("sub-contract-net");
         ArrayList<AccessPoint> near_drones = env.getNearDrones(accessPoint);
 
         for (int i = 0; i < near_drones.size(); i++) {
-            cfp.addReceiver(new AID(near_drones.get(i).getLocalName(), false));
+            cfp.addReceiver(new sajas.core.AID(near_drones.get(i).getLocalName(), false));
         }
         v.add(cfp);
 
@@ -64,7 +63,7 @@ public class APSubContractNetInit extends ContractNetInitiator {
         });
 
         for (Object respons : responses) {
-            System.out.println(" (Init.handleAllResponses) Response from: " + ((ACLMessage) respons).getSender().getLocalName() + " content:" + ((ACLMessage) respons).getContent());
+            System.out.println(" (Init.handleAllResponses) Response from: " + ((ACLMessage) respons).getSender().getName() + " content:" + ((ACLMessage) respons).getContent());
             aux_name.add(((ACLMessage) respons).getSender().getName());
             ACLMessage msg_reply = ((ACLMessage) respons).createReply();
             ACLMessage msg = (ACLMessage) respons;
@@ -94,7 +93,7 @@ public class APSubContractNetInit extends ContractNetInitiator {
         }
 
         if (collected >= this.trafficPoint.getTraffic()) {
-            this.env.getTrafficPointByName(this.trafficPoint.getName()).setCollected(this.trafficPoint.getTraffic());
+            this.env.getTrafficPointByName(this.trafficPoint.getTPName()).setCollected(this.trafficPoint.getTraffic());
         }
 
     }

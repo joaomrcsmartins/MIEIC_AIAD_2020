@@ -1,9 +1,9 @@
 package aiad.util;
 
 import aiad.Coordinates;
-import aiad.Environment;
-import aiad.agents.TrafficPoint;
+import aiad.Launcher;
 import aiad.agents.AccessPoint;
+import aiad.agents.TrafficPoint;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 import static java.lang.Thread.sleep;
 
 public class NetworkMap extends Canvas {
-    private final Environment env;
+    private final Launcher.Environment env;
     public int time = 0;
 
     protected ArrayList<JRadioButton> radioButtons = new ArrayList<>();
@@ -30,7 +30,7 @@ public class NetworkMap extends Canvas {
 
     private CsvFileWriter csvMetricsFile;
 
-    public NetworkMap(Environment env, CsvFileWriter csvMetricsFile) {
+    public NetworkMap(Launcher.Environment env, CsvFileWriter csvMetricsFile) {
         this.env = env;
         JFrame frame = new JFrame("Network Map");
         paintTextArea(frame);

@@ -1,22 +1,22 @@
 package aiad.agentbehaviours;
 
-import aiad.Environment;
-import aiad.agents.TrafficPoint;
+import aiad.Launcher;
 import aiad.agents.AccessPoint;
+import aiad.agents.TrafficPoint;
 import aiad.util.ClientPair;
 import jade.domain.FIPAAgentManagement.FailureException;
 import jade.domain.FIPAAgentManagement.RefuseException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
-import jade.proto.ContractNetResponder;
+import sajas.proto.ContractNetResponder;
 
 public class APContractNetResponder extends ContractNetResponder {
 
     AccessPoint accessPoint;
-    Environment env;
+    Launcher.Environment env;
 
-    public APContractNetResponder(AccessPoint a, MessageTemplate mt, Environment env) {
+    public APContractNetResponder(AccessPoint a, MessageTemplate mt, Launcher.Environment env) {
         super(a, mt);
         this.accessPoint = a;
         this.env = env;
@@ -27,7 +27,7 @@ public class APContractNetResponder extends ContractNetResponder {
         boolean removed = false;
         System.out.println(" (ContractNet-handleCpf) FAP agent " + this.accessPoint.getLocalName() + ": CFP received from " + cfp.getSender().getLocalName() + ". Traffic requested is " + cfp.getContent());
 
-        ClientPair trafficPoint_pair = this.accessPoint.getClientByName(cfp.getSender().getName());
+        ClientPair trafficPoint_pair = this.accessPoint.getClientByName(cfp.getSender().getLocalName());
         if (trafficPoint_pair != null) {
             removed = true;
             this.accessPoint.removeClient(trafficPoint_pair);
@@ -38,7 +38,7 @@ public class APContractNetResponder extends ContractNetResponder {
             System.out.println(" (ContractNet-handleCpf) FAP agent " + this.accessPoint.getLocalName() + ": Proposing " + this.accessPoint.getAvailableTraffic() + " to " + cfp.getSender().getLocalName());
             ACLMessage propose = cfp.createReply();
             propose.setPerformative(ACLMessage.PROPOSE);
-            propose.setContent( removed ? this.accessPoint.getAvailableTraffic() + ":" : String.valueOf(this.accessPoint.getAvailableTraffic()));
+            propose.setContent(removed ? this.accessPoint.getAvailableTraffic() + ":" : String.valueOf(this.accessPoint.getAvailableTraffic()));
             return propose;
         } else {
             System.out.println(" (ContractNet-handleCpf)  FAP agent " + this.accessPoint.getLocalName() + ": Refused contract from " + cfp.getSender().getName());

@@ -1,11 +1,10 @@
 package aiad.agentbehaviours;
 
-import aiad.Environment;
-import aiad.agents.TrafficPoint;
+import aiad.Launcher;
 import aiad.agents.AccessPoint;
-import jade.core.AID;
+import aiad.agents.TrafficPoint;
 import jade.lang.acl.ACLMessage;
-import jade.proto.ContractNetInitiator;
+import sajas.proto.ContractNetInitiator;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,26 +16,26 @@ import java.util.Vector;
 public class TPContractNetInit extends ContractNetInitiator {
 
     TrafficPoint trafficPoint;
-    Environment env;
+    Launcher.Environment env;
 
     int collected_aux;
 
-    public TPContractNetInit(TrafficPoint a, ACLMessage msg, Environment env) {
+    public TPContractNetInit(TrafficPoint a, ACLMessage msg, Launcher.Environment env) {
         super(a, msg);
         this.trafficPoint = a;
         this.env = env;
-        this.collected_aux = 0;
+        Launcher.Environment.sumRequest();
     }
 
     @Override
     protected Vector prepareCfps(ACLMessage cfp) {
         Vector v = new Vector();
+        System.out.println(" (Init.prepareCfps)  " + trafficPoint.getTPName());
         cfp.setContent(String.valueOf(trafficPoint.getTraffic()));
         cfp.setConversationId("contract-net");
         ArrayList<AccessPoint> near_drones = env.getNearDrones(trafficPoint);
-
         for (int i = 0; i < near_drones.size(); i++) {
-            cfp.addReceiver(new AID(near_drones.get(i).getLocalName(), false));
+            cfp.addReceiver(new sajas.core.AID(near_drones.get(i).getLocalName(), false));
         }
         v.add(cfp);
 
@@ -61,6 +60,8 @@ public class TPContractNetInit extends ContractNetInitiator {
 
     @Override
     protected void handleAllResponses(Vector responses, Vector acceptances) {
+
+        this.trafficPoint.removeBehaviour(this.trafficPoint.getRequest());
 
         ArrayList<ACLMessage> aux = new ArrayList<>();
         ArrayList<String> aux_name = new ArrayList<>();
@@ -99,16 +100,19 @@ public class TPContractNetInit extends ContractNetInitiator {
         }
 
         for (ACLMessage auxiliary : aux) {
-            if (collected < this.trafficPoint.getTraffic())
+            if (collected < this.trafficPoint.getTraffic()) {
                 auxiliary.setPerformative(ACLMessage.REJECT_PROPOSAL);
+            }
             acceptances.add(auxiliary);
         }
 
         if (collected < this.trafficPoint.getTraffic()) {
             this.trafficPoint.setCollected(collected - collected_aux);
-            this.trafficPoint.addBehaviour(new TPRequestProtocolInit(this.trafficPoint, new ACLMessage(ACLMessage.REQUEST), this.env));
+            this.trafficPoint.setRequest(new TPRequestProtocolInit(this.trafficPoint, new ACLMessage(ACLMessage.REQUEST), this.env));
+            this.trafficPoint.addBehaviour(this.trafficPoint.getRequest());
         } else {
-            this.env.getTrafficPointByName(this.trafficPoint.getName()).setCollected(1);
+            this.env.getTrafficPointByName(this.trafficPoint.getTPName()).setCollected(1);
+            this.env.getTrafficPointByName(this.trafficPoint.getTPName()).satisfy();
         }
 
     }

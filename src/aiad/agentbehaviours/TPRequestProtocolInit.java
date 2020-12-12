@@ -1,11 +1,10 @@
 package aiad.agentbehaviours;
 
-import aiad.Environment;
-import aiad.agents.TrafficPoint;
+import aiad.Launcher;
 import aiad.agents.AccessPoint;
-import jade.core.AID;
+import aiad.agents.TrafficPoint;
 import jade.lang.acl.ACLMessage;
-import jade.proto.AchieveREInitiator;
+import sajas.proto.AchieveREInitiator;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -15,14 +14,15 @@ public class TPRequestProtocolInit extends
         AchieveREInitiator {
 
     TrafficPoint trafficPoint;
-    Environment env;
+    transient Launcher.Environment env;
     Integer currentReceiverDrone;
 
-    public TPRequestProtocolInit(TrafficPoint a, ACLMessage msg, Environment env) {
+    public TPRequestProtocolInit(TrafficPoint a, ACLMessage msg, Launcher.Environment env) {
         super(a, msg);
         this.trafficPoint = a;
         this.env = env;
         this.currentReceiverDrone = Math.abs(new Random().nextInt() % env.getNearDrones(a).size());
+        Launcher.Environment.sumRequest();
     }
 
     @Override
@@ -32,7 +32,7 @@ public class TPRequestProtocolInit extends
         try {
             request.setContentObject(this.trafficPoint);
             ArrayList<AccessPoint> near_drones = env.getNearDrones(trafficPoint);
-            request.addReceiver(new AID(near_drones.get(currentReceiverDrone).getLocalName(), false));
+            request.addReceiver(new sajas.core.AID(near_drones.get(currentReceiverDrone).getLocalName(), false));
             v.add(request);
         } catch (Exception e) {
             e.printStackTrace();
