@@ -29,7 +29,9 @@ public class Launcher extends Repast3Launcher {
 
     private static final boolean BATCH_MODE = true;
 
-    private int N = 50;
+    private int N_DRONES = 50;
+
+    private int N_TRAFFIC_POINTS = 100;
 
     public static final boolean USE_RESULTS_COLLECTOR = true;
 
@@ -63,17 +65,25 @@ public class Launcher extends Repast3Launcher {
         return null;
     }
 
-    public int getN() {
-        return N;
+    public int getN_DRONES() {
+        return N_DRONES;
     }
 
-    public void setN(int N) {
-        this.N = N;
+    public void setN_DRONES(int N) {
+        this.N_DRONES = N;
+    }
+
+    public int getN_TRAFFIC_POINTS() {
+        return N_TRAFFIC_POINTS;
+    }
+
+    public void setN_TRAFFIC_POINTS(int n_TRAFFIC_POINTS) {
+        N_TRAFFIC_POINTS = n_TRAFFIC_POINTS;
     }
 
     @Override
     public String[] getInitParam() {
-        return new String[]{"N"};
+        return new String[]{"N_DRONES","N_TRAFFIC_POINTS"};
     }
 
     @Override
@@ -101,9 +111,6 @@ public class Launcher extends Repast3Launcher {
     private void launchAgents() {
         Random random = new Random(System.currentTimeMillis());
 
-        int N_TRAFFICPOINT = N;
-        int N_DRONE = N * 2;
-
         traffic_points = new ArrayList<>();
         drones = new ArrayList<>();
         nodes = new ArrayList<>();
@@ -111,7 +118,7 @@ public class Launcher extends Repast3Launcher {
         try {
 
             // create trafficpoints
-            for (int i = 0; i < N_TRAFFICPOINT; i++) {
+            for (int i = 0; i < N_TRAFFIC_POINTS; i++) {
                 int x = random.nextInt(400);
                 int y = random.nextInt(400);
                 int value = random.nextInt(120);
@@ -127,7 +134,7 @@ public class Launcher extends Repast3Launcher {
 
             }
             // create drones
-            for (int i = 0; i < N_DRONE; i++) {
+            for (int i = 0; i < N_DRONES; i++) {
                 int x = random.nextInt(400);
                 int y = random.nextInt(400);
                 AccessPoint ca = new AccessPoint(new Coordinates(x, y));
@@ -191,7 +198,7 @@ public class Launcher extends Repast3Launcher {
         // plot requested traffic coverage
         OpenSequenceGraph coveragePlot = new OpenSequenceGraph("Evolution of assured traffic over time", this);
         coveragePlot.setAxisTitles("time", "% Traffic coverage");
-        coveragePlot.addSequence("", () -> {
+        coveragePlot.addSequence("Traffic Covered / tick", () -> {
             // iterate through consumers
             double traffic_provided = 0.0;
             double traffic_all = 0.0;
